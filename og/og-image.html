@@ -1,0 +1,63 @@
+<!doctype html>
+<!-- Source for og-image.png (1200x630). Rebuild: chrome --headless --hide-scrollbars --window-size=1200,630 --virtual-time-budget=5000 --screenshot=og-image.png og/og-image.html -->
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Hebrew:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --bg: #f3f5f7; --surface: #ffffff; --ink: #15212c; --muted: #5b6977; --line: #dbe1e7;
+  --accent: #2a55c0; --accent-soft: #e6ecfa; --t1: #b8431b; --t2: #8a5d00; --t3: #2f7d74; --done: #2e8a57;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1200px; height: 630px; overflow: hidden; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: "IBM Plex Sans Hebrew", sans-serif;
+  display: grid; grid-template-columns: 1fr 420px; gap: 56px;
+  padding: 72px 80px; position: relative;
+}
+body::after { content: ""; position: absolute; inset: auto 0 0 0; height: 10px;
+  background: linear-gradient(to left, var(--t1) 0 33.3%, var(--t2) 33.3% 66.6%, var(--t3) 66.6%); }
+.main { display: flex; flex-direction: column; }
+.eyebrow { font: 500 22px "IBM Plex Mono", monospace; letter-spacing: .04em; color: var(--accent); direction: ltr; text-align: right; }
+h1 { font: 900 88px/1.02 "Frank Ruhl Libre", serif; margin-top: 22px; letter-spacing: -.01em; }
+.sub { font-size: 28px; line-height: 1.45; color: var(--muted); margin-top: 26px; max-width: 30ch; }
+.stats { margin-top: auto; display: flex; gap: 36px; }
+.stat b { display: block; font: 700 46px/1 "Frank Ruhl Libre", serif; color: var(--ink); }
+.stat span { font-size: 20px; color: var(--muted); }
+.card {
+  align-self: center; background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  padding: 26px 28px; box-shadow: 0 18px 40px -24px rgba(21,33,44,.35);
+}
+.row { display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 22px; font-weight: 500; }
+.row:last-child { border-bottom: 0; }
+.box { flex: none; width: 26px; height: 26px; border-radius: 7px; border: 2px solid #b5c0cb; display: grid; place-items: center; }
+.row.done .box { background: var(--done); border-color: var(--done); }
+.row.done .box::after { content: ""; width: 7px; height: 13px; border: solid #fff; border-width: 0 3px 3px 0; transform: translateY(-2px) rotate(45deg); }
+.row.done .txt { color: var(--muted); text-decoration: line-through; text-decoration-color: #b5c0cb; }
+.tier { margin-inline-start: auto; font: 600 15px "IBM Plex Sans Hebrew"; padding: 3px 10px; border-radius: 99px; color: #fff; }
+.tier.t1 { background: var(--t1); } .tier.t2 { background: var(--t2); } .tier.t3 { background: var(--t3); }
+</style>
+</head>
+<body>
+  <div class="main">
+    <div class="eyebrow">Frontend Architect / Tech Lead</div>
+    <h1>תכנית לימודים<br>לטק ליד</h1>
+    <p class="sub">נושאים מדורגים לפי חשיבות, מקורות חינמיים לפי עומק, עם עדיפות לווידאו</p>
+    <div class="stats">
+      <div class="stat"><b>16</b><span>נושאים</span></div>
+      <div class="stat"><b>437</b><span>מקורות</span></div>
+      <div class="stat"><b>93</b><span>פלייליסטים וקורסים</span></div>
+    </div>
+  </div>
+  <div class="card" aria-hidden="true">
+    <div class="row done"><span class="box"></span><span class="txt">Frontend System Design</span><span class="tier t1">1</span></div>
+    <div class="row done"><span class="box"></span><span class="txt">Vue / React</span><span class="tier t1">1</span></div>
+    <div class="row"><span class="box"></span><span class="txt">AI לאורך ה־SDLC</span><span class="tier t1">1</span></div>
+    <div class="row"><span class="box"></span><span class="txt">ביצועים</span><span class="tier t2">2</span></div>
+    <div class="row"><span class="box"></span><span class="txt">TypeScript מתקדם</span><span class="tier t2">2</span></div>
+    <div class="row"><span class="box"></span><span class="txt">אבטחה ונגישות</span><span class="tier t3">3</span></div>
+  </div>
+</body>
+</html>
