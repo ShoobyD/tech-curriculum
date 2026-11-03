@@ -228,5 +228,5 @@ const out = tpl
   .replace('{{STATUS}}', statusHtml)
   .replace('{{TOC}}', toc)
   .replace('{{TIERS}}', tiersHtml);
-writeFileSync(outPath, out);
+writeFileSync(outPath, out.replace(/\r?\n/g, '\r\n'));
 console.log('items:', itemCount, 'sections:', tiers.reduce((a, t) => a + t.sections.length, 0), 'bytes:', Buffer.byteLength(out));
