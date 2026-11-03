@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<title>תכנית לימודים לטק ליד</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Hebrew:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one reading column, a sticky control strip (progress + filters), topics grouped under tier bands. */
+:root {
+  --bg: #f3f5f7;
+  --surface: #ffffff;
+  --ink: #15212c;
+  --muted: #5b6977;
+  --line: #dbe1e7;
+  --accent: #2a55c0;
+  --accent-soft: #e6ecfa;
+  --t1: #b8431b;
+  --t2: #8a5d00;
+  --t3: #2f7d74;
+  --d-o: #2e8a57;
+  --d-m: #b98a0f;
+  --d-d: #c0392b;
+  --done: #2e8a57;
+  --font-display: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+  --font-body: "IBM Plex Sans Hebrew", "Segoe UI", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e141a; --surface: #151d25; --ink: #e2e8ee; --muted: #93a2b0; --line: #26323d;
+    --accent: #7ea3ff; --accent-soft: #1c2a47; --t1: #f08a5d; --t2: #e4b64a; --t3: #5fc2b5;
+    --d-o: #5cc48a; --d-m: #e4b64a; --d-d: #f0766a; --done: #5cc48a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e141a; --surface: #151d25; --ink: #e2e8ee; --muted: #93a2b0; --line: #26323d;
+  --accent: #7ea3ff; --accent-soft: #1c2a47; --t1: #f08a5d; --t2: #e4b64a; --t3: #5fc2b5;
+  --d-o: #5cc48a; --d-m: #e4b64a; --d-d: #f0766a; --done: #5cc48a; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+body {
+  margin: 0;
+  background: var(--bg); color: var(--ink);
+  font: 400 16px/1.65 var(--font-body);
+  direction: rtl;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap {
+  max-width: 880px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+code { font-family: var(--font-mono); font-size: .86em; background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; direction: ltr; unicode-bidi: isolate; }
+h1, h2, h3, h4 { text-wrap: balance; }
+
+/* ---------- header ---------- */
+.masthead { padding-block: 40px 20px; display: grid; gap: 14px; }
+.eyebrow { font-size: 13px; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(30px, 6vw, 46px); line-height: 1.1; margin: 0; }
+.note { color: var(--muted); margin: 0; max-width: 62ch; font-size: 15px; }
+.overview { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin-top: 6px; }
+.big-pct { font-family: var(--font-mono); font-size: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
+.big-pct small { font-size: 15px; color: var(--muted); display: block; margin-top: 6px; font-family: var(--font-body); }
+.tier-bars { display: grid; gap: 8px; min-width: 0; }
+.tier-bar { display: grid; grid-template-columns: 74px 1fr 64px; gap: 10px; align-items: center; font-size: 13px; }
+.tier-bar .lbl { font-weight: 600; }
+.tier-bar .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); text-align: left; direction: ltr; }
+.track { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.fill { height: 100%; width: 0; border-radius: 99px; transition: width .3s ease; }
+.save-status { grid-column: 1 / -1; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.save-status .led { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+
+/* ---------- sticky controls ---------- */
+.controls { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.controls .wrap { padding-block: 10px; display: grid; gap: 8px; }
+.thin-progress { height: 4px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.thin-progress .fill { background: var(--accent); }
+.filters { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+.fgroup { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.fgroup-label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+.chip {
+  font: 500 13px/1 var(--font-body); color: var(--ink);
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 99px; padding: 7px 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+}
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+.chip[aria-pressed="false"] { color: var(--muted); }
+.chip[aria-pressed="false"] .dot { opacity: .35; }
+
+/* ---------- intro blocks ---------- */
+details.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; margin-top: 14px; }
+details.panel > summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+details.panel > summary::-webkit-details-marker { display: none; }
+details.panel > summary::after { content: "+"; font-family: var(--font-mono); color: var(--muted); }
+details.panel[open] > summary::after { content: "−"; }
+details.panel .panel-body { padding: 0 18px 16px; min-width: 0; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+
+/* ---------- TOC ---------- */
+.toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px 28px; margin-top: 28px; }
+.toc-tier { font-size: 12px; font-weight: 700; letter-spacing: .06em; padding-bottom: 6px; border-bottom: 2px solid currentColor; margin-bottom: 4px; }
+.t-1 { color: var(--t1); } .t-2 { color: var(--t2); } .t-3 { color: var(--t3); } .t-end { color: var(--muted); }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc a { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; padding: 5px 0; color: var(--ink); text-decoration: none; font-size: 14px; align-items: baseline; }
+.toc a:hover .toc-title { color: var(--accent); text-decoration: underline; }
+.toc-num, .toc-count { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; direction: ltr; }
+.toc a:not(:has(.toc-num)) { grid-template-columns: 1fr auto; }
+.toc li.is-off { opacity: .4; }
+.toc-count.complete { color: var(--done); }
+
+/* ---------- tiers & topics ---------- */
+.tier { margin-top: 48px; }
+.tier-head { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2px 16px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+.tier[data-tier="1"] .tier-head { border-color: var(--t1); }
+.tier[data-tier="2"] .tier-head { border-color: var(--t2); }
+.tier[data-tier="3"] .tier-head { border-color: var(--t3); }
+.tier-head h2 { font-family: var(--font-display); font-weight: 900; font-size: 30px; margin: 0; line-height: 1.15; }
+.tier-head p { margin: 0; color: var(--muted); grid-row: 2; font-size: 15px; }
+.tier-head .count { grid-row: 1 / span 2; grid-column: 2; }
+
+.topic { margin-top: 26px; scroll-margin-top: 120px; }
+.topic-head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: baseline; }
+.topic-head:not(:has(.topic-num)) { grid-template-columns: 1fr auto; }
+.topic-num { font-family: var(--font-mono); font-size: 15px; color: var(--muted); min-width: 1.6em; }
+.topic-head h3 { font-size: 22px; font-weight: 700; margin: 0; line-height: 1.3; min-width: 0; }
+.count { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; direction: ltr; }
+.count.complete { color: var(--done); }
+.topic-body { padding-inline-start: 0; min-width: 0; max-width: 72ch; }
+.topic-body p { margin: 10px 0; }
+.topic-body h4 { font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--muted); margin: 22px 0 6px; }
+.lead { font-weight: 700; }
+.callout { background: var(--accent-soft); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+.prose-list { margin: 6px 0; padding-inline-start: 22px; }
+.prose-list li { margin: 3px 0; }
+.prose-list .prose-list { margin: 2px 0; }
+
+/* sources */
+.sources { display: grid; gap: 10px; margin-top: 4px; }
+.depth-group { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px 6px; }
+.depth-label { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-weight: 700; font-size: 14px; }
+.depth-hint { font-weight: 400; color: var(--muted); font-size: 13px; }
+.depth-extra { flex-basis: 100%; font-weight: 400; font-size: 14px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+.d-o { background: var(--d-o); } .d-m { background: var(--d-m); } .d-d { background: var(--d-d); }
+.items { list-style: none; margin: 4px 0 0; padding: 0; }
+.item { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); align-items: start; }
+.items > .item:first-child { border-top: 0; }
+.tasks .item:first-child { border-top: 1px solid var(--line); }
+.item input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.box { width: 20px; height: 20px; border: 1.5px solid var(--muted); border-radius: 5px; margin-top: 3px; cursor: pointer; display: grid; place-items: center; background: var(--surface); }
+.item input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 2px; }
+.item input:checked + .box { background: var(--done); border-color: var(--done); }
+.item input:checked + .box::after { content: ""; width: 5px; height: 10px; border: solid var(--surface); border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+.item-body { min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
+.item.is-done .item-body { color: var(--muted); }
+.item.is-done .item-body a { color: var(--muted); }
+.tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .03em; border-radius: 4px; padding: 1px 6px; vertical-align: 1px; line-height: 1.6; }
+.tag.video { background: var(--accent-soft); color: var(--accent); }
+.tag.old { border: 1px solid var(--line); color: var(--muted); font-weight: 600; }
+.empty-note { color: var(--muted); font-size: 14px; font-style: italic; }
+
+/* tabs */
+.tabs { margin-top: 18px; }
+.tablist { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+[role="tab"] {
+  font: 600 15px/1 var(--font-body); color: var(--muted); background: none; border: 0;
+  border-bottom: 3px solid transparent; padding: 12px 14px 10px; cursor: pointer; display: inline-flex; gap: 10px; align-items: baseline; white-space: nowrap;
+}
+[role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+[role="tab"]:hover { color: var(--ink); }
+.tabpanel { padding-top: 6px; }
+.tabpanel:focus-visible { outline-offset: 6px; }
+
+footer { margin-block: 56px 40px; color: var(--muted); font-size: 13px; }
+
+@media (max-width: 560px) {
+  .overview { grid-template-columns: 1fr; }
+  .tier-bar { grid-template-columns: 64px 1fr 58px; }
+  .controls .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
+  .fgroup { flex-wrap: nowrap; }
+  .chip { white-space: nowrap; }
+  .tier-head h2 { font-size: 26px; }
+  .topic-head h3 { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) { .fill { transition: none; } html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<header class="wrap masthead">
+  <div class="eyebrow">Frontend Architect / Tech Lead · ריאיונות טכניים</div>
+  <h1>תכנית לימודים לטק ליד</h1>
+  <p class="note">{{NOTE}}</p>
+  <div class="overview" aria-label="התקדמות">
+    <div class="big-pct"><span id="pct">0%</span><small id="done-of">0 מתוך 0</small></div>
+    <div class="tier-bars" id="tier-bars"></div>
+    <div class="save-status"><span class="led"></span><span>ההתקדמות נשמרת רק בדפדפן הזה, במחשב שלך</span></div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="thin-progress" aria-hidden="true"><div class="fill" id="thin-fill"></div></div>
+    <div class="filters" role="group" aria-label="סינון">
+      <div class="fgroup"><span class="fgroup-label">עדיפות</span>
+        <button type="button" class="chip" data-f="tier" data-v="1" aria-pressed="true">1</button>
+        <button type="button" class="chip" data-f="tier" data-v="2" aria-pressed="true">2</button>
+        <button type="button" class="chip" data-f="tier" data-v="3" aria-pressed="true">3</button>
+      </div>
+      <div class="fgroup"><span class="fgroup-label">עומק</span>
+        <button type="button" class="chip" data-f="depth" data-v="o" aria-pressed="true"><span class="dot d-o"></span>סקירה</button>
+        <button type="button" class="chip" data-f="depth" data-v="m" aria-pressed="true"><span class="dot d-m"></span>בינוני</button>
+        <button type="button" class="chip" data-f="depth" data-v="d" aria-pressed="true"><span class="dot d-d"></span>עומק</button>
+      </div>
+      <div class="fgroup">
+        <button type="button" class="chip" data-f="video" aria-pressed="false">וידאו בלבד</button>
+        <button type="button" class="chip" data-f="hideDone" aria-pressed="false">הסתר מה שסיימתי</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <details class="panel" open>
+    <summary>מצב הכלים, סוף אוקטובר 2026</summary>
+    <div class="panel-body">{{STATUS}}</div>
+  </details>
+  <details class="panel">
+    <summary>איך להשתמש בתכנית</summary>
+    <div class="panel-body"><ul class="prose-list">
+        <li><strong>עדיפות:</strong> עדיפות 1 עולה כמעט בכל ריאיון, ומתחילים ממנה. עדיפות 2 נשאלת לעתים קרובות, לפעמים לעומק. עדיפות 3 מראה רוחב ונשאלת בדרך כלל בקצרה.</li>
+        <li><strong>עומק המקור:</strong> <span class="dot d-o"></span> סקירה, עד חצי שעה. <span class="dot d-m"></span> בינוני, הרצאה או קורס קצר של שעה עד שלוש. <span class="dot d-d"></span> עומק, קורס מלא, תיעוד, מפרט או ספר.</li>
+        <li><strong>תגיות:</strong> <span class="tag video">וידאו</span> מסמן סרטון, ו־<span class="tag video">פלייליסט</span> מסמן סדרה או כנס שלם. קישור "חלק מסדרה" מוביל לפלייליסט המלא של הסדרה. <span class="tag old">ישן</span> מסמן חומר ישן: העקרונות נכונים, אבל כדאי לשים לב לתאריך.</li>
+        <li><strong>סדר מומלץ בכל נושא:</strong> קודם סקירה, אחר כך בינוני, ועומק רק בנושאים שרוצים להעמיק בהם. בסוף עוברים על השאלות הצפויות ומנסחים תשובה בקול.</li>
+        <li><strong>מעקב:</strong> מסמנים כל מקור כשמסיימים. ההתקדמות נשמרת בדפדפן שבו פתחת את הקובץ, ולא עולה לשום מקום. בדפדפן אחר או במחשב אחר היא תתחיל מאפס.</li>
+        <li><strong>מסלולי Vue ו־React:</strong> בנושא 2 עוברים בין המסלולים בלשוניות. הספירה כוללת את שני המסלולים.</li>
+      </ul></div>
+  </details>
+
+  <nav class="toc" aria-label="תוכן עניינים">{{TOC}}</nav>
+
+  {{TIERS}}
+
+  <footer>המקורות נבדקו ב־31.10.2026. כל התוכן חינמי. אותה תכנית שמורה גם כקובץ Markdown, וממנו נבנה הדף.</footer>
+</main>
+
+<script>
+(() => {
+  const PROGRESS_KEY = 'tl-plan-progress-v1';
+  const PREFS_KEY = 'tl-plan-prefs-v1';
+  const TIER_LABELS = { '1': 'עדיפות 1', '2': 'עדיפות 2', '3': 'עדיפות 3', end: 'לסיום' };
+  const TIER_COLORS = { '1': 'var(--t1)', '2': 'var(--t2)', '3': 'var(--t3)', end: 'var(--muted)' };
+
+  const items = [...document.querySelectorAll('.item')];
+  const byId = new Map(items.map(el => [el.dataset.id, el]));
+
+  const lsGet = k => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } };
+
+  // ---------- progress state ----------
+  let state = { done: [], updatedAt: 0 };
+  const saved = lsGet(PROGRESS_KEY);
+  if (saved && Array.isArray(saved.done)) state = saved;
+  let doneSet = new Set(state.done);
+
+  function applyChecks() {
+    for (const el of items) {
+      const on = doneSet.has(el.dataset.id);
+      el.querySelector('input').checked = on;
+      el.classList.toggle('is-done', on);
+    }
+  }
+
+  // ---------- counts ----------
+  const tierBars = document.getElementById('tier-bars');
+  tierBars.innerHTML = Object.keys(TIER_LABELS).map(k =>
+    `<div class="tier-bar"><span class="lbl">${TIER_LABELS[k]}</span><div class="track"><div class="fill" data-bar="${k}" style="background:${TIER_COLORS[k]}"></div></div><span class="num" data-num="${k}"></span></div>`).join('');
+
+  function updateCounts() {
+    const total = items.length;
+    const done = items.filter(el => doneSet.has(el.dataset.id)).length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById('pct').textContent = pct + '%';
+    document.getElementById('done-of').textContent = `${done} מתוך ${total} פריטים`;
+    document.getElementById('thin-fill').style.width = pct + '%';
+    for (const k of Object.keys(TIER_LABELS)) {
+      const its = items.filter(el => el.dataset.tier === k);
+      const d = its.filter(el => doneSet.has(el.dataset.id)).length;
+      tierBars.querySelector(`[data-bar="${k}"]`).style.width = (its.length ? d / its.length * 100 : 0) + '%';
+      tierBars.querySelector(`[data-num="${k}"]`).textContent = `${d}/${its.length}`;
+    }
+    for (const c of document.querySelectorAll('[data-count-for]')) {
+      const scope = document.getElementById(c.dataset.countFor);
+      if (!scope) continue;
+      const its = scope.querySelectorAll('.item');
+      const d = [...its].filter(el => doneSet.has(el.dataset.id)).length;
+      c.textContent = its.length ? `${d}/${its.length}` : '';
+      c.classList.toggle('complete', its.length > 0 && d === its.length);
+    }
+  }
+
+  // ---------- toggling (progress lives only in this browser's storage) ----------
+  function onToggle(el, on) {
+    if (on) doneSet.add(el.dataset.id); else doneSet.delete(el.dataset.id);
+    el.classList.toggle('is-done', on);
+    state = { done: [...doneSet], updatedAt: Date.now() };
+    lsSet(PROGRESS_KEY, state);
+    updateCounts();
+    if (filters.hideDone) applyFilters();
+  }
+  for (const el of items) el.querySelector('input').addEventListener('change', e => onToggle(el, e.target.checked));
+
+  // ---------- filters ----------
+  const prefs = lsGet(PREFS_KEY) || {};
+  const filters = {
+    tier: new Set(prefs.tier || ['1', '2', '3']),
+    depth: new Set(prefs.depth || ['o', 'm', 'd']),
+    video: !!prefs.video,
+    hideDone: !!prefs.hideDone,
+    tabs: prefs.tabs || {},
+  };
+  const savePrefs = () => lsSet(PREFS_KEY, { tier: [...filters.tier], depth: [...filters.depth], video: filters.video, hideDone: filters.hideDone, tabs: filters.tabs });
+
+  function itemVisible(el) {
+    const d = el.dataset;
+    if (filters.hideDone && doneSet.has(d.id)) return false;
+    if (d.depth === 'task') return true;
+    if (!filters.depth.has(d.depth)) return false;
+    if (filters.video && d.video !== '1') return false;
+    return true;
+  }
+  const tierOn = t => t === 'end' || filters.tier.has(t);
+
+  function applyFilters() {
+    for (const el of items) el.hidden = !itemVisible(el);
+    for (const g of document.querySelectorAll('.depth-group')) g.hidden = !g.querySelector('.item:not([hidden])');
+    for (const t of document.querySelectorAll('.tier')) t.hidden = !tierOn(t.dataset.tier);
+    for (const s of document.querySelectorAll('.topic')) {
+      const all = s.querySelectorAll('.item');
+      const note = s.querySelector('.empty-note');
+      note.hidden = !all.length || !!s.querySelector('.item:not([hidden])');
+      const li = document.querySelector(`.toc a[href="#${s.id}"]`)?.parentElement;
+      if (li) li.classList.toggle('is-off', !tierOn(s.dataset.tier));
+    }
+    for (const b of document.querySelectorAll('.chip')) {
+      const f = b.dataset.f;
+      const on = f === 'tier' || f === 'depth' ? filters[f].has(b.dataset.v) : filters[f];
+      b.setAttribute('aria-pressed', String(on));
+    }
+  }
+
+  document.querySelector('.filters').addEventListener('click', e => {
+    const b = e.target.closest('.chip');
+    if (!b) return;
+    const f = b.dataset.f;
+    if (f === 'tier' || f === 'depth') {
+      const set = filters[f];
+      if (set.has(b.dataset.v)) { if (set.size > 1) set.delete(b.dataset.v); } else set.add(b.dataset.v);
+    } else filters[f] = !filters[f];
+    savePrefs();
+    applyFilters();
+  });
+
+  // ---------- tabs (Vue / React tracks) ----------
+  for (const box of document.querySelectorAll('.tabs')) {
+    const tabs = [...box.querySelectorAll('[role="tab"]')];
+    const select = (tab, focus) => {
+      for (const t of tabs) {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      }
+      if (focus) tab.focus();
+      filters.tabs[box.dataset.tabs] = tab.dataset.key;
+      savePrefs();
+    };
+    const remembered = tabs.find(t => t.dataset.key === filters.tabs[box.dataset.tabs]);
+    if (remembered) select(remembered, false);
+    box.querySelector('[role="tablist"]').addEventListener('click', e => {
+      const t = e.target.closest('[role="tab"]');
+      if (t) select(t, false);
+    });
+    box.querySelector('[role="tablist"]').addEventListener('keydown', e => {
+      const i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      // RTL: the next tab sits to the left
+      const map = { ArrowLeft: i + 1, ArrowRight: i - 1, Home: 0, End: tabs.length - 1 };
+      if (!(e.key in map)) return;
+      e.preventDefault();
+      select(tabs[(map[e.key] + tabs.length) % tabs.length], true);
+    });
+  }
+
+  applyChecks();
+  updateCounts();
+  applyFilters();
+})();
+</script>
+</body>
+</html>
