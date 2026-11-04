@@ -109,7 +109,7 @@ function itemId(text) {
 // Text after "חלק מסדרה" describes the parent series, not this item, so it is ignored.
 function itemLength(text) {
   const own = text.split('חלק מסדרה')[0].replace(/\]\([^)]*\)/g, ']');
-  const m = own.match(/(\d+(?:[.,]\d+)?)\s*(?:–\d+\s*)?(דקות|דקה|שעות|שעה|סרטונים)/);
+  const m = own.match(/(\d+:\d{2}|\d+(?:[.,]\d+)?(?:–\d+)?)\s*(דקות|דקה|שעות|שעה|סרטונים)/);
   if (m) return `${m[1]} ${{ 'דקות': "דק'", 'דקה': "דק'", 'שעות': "ש'", 'שעה': "ש'", 'סרטונים': "סרט'" }[m[2]]}`;
   if (/כשעתיים|שעתיים/.test(own)) return "2 ש'";
   if (/כשעה|שעה אחת/.test(own)) return "1 ש'";
@@ -207,13 +207,23 @@ function renderBlocks(src, ctx) {
   return html;
 }
 
-// Sources lead each topic: the prose before "מקורות" (why it matters, questions, practice) folds into a closed panel.
+// Sources lead each topic: the prose before the first source list (why it matters, questions, practice) folds into
+// a closed panel. The list starts at the heading right before the first depth group: a plain "מקורות" heading is
+// dropped, a sub-part heading (3א., R1.) stays.
 const SOURCES_HEAD = '<h4>מקורות</h4>';
 function sourcesFirst(html) {
-  const i = html.indexOf(SOURCES_HEAD);
-  if (i <= 0) return html;
-  return `<details class="brief"><summary>על הנושא: למה זה חשוב, שאלות צפויות ותרגול</summary><div class="brief-body">${html.slice(0, i)}</div></details>` +
-    html.slice(i + SOURCES_HEAD.length);
+  const first = html.indexOf('<div class="sources">');
+  if (first < 0) return html;
+  let i = html.lastIndexOf('<h4>', first);
+  if (i < 0 || html.indexOf('</h4>', i) + 5 !== first) i = first;
+  const rest = html.startsWith(SOURCES_HEAD, i) ? html.slice(i + SOURCES_HEAD.length) : html.slice(i);
+  const brief = html.slice(0, i);
+  if (!brief.trim()) return rest;
+  // The label names what the brief actually holds: its headings, plus practice when there is one.
+  const parts = [...brief.matchAll(/<h4>([^<]+)<\/h4>/g)].map(m => m[1]);
+  if (/<strong class="lead">תרגול:/.test(brief)) parts.push('תרגול');
+  const label = parts.length ? `על הנושא: ${parts.join(', ')}` : 'על הנושא';
+  return `<details class="brief"><summary>${label}</summary><div class="brief-body">${brief}</div></details>` + rest;
 }
 
 // Isolate Latin runs so mixed Hebrew/English drawer labels keep their order.
