@@ -7,3 +7,6 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# Design tooling (contains the dev-only direction contract)
+.impeccable/

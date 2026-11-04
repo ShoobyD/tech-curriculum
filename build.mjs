@@ -105,15 +105,33 @@ function itemId(text) {
   return n === 1 ? base : `${base}-${n}`;
 }
 
+// The item's own length, typed short for the card's length column: "40 דק'", "3 ש'", "15 סרט'".
+// Text after "חלק מסדרה" describes the parent series, not this item, so it is ignored.
+function itemLength(text) {
+  const own = text.split('חלק מסדרה')[0].replace(/\]\([^)]*\)/g, ']');
+  const m = own.match(/(\d+(?:[.,]\d+)?)\s*(?:–\d+\s*)?(דקות|דקה|שעות|שעה|סרטונים)/);
+  if (m) return `${m[1]} ${{ 'דקות': "דק'", 'דקה': "דק'", 'שעות': "ש'", 'שעה': "ש'", 'סרטונים': "סרט'" }[m[2]]}`;
+  if (/כשעתיים|שעתיים/.test(own)) return "2 ש'";
+  if (/כשעה|שעה אחת/.test(own)) return "1 ש'";
+  return '';
+}
+
 function renderItem(text, ctx) {
   const video = /🎬/.test(text);
   const playlist = /^[^\]]*\]\(https:\/\/www\.youtube\.com\/playlist/.test(text.replace(/🎬\s*/g, ''));
   const body = inline(text.replace(/🎬\s*/g, ''));
   const id = itemId(text);
   itemCount++;
+  // Call number: topic number plus the item's position in the topic (both tracks share one sequence).
+  const call = ctx.num ? `${ctx.num}.${String(++ctx.counter.n).padStart(2, '0')}` : '';
+  const title = (text.match(/\[((?:[^\[\]]|\[[^\]]*\])+)\]\(/) || [, text])[1].replace(/[*`]/g, '');
+  const kind = video ? (playlist ? 'פלייליסט' : 'וידאו') : 'קריאה';
   return `<li class="item" data-id="${id}" data-tier="${ctx.tier}" data-depth="${ctx.depth}" data-video="${video ? 1 : 0}">` +
-    `<input type="checkbox" id="c-${id}"><label for="c-${id}" class="box" aria-hidden="true"></label>` +
-    `<div class="item-body">${video ? `<span class="tag video">${playlist ? 'פלייליסט' : 'וידאו'}</span> ` : ''}${body}</div></li>`;
+    `<span class="call">${call}</span>` +
+    `<div class="item-body">${body}</div>` +
+    `<span class="kind"><span class="tag${video ? ' video' : ''}">${kind}</span><span class="len">${itemLength(text)}</span></span>` +
+    `<input type="checkbox" id="c-${id}" aria-label="${esc(`נלמד: ${title}`)}"><label for="c-${id}" class="box" aria-hidden="true"></label>` +
+    `<span class="stamp" aria-hidden="true"></span></li>`;
 }
 
 // Parse list lines into a tree: {text, ordered, children}
@@ -189,13 +207,29 @@ function renderBlocks(src, ctx) {
   return html;
 }
 
+// Sources lead each topic: the prose before "מקורות" (why it matters, questions, practice) folds into a closed panel.
+const SOURCES_HEAD = '<h4>מקורות</h4>';
+function sourcesFirst(html) {
+  const i = html.indexOf(SOURCES_HEAD);
+  if (i <= 0) return html;
+  return `<details class="brief"><summary>על הנושא: למה זה חשוב, שאלות צפויות ותרגול</summary><div class="brief-body">${html.slice(0, i)}</div></details>` +
+    html.slice(i + SOURCES_HEAD.length);
+}
+
+// Isolate Latin runs so mixed Hebrew/English drawer labels keep their order.
+// A run ends on a letter, digit or ")"; trailing punctuation such as the "/" in "JS/דפדפן" stays outside.
+const bdi = html => html.replace(/[A-Za-z][\w.+#-]*(?:[ ()/&+.:-]+[\w.+#-]+)*\)?/g, m => {
+  const run = m.replace(/[^\w)]+$/, '');
+  return `<bdi>${run}</bdi>${m.slice(run.length)}`;
+});
+
 function renderSection(s, t) {
-  const ctx = { tier: t.key, depth: 'task' };
-  let body = renderBlocks(s.lines, ctx);
+  const ctx = { tier: t.key, depth: 'task', num: s.num, counter: { n: 0 } };
+  let body = sourcesFirst(renderBlocks(s.lines, ctx));
   if (s.subs.length) {
     const tabs = s.subs.map((sb, k) => {
       const name = sb.title.replace(/^\S+\.\s*/, '').replace(/^מסלול\s*/, '');
-      return { id: `${s.id}-tab-${k}`, name, html: renderBlocks(sb.lines, ctx), key: name.toLowerCase() };
+      return { id: `${s.id}-tab-${k}`, name, html: sourcesFirst(renderBlocks(sb.lines, ctx)), key: name.toLowerCase() };
     });
     body += `<div class="tabs" data-tabs="${s.id}"><div class="tablist" role="tablist" aria-label="בחירת מסלול">` +
       tabs.map((tb, k) => `<button type="button" role="tab" id="${tb.id}" aria-controls="${tb.id}-panel" aria-selected="${k === 0}" tabindex="${k === 0 ? 0 : -1}" data-key="${tb.key}">` +
@@ -210,12 +244,12 @@ function renderSection(s, t) {
 }
 
 const tiersHtml = tiers.map(t =>
-  `<div class="tier" data-tier="${t.key}" id="tier-${t.key}"><div class="tier-head"><h2>${t.label}</h2><p>${t.sub}</p><span class="count" data-count-for="tier-${t.key}"></span></div>` +
+  `<div class="tier" data-tier="${t.key}" id="tier-${t.key}"><div class="tier-head"><h2><span class="tier-tab">${t.label}</span><span class="tier-line">${t.sub}</span></h2><span class="count" data-count-for="tier-${t.key}"></span></div>` +
   t.sections.map(s => renderSection(s, t)).join('') + `</div>`).join('');
 
 const toc = tiers.map(t =>
-  `<div class="toc-group"><div class="toc-tier t-${t.key}">${t.label}</div><ol>` +
-  t.sections.map(s => `<li><a href="#${s.id}">${s.num ? `<span class="toc-num">${s.num}</span>` : ''}<span class="toc-title">${inline(s.title)}</span><span class="toc-count" data-count-for="${s.id}"></span></a></li>`).join('') +
+  `<div class="toc-group" data-tier="${t.key}"><div class="toc-tier">${t.label}</div><ol>` +
+  t.sections.map(s => `<li><a href="#${s.id}">${s.num ? `<span class="toc-num">${s.num}</span>` : ''}<span class="toc-title">${bdi(inline(s.title))}</span><span class="toc-count" data-count-for="${s.id}"></span></a></li>`).join('') +
   `</ol></div>`).join('');
 
 const howHtml = renderBlocks(intro.how, { tier: 'intro', depth: 'task' });

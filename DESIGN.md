@@ -1,0 +1,345 @@
+---
+name: tech-lead-curriculum
+description: A library card catalogue for a free, video-first tech-lead study plan.
+colors:
+  oak-0: "#0f241d"
+  oak-1: "#1a3a30"
+  oak-front: "#24493c"
+  oak-front-on: "#2f5d4d"
+  oak-edge: "#08140f"
+  brass: "#c9a352"
+  holder: "#efe6cc"
+  holder-ink: "#10241d"
+  seal: "#e9c46a"
+  cab-ink: "#eef3ec"
+  cab-muted: "#a9c3b5"
+  ground: "#e7eae3"
+  card: "#fefefb"
+  ink: "#19201c"
+  muted: "#536059"
+  line: "#ccd3c9"
+  rule-red: "#c4432f"
+  rule-blue: "#c8d9e3"
+  link: "#1f4f8a"
+  stamp: "#7b2a6c"
+  stamp-soft: "#f3e5ef"
+  t1: "#b3402a"
+  t2: "#876000"
+  t3: "#2f5b8c"
+  t-end: "#5d554d"
+  on-t: "#ffffff"
+typography:
+  display:
+    fontFamily: "Miriam Libre, Segoe UI, Arial, sans-serif"
+    fontSize: "30px"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "-0.01em"
+  brand:
+    fontFamily: "Miriam Libre, Segoe UI, Arial, sans-serif"
+    fontSize: "27px"
+    fontWeight: 700
+    lineHeight: 1.15
+    letterSpacing: "-0.01em"
+  headline:
+    fontFamily: "Miriam Libre, Segoe UI, Arial, sans-serif"
+    fontSize: "24px"
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: "-0.01em"
+  body:
+    fontFamily: "Miriam Libre, Segoe UI, Arial, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.65
+  body-card:
+    fontFamily: "Miriam Libre, Segoe UI, Arial, sans-serif"
+    fontSize: "15px"
+    fontWeight: 400
+    lineHeight: "26px"
+  label:
+    fontFamily: "Miriam Libre, Segoe UI, Arial, sans-serif"
+    fontSize: "12px"
+    fontWeight: 700
+    lineHeight: 1.65
+  call-number:
+    fontFamily: "Courier Prime, Courier New, monospace"
+    fontSize: "21px"
+    fontWeight: 700
+    lineHeight: "26px"
+    fontFeature: "tnum"
+  topic-number:
+    fontFamily: "Courier Prime, Courier New, monospace"
+    fontSize: "26px"
+    fontWeight: 700
+    lineHeight: 1
+    fontFeature: "tnum"
+  meta:
+    fontFamily: "Courier Prime, Courier New, monospace"
+    fontSize: "13px"
+    fontWeight: 400
+    lineHeight: 1.6
+    fontFeature: "tnum"
+  stamp:
+    fontFamily: "Courier Prime, Courier New, monospace"
+    fontSize: "14px"
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: "0.08em"
+rounded:
+  card: "2px"
+  drawer: "3px"
+  stamp: "4px"
+  depth-tab: "6px"
+  guide-tab: "8px"
+  round: "50%"
+spacing:
+  item-gap: "8px"
+  card-inset: "16px"
+  source-gap: "22px"
+  topic-gap: "44px"
+  section-gap: "72px"
+  card-rule: "26px"
+  rail-width: "312px"
+  field-max: "920px"
+components:
+  index-card:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-card}"
+    rounded: "{rounded.card}"
+    padding: "14px 16px 13px"
+  drawer-front:
+    backgroundColor: "{colors.oak-front}"
+    textColor: "{colors.cab-ink}"
+    rounded: "{rounded.drawer}"
+    padding: "6px 8px 7px"
+  drawer-front-current:
+    backgroundColor: "{colors.oak-front-on}"
+    textColor: "{colors.cab-ink}"
+  label-holder:
+    backgroundColor: "{colors.holder}"
+    textColor: "{colors.holder-ink}"
+    rounded: "{rounded.card}"
+    padding: "3px 9px"
+  palette-swatch:
+    rounded: "{rounded.round}"
+    size: "24px"
+  chip:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.drawer}"
+    padding: "7px 10px"
+  chip-pressed:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.card}"
+  guide-card-tier-1:
+    backgroundColor: "{colors.t1}"
+    textColor: "{colors.on-t}"
+    typography: "{typography.display}"
+    padding: "22px 24px 20px"
+  guide-card-tier-2:
+    backgroundColor: "{colors.t2}"
+    textColor: "{colors.on-t}"
+  guide-card-tier-3:
+    backgroundColor: "{colors.t3}"
+    textColor: "{colors.on-t}"
+  track-tab:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.muted}"
+    rounded: "{rounded.guide-tab}"
+    padding: "11px 16px 9px"
+  track-tab-selected:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.card}"
+  date-stamp:
+    textColor: "{colors.stamp}"
+    typography: "{typography.stamp}"
+    rounded: "{rounded.stamp}"
+    padding: "5px 9px 4px"
+  progress-seal:
+    textColor: "{colors.seal}"
+    rounded: "{rounded.round}"
+    size: "112px"
+  type-tag-video:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.card}"
+    rounded: "{rounded.card}"
+    padding: "4px 6px 3px"
+---
+
+# Design System: tech-lead-curriculum
+
+## Overview
+
+**Creative North Star: "The Card Catalogue"**
+
+The study plan is a library card catalogue on a reading-room table. A wooden cabinet holds one drawer per topic, each with a brass label holder; the open drawer is the reading field, where tiers stand as coloured guide cards and every source is a ruled index card with its own call number. Finishing a source is a library date stamp, inked and slightly crooked.
+
+Density is a reference tool's, not a dashboard's: every card keeps the same columns (call number, body, type and length, stamp, box) so the eye scans down a drawer without re-reading layout. Ornament comes only from the catalogue's own materials (painted wood, brass, card stock, printed ruling, ink), and those materials now carry real surface: paper fibre, wood grain lit from above, framed label slips, ink that bites unevenly into the card. The page is Hebrew and right-to-left; English titles, call numbers and dates sit inside it as isolated left-to-right runs.
+
+The cabinet comes in four finishes the reader picks from a swatch row in the cabinet header: the green reading room (default), oak, steel and navy. Each finish recolours the same token names, and each has a night version: wood deeper, cards dimmed, inks brighter. The frontmatter records the green reading room in daylight; the other finishes and every dark value live in the sidecar. The world refuses the default learning-tracker look: no sidebar of percentage bars, no soft rounded cards, no blue progress bars.
+
+**Key Characteristics:**
+- Wood-grained cabinet rail (right side, sticky) beside a paper-grained reading field.
+- Index cards with a red head rule and blue ruling at a 26px line pitch, on fibred card stock that lifts slightly under the pointer.
+- Call numbers in Courier Prime as each card's first, largest mark.
+- Tier colour carried only by guide cards, topic numbers and drawer-number rules.
+- Done is a rotated, ink-bitten date stamp with the real date; overall progress is a round library seal.
+- Four cabinet finishes (green, oak, steel, navy) behind one set of token names.
+
+## Colors
+
+Painted-wood and paper neutrals, three tier inks, and one stamp ink that means "done". Values below describe the default green reading room; the token names are shared by every finish (the cabinet tokens keep their historical oak-* names in all four).
+
+### Primary
+- **Plum Stamp Ink** (stamp): the ink of the date stamp, the checked box, a done card's call number, a completed count, focus rings, caret and the selection background (selected text turns Card Stock). It marks the reader's own actions on the catalogue.
+- **Seal Gilt** (seal): the brighter ink used only for the round progress seal on the dark cabinet, where the stamp ink would sink.
+- **Plum Wash** (stamp-soft): the faint stamp tint behind inline code and callout notes.
+
+### Secondary
+- **Rust Guide** (t1), **Mustard Guide** (t2), **Slate Blue Guide** (t3): tiers 1, 2 and 3. They fill the guide-card head and tab, colour the topic number, and rule the top of each drawer number in the cabinet. On-tier text (on-t) is white in light mode and near-black in dark mode.
+- **Closing Guide** (t-end): the neutral guide card for the untiered closing section.
+
+### Tertiary
+- **Head Rule Red** (rule-red) and **Ruling Blue** (rule-blue): the printed lines of the index card stock. They are card material, never text or interface colour.
+- **Catalogue Link Blue** (link): link text in the reading field.
+
+### Neutral
+- **Cabinet Shadow** (oak-0) and **Bottle Green** (oak-1): the cabinet body, a top-lit gradient from oak-1 down to oak-0 under the wood grain.
+- **Drawer Front** (oak-front) and **Drawer Pulled** (oak-front-on): drawer faces at rest, and when hovered or current. **Cabinet Seam** (oak-edge) is the cabinet's edge line.
+- **Brass** (brass): the label-holder frame and the page scrollbar thumb.
+- **Holder Slip** (holder) with **Holder Ink** (holder-ink): the paper slip inside each brass holder.
+- **Cabinet Ink** (cab-ink) and **Cabinet Muted** (cab-muted): text on the cabinet.
+- **Reading Table** (ground): the page ground behind the cards.
+- **Card Stock** (card): index cards, panels, chips and tabs at rest.
+- **Ink** (ink), **Faded Ink** (muted), **Pencil Line** (line): text, secondary text, and dividers or borders in the reading field.
+
+### The Four Finishes
+- **Green reading room** (default, no attribute): bottle-green cabinet, brass, gilt seal, plum stamp ink; tiers rust, mustard, slate blue.
+- **Oak** (data-palette="oak"): oak cabinet, brass, lilac seal, violet stamp ink; tiers vermilion, ochre, teal.
+- **Steel** (data-palette="steel"): slate powder-coat cabinet, chrome holder frames, orange seal, orange-red stamp ink; tiers burnt orange, olive, teal.
+- **Navy** (data-palette="navy"): midnight-blue cabinet, gold, gold seal, red stamp ink; tiers copper, ochre, green.
+
+### Named Rules
+**The Stamp Ink Rule.** The stamp ink means the reader did something: done, focused, selected. It never decorates headings, tiers or navigation chrome, in any finish.
+
+**The One Channel Rule.** Each variable has exactly one visual channel. Tier is colour; depth is the fill of a ring (empty, half, full) in the current text colour; done is the stamp. Never colour-code depth or shape-code tier.
+
+**The Card Stock Rule.** Head-rule red and ruling blue belong to the card's printed lines only. Tier 1 is a separate ink; the two are never swapped.
+
+**The Same Names Rule.** A finish is a set of values under the shared token names, defined for light and dark. Surfaces use tokens only; the one place palette-literal colours appear is a swatch face, which previews its finish (cabinet colour against seal or brass, split diagonally). A finish sets the cabinet, paper, ink and tier values for both light and dark; anything it leaves unset falls back to the green reading room (today the closing guide, t-end, and the white on-tier text in light).
+
+**The Reader's Finish Rule.** The finish is a reader preference: chosen from the swatch row, saved with the other preferences, and applied before first paint as an attribute on the root. The default finish carries no attribute, so a page with no stored preference paints green with no flash.
+
+## Typography
+
+**Display Font:** Miriam Libre (with Segoe UI, Arial)
+**Body Font:** Miriam Libre (with Segoe UI, Arial)
+**Label/Mono Font:** Courier Prime (with Courier New)
+
+**Character:** Miriam Libre is the catalogue's Hebrew voice for titles and prose; Courier Prime is the typewriter that filled in the cards: call numbers, counts, lengths, dates and the stamp.
+
+### Hierarchy
+- **Display** (700, 30px, 1.2; 22px on phone): tier guide-card heading, with the tier name on the tab above it at 15px.
+- **Brand** (700, 27px, 1.15; 21px on phone): the plan title on the cabinet.
+- **Headline** (700, 24px, 1.25; 20px on phone): topic heading, beside the topic number.
+- **Call number** (Courier Prime 700, 21px on the 26px card line; 18px on phone): each card's headline.
+- **Topic number** (Courier Prime 700, 26px, 1; 21px on phone): the drawer number beside a topic heading, in tier ink.
+- **Body** (400, 16px, 1.65): prose in the reading field, capped at 70ch. Card body runs at 15px on the 26px ruling.
+- **Meta** (Courier Prime 400, 13px): counts and item lengths; 12px for drawer counts in the cabinet.
+- **Label** (700, 12px): filter group labels, table headers, cabinet tier labels; the swatch-row label is 12px regular in Cabinet Muted. Type tags are 11px 700.
+- **Stamp** (Courier Prime 700, 14px, 0.08em tracking, uppercase month): the date stamp.
+
+### Named Rules
+**The Typewriter Rule.** Every number a visitor scans (call number, topic number, count, length, date, percentage) is Courier Prime with tabular figures. Prose and titles never are.
+
+**The Isolated Run Rule.** English, numbers and dates inside Hebrew are set left-to-right and isolated (ltr direction or a bdi run), so a call number like 3.12 never flips.
+
+## Layout
+
+Desktop is a two-column shell: a sticky, full-height cabinet rail on the right that scrolls on its own, and the reading field on the left, centred at its maximum width with max(16px, 3vw) side padding. The cabinet header stacks the title, the swatch row (four 24px swatches, 8px apart) and the subtitle. A sticky, lightly blurred filter bar sits at the top of the field.
+
+Vertical rhythm is set in catalogue units: section-gap before each tier guide card and the footer, topic-gap between topics, source-gap between depth groups, item-gap between index cards. Card content snaps to the card-rule line pitch.
+
+The index card is a fixed five-column grid on desktop (call number 70px, body, type 72px, stamp 118px, box 28px).
+
+At 900px and below the cabinet becomes a static header: title and swatches share one wrapping row (the swatch label hides), a 72px seal, and the drawers as a horizontal scroll-snapped strip. Filters become one scrolling row that fades out at the far edge. Cards reflow to call number and box on the first line, body below, type and length on a third line; the stamp overlays the call-number line.
+
+### Named Rules
+**The Fixed Columns Rule.** Every index card in a drawer uses the same column grid; a missing value leaves its column empty rather than letting the others shift.
+
+## Elevation & Depth
+
+Depth is physical and layered: every surface reads as the material it is. The ground and every card carry a fine SVG-noise paper fibre; the cabinet and each drawer front carry a stretched wood grain over a top-lit gradient (light falling from above, a faint diagonal sheen on the cabinet, an inset shadow along its inner edge). Label holders are framed slips: a brass ring with a dark outer hairline and an inset shadow so the slip sits behind the frame. The stamp and the seal are masked with an ink-bite noise so the ink takes unevenly. Shadows are soft and stacked (a contact line, a short drop, a long ambient fall), all in neutral black so they work on every finish. There are no hard offset shadows and no glows.
+
+### Shadow Vocabulary
+- **Card lift** (`box-shadow: 0 1px 1px rgba(0,0,0,.07), 0 3px 6px -2px rgba(0,0,0,.10), 0 14px 26px -14px rgba(0,0,0,.40)`): index cards and details panels at rest.
+- **Card lift, hover** (`box-shadow: 0 2px 2px rgba(0,0,0,.08), 0 8px 14px -6px rgba(0,0,0,.16), 0 22px 36px -16px rgba(0,0,0,.45)`): an index card under the pointer, with a 2px rise.
+- **Guide card** (`box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 18px 30px -16px rgba(0,0,0,.55)`): tier guide-card heads; the tab casts `0 -4px 10px -6px rgba(0,0,0,.3)` upward.
+- **Drawer at rest** (`box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 4px 8px -3px rgba(0,0,0,.65), 0 1px 2px rgba(0,0,0,.4)`): drawer fronts.
+- **Drawer pulled** (`box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 14px 22px -8px rgba(0,0,0,.8), 0 2px 4px rgba(0,0,0,.45)`): the current drawer, with a 22px slide out of the cabinet.
+- **Holder frame** (`box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), inset 0 1px 3px rgba(0,0,0,.28)`): the label holder's brass frame and recessed slip.
+- **Chip** (`box-shadow: 0 1px 2px rgba(0,0,0,.10)`; pressed: `inset 0 1px 2px rgba(0,0,0,.35)`): filter chips sit up at rest and press in when on.
+
+### Named Rules
+**The Material Depth Rule.** Depth comes only from the catalogue's materials: paper fibre on paper, wood grain on the cabinet, a recessed slip in a brass frame, ink that bites. Textures are low-opacity SVG noise drawn in the page, never photographs or raster files, and gradients are limited to light falling from above.
+
+**The Pulled Drawer Rule.** Raised depth answers the reader. The drawer for the topic in view slides out and deepens its shadow; an index card under the pointer rises 2px into the hover lift. Nothing else in the reading field moves, and under reduced motion the card does not rise.
+
+## Shapes
+
+Corners are nearly square, like cut card stock: card radius for index cards, label holders, tags and the checkbox; drawer radius for drawer fronts, chips, panels and focus rings; stamp radius for the date stamp and the bottom of a guide-card head. Tabs are the one rounded silhouette: guide-card tabs and the Vue/React track tabs round their top corners only at guide-tab radius, depth-group tabs at depth-tab radius. Full circles are reserved for the progress seal, the depth rings and the palette swatches.
+
+The first card under a depth tab loses its top-start corner so tab and card read as one piece. Card ruling is drawn with background gradients, never borders.
+
+## Components
+
+### Index Card (signature)
+Fibred card stock with a red head rule near the top and blue ruling every 26px, the card lift, near-square corners. Columns: call number, body (title link bold), type tag over length, stamp, checkbox. On hover it rises 2px into the hover lift over 0.35s `cubic-bezier(.16,1,.3,1)`. A done card fades its body text to Faded Ink and turns its call number to the stamp ink.
+
+### Date Stamp (signature)
+A double-ruled box in the stamp ink (2.5px border plus a 1px outline 2px out) with an uppercase Courier date such as "4 NOV 2026", rotated -7deg at 0.82 opacity, masked with the ink bite and multiplied onto the card (screen blend in dark mode). On tick it lands in 0.42s `cubic-bezier(.2,1.4,.4,1)` from 1.7x scale with a brief blur; under reduced motion it appears instantly.
+
+### Progress Seal
+A round library stamp in Seal Gilt: 4px ring with an inner 1.5px ring 11px in, rotated -8deg, masked with the ink bite, the percentage in Courier Prime 30px over a small Hebrew word.
+
+### Drawers (navigation)
+Each topic is a wood-grained drawer front, lit from above: topic number with a 3px tier-colour rule above it, a framed label holder with the title, and a Courier count. Hover and current use the lighter front; current also slides 22px out over 0.35s `cubic-bezier(.16,1,.3,1)` and takes the pulled shadow. Drawers outside the tier filter drop to 40% opacity. On phone they form a horizontal strip and do not slide.
+
+### Palette Swatches
+Four round 24px buttons in the cabinet header, each split diagonally between its finish's cabinet colour and its seal or brass colour, ringed 2px in the cabinet shadow with a faint light outer ring. Hover scales to 1.1 over 0.2s; the chosen swatch (aria-pressed) swaps the light ring for a 2px Cabinet Ink ring. Each carries the finish's Hebrew name as its accessible label.
+
+### Guide Cards (tiers)
+A full-width tier-colour head, fibred and lit from above, with a 36px tab rising above its start edge that carries the tier name; the descriptive line sits in the head below it. Counts in the head use the on-tier colour.
+
+### Chips (filters)
+Card-stock buttons with a 1px Pencil Line border, 13px text and the chip shadow. Hover darkens the border to Faded Ink; pressed inverts to Ink with Card Stock text and presses in. Depth chips lead with their depth ring.
+
+### Track Tabs
+Vue/React tabs are guide-card tabs on a 3px Ink baseline: Card Stock with Faded Ink text at rest, inverted to Ink when selected. Arrow keys follow RTL order.
+
+### Tags
+Small bordered labels in Ink. Video and playlist tags are filled Ink; the "old material" tag is outlined in Faded Ink at regular weight.
+
+### Panels and Brief
+Secondary content (tool status, how to use) lives in closed card-stock panels with the card lift; each topic's brief folds between two Pencil Lines. Disclosure is a drawn plus/minus mask in Faded Ink.
+
+## Do's and Don'ts
+
+### Do:
+- **Do** put the call number first on every index card, in Courier Prime 700 at 21px on the 26px ruling.
+- **Do** keep tier colour on guide cards, topic numbers and drawer rules only, and depth on the empty, half or full ring.
+- **Do** reserve the stamp ink for done, focus, caret and selection, and the seal ink for the seal on the cabinet.
+- **Do** set every scanned number in Courier Prime with tabular figures, isolated left-to-right inside Hebrew.
+- **Do** keep paper and wood corners at 2-4px; only tabs get 6-8px top corners.
+- **Do** read colour only through tokens, and give any new finish its own light and dark values.
+- **Do** give every motion a reduced-motion path that lands the final state instantly.
+
+### Don't:
+- **Don't** use percentage bars, blue progress bars or soft rounded tracker cards; progress is the seal and the stamps.
+- **Don't** colour-code depth or reuse tier inks for anything that is not a tier.
+- **Don't** use hard offset shadows or glows; depth is the layered, neutral-black shadows and material textures above.
+- **Don't** add texture that is not the material's own: no photographic or raster textures; grain belongs to paper and wood.
+- **Don't** let index-card columns shift between cards, on desktop or phone.
+- **Don't** draw the card ruling as borders or use the ruling colours for text.
