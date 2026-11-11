@@ -13,3 +13,9 @@ desktop.ini
 
 # Claude Code session export (personal, contains CV work)
 .session-history/
+
+# Accounts API (Cloudflare Worker): dependencies, local secrets and the local D1
+api/node_modules/
+api/.dev.vars
+api/.wrangler/
+

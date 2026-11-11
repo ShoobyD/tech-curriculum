@@ -1,0 +1,12 @@
+# Copy to .dev.vars (gitignored) for `npm run dev`. In production these are Worker secrets:
+#   npx wrangler secret put <NAME>
+
+# A GitHub OAuth App whose callback is http://localhost:8787/auth/callback.
+# Only needed to try the real login locally; the API itself works with `npm run dev:token`.
+GITHUB_CLIENT_ID="replace-me"
+GITHUB_CLIENT_SECRET="replace-me"
+
+# Any long random string. Signs the login tokens; changing it logs everyone out.
+#   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+SESSION_SECRET="replace-me"
+
