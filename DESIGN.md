@@ -166,6 +166,17 @@ components:
     textColor: "{colors.card}"
     rounded: "{rounded.card}"
     padding: "4px 6px 3px"
+  reader-card:
+    backgroundColor: "{colors.holder}"
+    textColor: "{colors.holder-ink}"
+    rounded: "{rounded.card}"
+    padding: "10px 12px 8px"
+  reader-photo:
+    rounded: "{rounded.card}"
+    size: "40px"
+  friend-photo:
+    rounded: "{rounded.card}"
+    size: "22px"
 ---
 
 # Design System: tech-lead-curriculum
@@ -176,7 +187,7 @@ components:
 
 The study plan is a library card catalogue on a reading-room table. A wooden cabinet holds one drawer per topic, each with a brass label holder; the open drawer is the reading field, where tiers stand as coloured guide cards and every source is a ruled index card with its own call number. Finishing a source is a library date stamp, inked and slightly crooked.
 
-Density is a reference tool's, not a dashboard's: every card keeps the same columns (call number, body, type and length, stamp, box) so the eye scans down a drawer without re-reading layout. Ornament comes only from the catalogue's own materials (painted wood, brass, card stock, printed ruling, ink), and those materials now carry real surface: paper fibre, wood grain lit from above, framed label slips, ink that bites unevenly into the card. The page is Hebrew and right-to-left; English titles, call numbers and dates sit inside it as isolated left-to-right runs.
+Density is a reference tool's, not a dashboard's: every card keeps the same columns (call number, body, type and length, stamp, box, friends) so the eye scans down a drawer without re-reading layout. The catalogue is shared by a circle of friends: a reader who logs in carries a reader's card in the cabinet, and each index card shows the small ID photos of the friends who already stamped it. Ornament comes only from the catalogue's own materials (painted wood, brass, card stock, printed ruling, ink), and those materials now carry real surface: paper fibre, wood grain lit from above, framed label slips, ink that bites unevenly into the card. The page is Hebrew and right-to-left; English titles, call numbers and dates sit inside it as isolated left-to-right runs.
 
 The cabinet comes in four finishes the reader picks from a swatch row in the cabinet header: the green reading room (default), oak, steel and navy. Each finish recolours the same token names, and each has a night version: wood deeper, cards dimmed, inks brighter. The frontmatter records the green reading room in daylight; the other finishes and every dark value live in the sidecar. The world refuses the default learning-tracker look: no sidebar of percentage bars, no soft rounded cards, no blue progress bars.
 
@@ -187,6 +198,7 @@ The cabinet comes in four finishes the reader picks from a swatch row in the cab
 - Tier colour carried only by guide cards, topic numbers and drawer-number rules.
 - Done is a rotated, ink-bitten date stamp with the real date; overall progress is a round library seal.
 - Four cabinet finishes (green, oak, steel, navy) behind one set of token names.
+- A reader's card (a framed paper slip with a square ID photo) for the logged-in friend, and stacked square ID photos of friends on the cards they finished.
 
 ## Colors
 
@@ -258,13 +270,13 @@ Painted-wood and paper neutrals, three tier inks, and one stamp ink that means "
 
 ## Layout
 
-Desktop is a two-column shell: a sticky, full-height cabinet rail on the right that scrolls on its own, and the reading field on the left, centred at its maximum width with max(16px, 3vw) side padding. The cabinet header stacks the title, the swatch row (four 24px swatches, 8px apart) and the subtitle. A sticky, lightly blurred filter bar sits at the top of the field.
+Desktop is a two-column shell: a sticky, full-height cabinet rail on the right that scrolls on its own, and the reading field on the left, centred at its maximum width with max(16px, 3vw) side padding. The cabinet header stacks the title, the swatch row (four 24px swatches, 8px apart) and the subtitle; below it come the ledger (seal, count, sync status line) and the reader's card, then the drawers. A sticky, lightly blurred filter bar sits at the top of the field.
 
 Vertical rhythm is set in catalogue units: section-gap before each tier guide card and the footer, topic-gap between topics, source-gap between depth groups, item-gap between index cards. Card content snaps to the card-rule line pitch.
 
-The index card is a fixed five-column grid on desktop (call number 70px, body, type 72px, stamp 118px, box 28px).
+The index card is a fixed six-column grid on desktop (call number 70px, body, type 72px, stamp 118px, box 28px, friends 76px). In right-to-left order the friends column is the last, on the far left, beside the box.
 
-At 900px and below the cabinet becomes a static header: title and swatches share one wrapping row (the swatch label hides), a 72px seal, and the drawers as a horizontal scroll-snapped strip. Filters become one scrolling row that fades out at the far edge. Cards reflow to call number and box on the first line, body below, type and length on a third line; the stamp overlays the call-number line.
+At 900px and below the cabinet becomes a static header: title and swatches share one wrapping row (the swatch label hides), a 72px seal, the reader's card as one compact row (photo, name, actions stacked at the end) with its guest note hidden, and the drawers as a horizontal scroll-snapped strip. Filters become one scrolling row that fades out at the far edge. Cards reflow to call number and box on the first line, body below, type and length on a third line with the friends' photos at the far end of that line; the stamp overlays the call-number line.
 
 ### Named Rules
 **The Fixed Columns Rule.** Every index card in a drawer uses the same column grid; a missing value leaves its column empty rather than letting the others shift.
@@ -289,14 +301,14 @@ Depth is physical and layered: every surface reads as the material it is. The gr
 
 ## Shapes
 
-Corners are nearly square, like cut card stock: card radius for index cards, label holders, tags and the checkbox; drawer radius for drawer fronts, chips, panels and focus rings; stamp radius for the date stamp and the bottom of a guide-card head. Tabs are the one rounded silhouette: guide-card tabs and the Vue/React track tabs round their top corners only at guide-tab radius, depth-group tabs at depth-tab radius. Full circles are reserved for the progress seal, the depth rings and the palette swatches.
+Corners are nearly square, like cut card stock: card radius for index cards, label holders, tags and the checkbox; drawer radius for drawer fronts, chips, panels and focus rings; stamp radius for the date stamp and the bottom of a guide-card head. Tabs are the one rounded silhouette: guide-card tabs and the Vue/React track tabs round their top corners only at guide-tab radius, depth-group tabs at depth-tab radius. Full circles are reserved for the progress seal, the depth rings and the palette swatches; people's photos are square-cornered ID photos at card radius, never circles.
 
 The first card under a depth tab loses its top-start corner so tab and card read as one piece. Card ruling is drawn with background gradients, never borders.
 
 ## Components
 
 ### Index Card (signature)
-Fibred card stock with a red head rule near the top and blue ruling every 26px, the card lift, near-square corners. Columns: call number, body (title link bold), type tag over length, stamp, checkbox. On hover it rises 2px into the hover lift over 0.35s `cubic-bezier(.16,1,.3,1)`. A done card fades its body text to Faded Ink and turns its call number to the stamp ink.
+Fibred card stock with a red head rule near the top and blue ruling every 26px, the card lift, near-square corners. Columns: call number, body (title link bold), type tag over length, stamp, checkbox, friends' photos. On hover it rises 2px into the hover lift over 0.35s `cubic-bezier(.16,1,.3,1)`. A done card fades its body text to Faded Ink and turns its call number to the stamp ink.
 
 ### Date Stamp (signature)
 A double-ruled box in the stamp ink (2.5px border plus a 1px outline 2px out) with an uppercase Courier date such as "4 NOV 2026", rotated -7deg at 0.82 opacity, masked with the ink bite and multiplied onto the card (screen blend in dark mode). On tick it lands in 0.42s `cubic-bezier(.2,1.4,.4,1)` from 1.7x scale with a brief blur; under reduced motion it appears instantly.
@@ -306,6 +318,17 @@ A round library stamp in Seal Gilt: 4px ring with an inner 1.5px ring 11px in, r
 
 ### Drawers (navigation)
 Each topic is a wood-grained drawer front, lit from above: topic number with a 3px tier-colour rule above it, a framed label holder with the title, and a Courier count. Hover and current use the lighter front; current also slides 22px out over 0.35s `cubic-bezier(.16,1,.3,1)` and takes the pulled shadow. Drawers outside the tier filter drop to 40% opacity. On phone they form a horizontal strip and do not slide.
+
+### Reader's Card (account)
+The account area in the cabinet, built from the label-holder material: a Holder Slip with the holder frame shadow (brass ring, dark hairline, recessed slip) at card radius.
+- **Guest:** the slip is a button, "התחברות עם GitHub" with the GitHub mark drawn in the holder ink, rising 1px on hover; a Cabinet Muted note under it says what logging in gives.
+- **Logged in:** a 40px square ID photo (card radius, dark hairline), the name in 14px 700 and the @login in Courier Prime 12px, then a dashed rule and two text actions: "התנתקות" (700) and, at the far end, "מחיקת החשבון" (400), which asks for confirmation.
+- **Sync status:** the 12px status line under the count in the ledger tells where progress is kept: only in this browser, loading, saving, saved in the account, or a problem. Problems switch it to Cabinet Ink at 700; it is a polite live region.
+
+User data (name, login, photo address) is only ever set as text or as an image on GitHub's avatar host.
+
+### Friend Photos
+On every index card a friend has finished, the friends' 22px square ID photos stack in the friends column, overlapping by 6px, each ringed 2px in Card Stock with a short neutral shadow; the friend who finished it last is first (beside the box) and on top. Up to three photos, then a Courier "+N" in Faded Ink. A friend without a photo gets the first letter of the name on a Faded Ink square. The names ("סיימו: …") are the cluster's tooltip and screen-reader text. The reader never appears in their own cluster: their mark is the stamp. If the friends list can't be loaded, the column stays empty and nothing else changes.
 
 ### Palette Swatches
 Four round 24px buttons in the cabinet header, each split diagonally between its finish's cabinet colour and its seal or brass colour, ringed 2px in the cabinet shadow with a faint light outer ring. Hover scales to 1.1 over 0.2s; the chosen swatch (aria-pressed) swaps the light ring for a 2px Cabinet Ink ring. Each carries the finish's Hebrew name as its accessible label.
@@ -343,3 +366,4 @@ Secondary content (tool status, how to use) lives in closed card-stock panels wi
 - **Don't** add texture that is not the material's own: no photographic or raster textures; grain belongs to paper and wood.
 - **Don't** let index-card columns shift between cards, on desktop or phone.
 - **Don't** draw the card ruling as borders or use the ruling colours for text.
+

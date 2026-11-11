@@ -8,7 +8,7 @@ web
 
 ## Users
 
-Experienced frontend developers preparing for Frontend Tech Lead / Architect interviews. They come back to the page many times over weeks: they pick the next topic, open a video or course, and tick it off. The author is one of them; the page is shared publicly for others in the same situation.
+Experienced frontend developers preparing for Frontend Tech Lead / Architect interviews. They come back to the page many times over weeks: they pick the next topic, open a video or course, and tick it off. The author is one of them; the page is public, and a circle of friends uses it together, seeing who has already finished each source.
 
 ## Product Purpose
 
@@ -21,13 +21,15 @@ Every source was opened and checked (YouTube oEmbed / HTTP), all content is free
 ## Operating Context
 
 - Desktop for long study sessions; phone for browsing and ticking items between sessions.
-- Progress lives only in the visitor's browser (localStorage); there are no accounts and no server.
+- Without a login, progress lives only in the visitor's browser (localStorage). Friends can log in with GitHub: their progress is then kept in their account, follows them between devices, and is visible to every other friend (each card shows who already finished it). There is no private option; this is for friends.
+- Stored per account: GitHub id, login, name and avatar, and which sources were finished and when. No email, password or IP address.
 - Shared as a link (Open Graph preview image at `og-image.png`).
 
 ## Capabilities and Constraints
 
 - One static HTML page (`index.html`) generated from `README.md` by `build.mjs` with `template.html`; no framework, no extra build step. GitHub Pages serves the repo root.
-- Features that must keep working: checkboxes with persisted progress, overall and per-tier/per-topic progress, filters (tier, depth, video only, hide done), Vue/React tabs, table of contents, internal anchors.
+- A small accounts API beside it: a Cloudflare Worker with a D1 database in `api/` (GitHub OAuth login, each person's progress, everyone's finished sources). It is deployed separately (`api/README.md`); the page talks to it with a bearer token and works fully without it.
+- Features that must keep working: checkboxes with persisted progress, overall and per-tier/per-topic progress, filters (tier, depth, video only, hide done), Vue/React tabs, table of contents, internal anchors, the guest experience with no login, and for logged-in friends: sync between devices and friends' avatars on the cards.
 - Content is Hebrew, RTL; source titles and links are English.
 - Must work well on phone and support dark mode (system preference).
 - Text files use CRLF.
@@ -48,3 +50,4 @@ Every source was opened and checked (YouTube oEmbed / HTTP), all content is free
 ## Accessibility & Inclusion
 
 Keep WCAG 2.2 AA as the floor: keyboard access for tabs, filters and checkboxes, visible focus, sufficient contrast in both themes, reduced motion respected.
+
