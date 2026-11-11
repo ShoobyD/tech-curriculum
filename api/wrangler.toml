@@ -16,8 +16,7 @@ ALLOWED_ORIGINS = "https://shoobyd.github.io,http://localhost:4399"
 [[d1_databases]]
 binding = "DB"
 database_name = "tech-lead-curriculum"
-# replaced by the id that `npx wrangler d1 create tech-lead-curriculum` prints (step 2);
-# local dev works with this placeholder
-database_id = "00000000-0000-0000-0000-000000000000"
+# created with `npx wrangler d1 create tech-lead-curriculum`; local dev keeps its own copy under .wrangler/
+database_id = "df0eb692-0577-402d-8476-d594b51ca6fd"
 migrations_dir = "migrations"
 

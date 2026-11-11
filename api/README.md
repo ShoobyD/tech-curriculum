@@ -75,12 +75,13 @@ npx wrangler d1 create tech-lead-curriculum   # put the printed id in wrangler.t
 npm run migrate:remote
 ```
 
-Create a GitHub OAuth App (GitHub → Settings → Developer settings → OAuth Apps → New):
+Create a GitHub OAuth App ([github.com/settings/applications/new](https://github.com/settings/applications/new): account Settings → Developer settings → OAuth Apps):
 
 - Homepage URL: `https://shoobyd.github.io/tech-lead-curriculum/`
-- Authorization callback URL: `https://tech-lead-curriculum-api.bmusty.workers.dev/auth/callback`
+- Redirect URI (called "Authorization callback URL" in older forms): `https://tech-lead-curriculum-api.bmusty.workers.dev/auth/callback`, exactly, without a trailing slash
+- Wildcard matching, Device Flow and expiring user tokens: off
 
-Then set the three secrets and deploy:
+Then set the three secrets and deploy. Run `secret put` in a regular terminal: it prompts for the value, and a non-interactive shell would upload an empty one. Keep the client secret out of shell history and chat logs:
 
 ```sh
 npx wrangler secret put GITHUB_CLIENT_ID
