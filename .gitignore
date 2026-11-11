@@ -10,3 +10,6 @@ desktop.ini
 
 # Design tooling (contains the dev-only direction contract)
 .impeccable/
+
+# Claude Code session export (personal, contains CV work)
+.session-history/
