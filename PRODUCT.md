@@ -21,7 +21,7 @@ Every source was opened and checked (YouTube oEmbed / HTTP), all content is free
 ## Operating Context
 
 - Desktop for long study sessions; phone for browsing and ticking items between sessions.
-- Without a login, progress lives only in the visitor's browser (localStorage). Friends can log in with GitHub: their progress is then kept in their account, follows them between devices, and is visible to every other friend (each card shows who already finished it). There is no private option; this is for friends.
+- Without a login, progress lives only in the visitor's browser (localStorage). Friends can log in with GitHub: their progress is then kept in their account, follows them between devices, and is visible to every other friend (each card shows who already finished it). Open pages update live, without a reload, over a WebSocket. There is no private option; this is for friends.
 - Stored per account: GitHub id, login, name and avatar, and which sources were finished and when. No email, password or IP address.
 - Shared as a link (Open Graph preview image at `og-image.png`).
 

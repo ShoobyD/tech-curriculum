@@ -946,7 +946,7 @@ details.panel { box-shadow: var(--lift); }
   }
   async function loadFriends() {
     try {
-      const res = await fetch(API + '/friends', { signal: AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined });
+      const res = await fetch(API + '/friends', { cache: 'no-cache', signal: AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined });
       if (!res.ok) return;
       const data = await res.json();
       friends = (Array.isArray(data.friends) ? data.friends : [])
@@ -995,7 +995,7 @@ details.panel { box-shadow: var(--lift); }
     state.pending = true;
     lsSet(PROGRESS_KEY, state);
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(pushProgress, 800);
+    saveTimer = setTimeout(pushProgress, 300);
     setStatus('saving');
   }
   async function pushProgress(keepalive = false) {
@@ -1065,6 +1065,82 @@ details.panel { box-shadow: var(--lift); }
     if (!session) return;
     if (!loaded) startAccount(); else if (state.pending) pushProgress();
   });
+
+  // ---------- live: every change is pushed over a WebSocket the moment it is saved (api/src/room.ts) ----------
+  // Open while the page is visible, closed while it is hidden. After a gap (hidden, or a dropped
+  // connection) the page reloads friends and its own progress, so nothing missed stays missing.
+  const busy = () => !!(state.pending || saving || saveTimer);
+  function ownChange(f) {
+    // my own progress, saved on another device (or the echo of this one's save);
+    // a newer change on this device wins, it is on its way to the account
+    if (busy()) return;
+    const p = { done: Object.keys(f.done), dates: Object.fromEntries(Object.entries(f.done).filter(([, t]) => t > 0)) };
+    if (!sameProgress(p, { done: [...doneSet], dates: state.dates })) adopt(p);
+    setStatus('saved');
+  }
+  function onLive(msg) {
+    if (msg?.type === 'progress') {
+      const f = msg.friend;
+      if (!f || typeof f.id !== 'number' || typeof f.login !== 'string' || !f.done || typeof f.done !== 'object') return;
+      friends = friends.filter(x => x.id !== f.id);
+      if (Object.keys(f.done).length) friends.unshift(f);
+      renderFriends();
+      if (session?.user?.id === f.id) ownChange(f);
+    } else if (msg?.type === 'deleted' && typeof msg.id === 'number') {
+      friends = friends.filter(x => x.id !== msg.id);
+      renderFriends();
+      if (session?.user?.id === msg.id) endSession('deleted');
+    }
+  }
+  async function catchUp() {
+    loadFriends();
+    if (!session || !loaded || busy()) return;
+    try {
+      const server = await api('/progress');
+      const p = { done: server.done, dates: server.dates || {} };
+      if (!busy() && !sameProgress(p, { done: [...doneSet], dates: state.dates })) adopt(p);
+    } catch (e) { /* the next gap or visit catches up */ }
+  }
+
+  const LIVE_URL = API.replace(/^http/, 'ws') + '/live';
+  let live = null, liveTimer = 0, pingTimer = 0, retries = 0;
+  function openLive() {
+    if (live || document.hidden || !('WebSocket' in window)) return;
+    let ws;
+    try { ws = new WebSocket(LIVE_URL); } catch (e) { return; }
+    live = ws;
+    ws.addEventListener('open', () => {
+      if (retries) catchUp(); // reconnected after a drop: fetch what was missed
+      retries = 0;
+      clearInterval(pingTimer);
+      pingTimer = setInterval(() => { try { ws.send('ping'); } catch (e) { /* closing */ } }, 45000);
+    });
+    ws.addEventListener('message', e => {
+      if (e.data === 'pong') return;
+      try { onLive(JSON.parse(e.data)); } catch (err) { /* not ours */ }
+    });
+    ws.addEventListener('close', () => {
+      clearInterval(pingTimer);
+      if (live !== ws) return; // closed on purpose
+      live = null;
+      // dropped: try again, waiting 1s, 2s, 4s… up to 30s
+      clearTimeout(liveTimer);
+      liveTimer = setTimeout(openLive, Math.min(30000, 1000 * 2 ** retries++));
+    });
+  }
+  function closeLive() {
+    clearTimeout(liveTimer);
+    clearInterval(pingTimer);
+    const ws = live;
+    live = null;
+    if (ws) ws.close(1000, 'hidden');
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { closeLive(); return; }
+    retries = 0;
+    catchUp();
+    openLive();
+  });
   // leaving with a change still waiting for its debounce: send it on the way out
   addEventListener('pagehide', () => { if (saveTimer) pushProgress(true); });
 
@@ -1073,6 +1149,7 @@ details.panel { box-shadow: var(--lift); }
   applyFilters();
   startAccount();
   loadFriends();
+  openLive();
 })();
 </script>
 </body>
