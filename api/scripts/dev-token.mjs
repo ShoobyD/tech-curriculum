@@ -1,7 +1,7 @@
 // Mints a session token for local testing, without going through GitHub:
 //   npm run dev:token -- <userId>
 // It signs with SESSION_SECRET from .dev.vars, in the same format as src/tokens.ts. The user must
-// exist in the local database (npm run db:seed:local creates users 1, 2 and 3).
+// exist in the local database (npm run db:seed:local creates users 1 to 5).
 import { readFileSync } from 'node:fs';
 import { webcrypto as crypto } from 'node:crypto';
 

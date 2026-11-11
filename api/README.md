@@ -47,7 +47,7 @@ cd api
 npm install
 cp .dev.vars.example .dev.vars   # then set SESSION_SECRET (and the GitHub values to try the real login)
 npm run migrate:local            # creates the tables in the local D1 (under .wrangler/)
-npm run db:seed:local            # three made-up friends, ids 1-3
+npm run db:seed:local            # five made-up friends, ids 1-5
 npm run dev                      # http://localhost:8787
 npm run dev:token -- 1           # prints a session token for user 1
 npm run typecheck

@@ -359,7 +359,7 @@ td:first-child { font-weight: 700; white-space: nowrap; }
 .items { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .item {
   --lh: 26px;
-  position: relative; display: grid; grid-template-columns: 70px minmax(0, 1fr) 72px 118px 28px; gap: 0 14px; align-items: start;
+  position: relative; display: grid; grid-template-columns: 70px minmax(0, 1fr) 72px 118px 28px 76px; gap: 0 14px; align-items: start;
   background-color: var(--card); border-radius: 2px; box-shadow: var(--shadow);
   padding: 14px 16px calc(var(--lh) * .5); line-height: var(--lh);
   background-image: linear-gradient(var(--rule-red), var(--rule-red)), repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), var(--rule-blue) calc(var(--lh) - 1px) var(--lh));
@@ -386,6 +386,13 @@ td:first-child { font-weight: 700; white-space: nowrap; }
 .item.is-done .item-body, .item.is-done .item-body a { color: var(--muted); }
 .item.is-done .call { color: var(--stamp); }
 .item.is-done .tag.video { background: var(--muted); border-color: var(--muted); }
+
+/* friends who already finished this source: small ID photos stacked beside the box, newest on top */
+.friends { grid-column: 6; grid-row: 1; justify-self: start; align-self: start; margin-top: 2px; display: flex; align-items: center; line-height: 1; cursor: default; }
+.friend { width: 22px; height: 22px; border-radius: 2px; flex: none; position: relative; background: var(--line); box-shadow: 0 0 0 2px var(--card), 0 1px 3px rgba(0,0,0,.35); }
+.friend + .friend { margin-inline-start: -6px; }
+span.friend { display: grid; place-items: center; font: 700 11px/1 var(--font-body); color: var(--card); background: var(--muted); }
+.friends-more { font: 700 12px/1 var(--font-type); color: var(--muted); margin-inline-start: 5px; direction: ltr; font-variant-numeric: tabular-nums; }
 
 /* the date stamp: the one authored moment */
 .stamp {
@@ -512,6 +519,7 @@ details.panel { box-shadow: var(--lift); }
   .item-body { grid-column: 1 / -1; grid-row: 2; }
   .box { grid-column: 2; grid-row: 1; }
   .stamp { grid-column: 1; grid-row: 1; font-size: 12px; margin-top: -2px; }
+  .friends { grid-column: 1 / -1; grid-row: 3; justify-self: end; margin-top: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -868,7 +876,83 @@ details.panel { box-shadow: var(--lift); }
     try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* storage unavailable */ }
     clearTimeout(saveTimer);
     renderAccount();
+    renderFriends();
     setStatus(note, note === 'expired' ? 'error' : '');
+  }
+
+  // ---------- friends: who already finished each source (GET /friends, public, guests too) ----------
+  let friends = [];
+  const itemById = new Map(items.map(el => [el.dataset.id, el]));
+  const SHOWN_FRIENDS = 3;
+  const joinNames = names => {
+    try { return new Intl.ListFormat('he', { type: 'conjunction' }).format(names); } catch (e) { return names.join(', '); }
+  };
+  function friendFace(f) {
+    // user data: text, or an image address on GitHub's avatar host only
+    if (typeof f.avatar === 'string' && f.avatar.startsWith(AVATAR_HOST)) {
+      const img = new Image(22, 22);
+      img.className = 'friend';
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.src = f.avatar + (f.avatar.includes('?') ? '&' : '?') + 's=44';
+      return img;
+    }
+    const initial = document.createElement('span');
+    initial.className = 'friend';
+    initial.textContent = [...(f.name || f.login)][0] || '?';
+    return initial;
+  }
+  function renderFriends() {
+    const me = session?.user?.id;
+    const byItem = new Map();
+    for (const f of friends) {
+      if (f.id === me) continue; // my own progress is the stamp
+      for (const [id, at] of Object.entries(f.done)) {
+        if (!itemById.has(id)) continue;
+        if (!byItem.has(id)) byItem.set(id, []);
+        byItem.get(id).push({ f, at: Number(at) || 0 });
+      }
+    }
+    for (const el of items) {
+      el.querySelector('.friends')?.remove();
+      const list = byItem.get(el.dataset.id);
+      if (!list) continue;
+      list.sort((a, b) => b.at - a.at); // whoever finished it last comes first
+      const label = 'סיימו: ' + joinNames(list.map(x => x.f.name || x.f.login));
+      const box = document.createElement('span');
+      box.className = 'friends';
+      box.title = label;
+      const faces = list.slice(0, SHOWN_FRIENDS).map((x, i, arr) => {
+        const face = friendFace(x.f);
+        face.style.zIndex = String(arr.length - i);
+        face.setAttribute('aria-hidden', 'true');
+        return face;
+      });
+      box.append(...faces);
+      if (list.length > SHOWN_FRIENDS) {
+        const more = document.createElement('span');
+        more.className = 'friends-more';
+        more.setAttribute('aria-hidden', 'true');
+        more.textContent = `+${list.length - SHOWN_FRIENDS}`;
+        box.append(more);
+      }
+      const sr = document.createElement('span');
+      sr.className = 'sr';
+      sr.textContent = label;
+      box.append(sr);
+      el.append(box);
+    }
+  }
+  async function loadFriends() {
+    try {
+      const res = await fetch(API + '/friends', { signal: AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined });
+      if (!res.ok) return;
+      const data = await res.json();
+      friends = (Array.isArray(data.friends) ? data.friends : [])
+        .filter(f => f && typeof f.login === 'string' && f.done && typeof f.done === 'object');
+      renderFriends();
+    } catch (e) { /* no avatars; the page works exactly as without them */ }
   }
 
   async function api(path, init = {}) {
@@ -949,6 +1033,7 @@ details.panel { box-shadow: var(--lift); }
       session = { ...session, user };
       lsSet(SESSION_KEY, session);
       renderAccount();
+      renderFriends();
       loaded = true;
       if (justLoggedIn) {
         const both = merged(server, state);
@@ -987,6 +1072,7 @@ details.panel { box-shadow: var(--lift); }
   updateCounts();
   applyFilters();
   startAccount();
+  loadFriends();
 })();
 </script>
 </body>
