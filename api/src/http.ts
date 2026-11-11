@@ -1,6 +1,10 @@
+import type { Room } from './room';
+
 /** Bindings and settings Cloudflare injects (wrangler.toml, secrets, .dev.vars locally). */
 export interface Env {
 	DB: D1Database;
+	/** The friends' live room (room.ts). */
+	ROOM: DurableObjectNamespace<Room>;
 	/** Comma-separated origins allowed to call the API and to receive a login. */
 	ALLOWED_ORIGINS: string;
 	/** Secrets. Any missing one makes the endpoints that need it answer "not_configured". */

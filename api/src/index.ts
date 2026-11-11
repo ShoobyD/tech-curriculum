@@ -4,22 +4,28 @@
  *   GET    /auth/login?return=<page>  login with GitHub (see auth.ts)
  *   GET    /auth/callback
  *   GET    /friends                   everyone's finished items, for the avatars on the cards (public)
+ *   GET    /live                      WebSocket: every change, the moment it is saved (public, see room.ts)
  *   GET    /me                        the logged-in person                    Authorization: Bearer
  *   DELETE /me                        deletes the account and its progress    Authorization: Bearer
  *   GET    /progress                  my progress                             Authorization: Bearer
  *   PUT    /progress                  {done, dates}: replaces my progress     Authorization: Bearer
  *
- * The site is static; this Worker is the only thing that writes to the database. Writes are
- * accepted only from the allowed origins.
+ * The site is static; this Worker is the only thing that writes to the database. Writes, and
+ * joining the live room, are accepted only from the allowed origins.
  */
 import { handleCallback, handleLogin } from './auth';
-import { deleteUser, getProgress, getUser, listFriends, putProgress } from './db';
+import { deleteUser, type Friend, getProgress, getUser, listFriends, putProgress, type User } from './db';
 import { allowedOrigins, corsHeaders, type Env, json } from './http';
-import { MAX_BYTES, parseProgress } from './progress';
+import { MAX_BYTES, type Progress, parseProgress } from './progress';
 import { sessionOfRequest } from './tokens';
 
+export { Room } from './room';
+
+/** All friends share one room. */
+const room = (env: Env) => env.ROOM.get(env.ROOM.idFromName('friends'));
+
 export default {
-	async fetch(request: Request, env: Env): Promise<Response> {
+	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const url = new URL(request.url);
 		const origin = request.headers.get('Origin');
 		const originAllowed = !!origin && allowedOrigins(env).includes(origin);
@@ -33,6 +39,12 @@ export default {
 			if (url.pathname === '/auth/callback' && method === 'GET') return await handleCallback(request, env);
 			if (url.pathname === '/friends' && method === 'GET') {
 				return json({ friends: await listFriends(env.DB) }, 200, cors, 'public, max-age=30');
+			}
+			if (url.pathname === '/live' && method === 'GET') {
+				if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return json({ error: 'websocket_expected' }, 426, cors);
+				// browsers always send Origin when opening a WebSocket: only the site may join
+				if (!originAllowed) return json({ error: 'origin' }, 403, cors);
+				return await room(env).fetch(request);
 			}
 
 			if (url.pathname !== '/me' && url.pathname !== '/progress') return json({ error: 'not_found' }, 404, cors);
@@ -50,12 +62,13 @@ export default {
 				if (method === 'GET') return json({ user }, 200, cors);
 				if (method === 'DELETE') {
 					await deleteUser(env.DB, user.id);
+					announce(env, ctx, { type: 'deleted', id: user.id });
 					return json({ deleted: true }, 200, cors);
 				}
 			}
 			if (url.pathname === '/progress') {
 				if (method === 'GET') return json(await getProgress(env.DB, user.id), 200, cors);
-				if (method === 'PUT') return await saveProgress(request, env, user.id, cors);
+				if (method === 'PUT') return await saveProgress(request, env, ctx, user, cors);
 			}
 			return json({ error: 'method_not_allowed' }, 405, cors);
 		} catch (err) {
@@ -65,7 +78,7 @@ export default {
 	},
 } satisfies ExportedHandler<Env>;
 
-async function saveProgress(request: Request, env: Env, userId: number, cors: Record<string, string>): Promise<Response> {
+async function saveProgress(request: Request, env: Env, ctx: ExecutionContext, user: User, cors: Record<string, string>): Promise<Response> {
 	const text = await request.text();
 	if (text.length > MAX_BYTES) return json({ error: 'too_large' }, 413, cors);
 	let body: unknown;
@@ -77,7 +90,25 @@ async function saveProgress(request: Request, env: Env, userId: number, cors: Re
 	const progress = parseProgress(body);
 	if (!progress) return json({ error: 'invalid' }, 422, cors);
 	const now = Date.now();
-	await putProgress(env.DB, userId, progress, now);
+	await putProgress(env.DB, user.id, progress, now);
+	announce(env, ctx, { type: 'progress', friend: asFriend(user, progress, now) });
 	return json({ saved: true, updatedAt: now }, 200, cors);
+}
+
+/** The same shape GET /friends returns per person. */
+function asFriend(user: User, progress: Progress, updatedAt: number): Friend {
+	return { ...user, done: Object.fromEntries(progress.done.map((id) => [id, progress.dates[id] ?? 0])), updatedAt };
+}
+
+/**
+ * Tells every open page, after the response is sent. The database already holds the change, so a
+ * failed push only delays it until the page next loads (pages also catch up when they reconnect).
+ */
+function announce(env: Env, ctx: ExecutionContext, message: { type: 'progress'; friend: Friend } | { type: 'deleted'; id: number }) {
+	ctx.waitUntil(
+		room(env)
+			.broadcast(JSON.stringify(message))
+			.catch((err: unknown) => console.error('live:', err)),
+	);
 }
 

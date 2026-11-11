@@ -20,3 +20,14 @@ database_name = "tech-lead-curriculum"
 database_id = "df0eb692-0577-402d-8476-d594b51ca6fd"
 migrations_dir = "migrations"
 
+# The friends' live room (src/room.ts): holds the open pages' WebSockets and pushes changes.
+[[durable_objects.bindings]]
+name = "ROOM"
+class_name = "Room"
+
+# Durable Object class history. The free plan supports only SQLite-backed classes, so the class
+# is declared with new_sqlite_classes even though the room stores nothing.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]
+

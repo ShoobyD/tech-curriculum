@@ -1,8 +1,8 @@
 # Accounts API
 
-Accounts and shared progress for the [study plan](https://shoobyd.github.io/tech-lead-curriculum/): a Cloudflare Worker with a D1 database. The site itself stays static on GitHub Pages. This Worker is the only thing that writes to the database, so write access never reaches the browser.
+Accounts and shared progress for the [study plan](https://shoobyd.github.io/tech-lead-curriculum/): a Cloudflare Worker with a D1 database and one Durable Object for live updates. The site itself stays static on GitHub Pages. This Worker is the only thing that writes to the database, so write access never reaches the browser.
 
-Friends log in with GitHub, and their progress follows them between devices. Everyone's progress is visible to everyone: the page shows, on each source, the friends who already finished it.
+Friends log in with GitHub, and their progress follows them between devices. Everyone's progress is visible to everyone: the page shows, on each source, the friends who already finished it. Open pages get every change live, over a WebSocket.
 
 ## API
 
@@ -11,6 +11,7 @@ Friends log in with GitHub, and their progress follows them between devices. Eve
 | `GET` | `/auth/login?return=<page>` | | Redirects to GitHub's consent page (no scopes) |
 | `GET` | `/auth/callback` | | Redirects back to `<page>#session=<token>`, or `<page>#auth_error=denied\|failed` |
 | `GET` | `/friends` | | `{ friends: [{ id, login, name, avatar, done: { itemId: timestamp }, updatedAt }] }`, most recently active first, cached 30 s |
+| `GET` | `/live` | | WebSocket upgrade, only from `ALLOWED_ORIGINS` (see [Live updates](#live-updates)); a plain request gets 426 |
 | `GET` | `/me` | Bearer | `{ user: { id, login, name, avatar } }` |
 | `DELETE` | `/me` | Bearer | `{ deleted: true }`: the account and its progress |
 | `GET` | `/progress` | Bearer | `{ done, dates, updatedAt }` (empty with `updatedAt: 0` before the first save) |
@@ -23,11 +24,24 @@ Errors are `{ error }` with one of:
 | Status | `error` | Meaning |
 | --- | --- | --- |
 | 401 | `login_required` | No token, a forged or expired one, or the account was deleted |
-| 403 | `origin` | A write (`PUT`, `DELETE`) not from one of `ALLOWED_ORIGINS` |
+| 403 | `origin` | A write (`PUT`, `DELETE`) or a `/live` connection not from one of `ALLOWED_ORIGINS` |
 | 413 | `too_large` | A progress body over 128 KB |
 | 400 | `bad_json` | The body isn't JSON |
 | 422 | `invalid` | Not a progress document: item ids must look like `build.mjs` makes them (`^[0-9a-z]{1,8}(-\d{1,3})?$`), at most 2000, dates positive numbers |
 | 500 | `not_configured` | A secret is missing |
+
+## Live updates
+
+Workers don't share memory between requests and D1 doesn't announce changes, so one Durable Object, `Room` (`src/room.ts`), is the meeting point for all friends. Each open page holds a WebSocket to it through `/live`. After a `PUT /progress` or `DELETE /me` is saved, the Worker sends the room one message, and the room passes it to every connected page:
+
+```jsonc
+{ "type": "progress", "friend": { "id": 1, "login": "…", "name": "…", "avatar": "…", "done": { "itemId": 1762000000000 }, "updatedAt": 1762000000000 } }
+{ "type": "deleted", "id": 1 }
+```
+
+The `friend` object has the same shape as an entry of `GET /friends`, and holds nothing that isn't already public there. The page's own devices receive their owner's changes the same way.
+
+The room accepts sockets with the Hibernation API: while nothing happens it sleeps and isn't billed for duration, even with pages connected. Pages send `ping` to keep the connection open, and the runtime answers `pong` without waking the room. A page that was disconnected reloads `/friends` and `/progress` when it reconnects, so a missed message only delays a change. The room stores nothing.
 
 ## How login works
 
