@@ -210,6 +210,32 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .done-of { font-size: 15px; color: var(--cab-ink); margin: 0; }
 .done-of + .save-status { margin-top: 6px; }
 .save-status { font-size: 12px; color: var(--cab-muted); margin: 0; line-height: 1.5; }
+.save-status[data-state="error"] { color: var(--cab-ink); font-weight: 700; }
+
+/* the reader's card: a paper slip in a brass frame, like the drawer labels, with a square ID photo */
+.reader-guest { display: grid; gap: 8px; }
+.gh-login, .reader-card {
+  color: var(--holder-ink); background-color: var(--holder); border-radius: 2px;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.35), rgba(0,0,0,.04));
+  box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), inset 0 1px 3px rgba(0,0,0,.28);
+}
+.gh-login {
+  display: flex; align-items: center; justify-content: center; gap: 9px; padding: 9px 12px;
+  font: 700 14px/1.3 var(--font-body); text-decoration: none;
+  transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s;
+}
+.gh-login:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), 0 6px 10px -4px rgba(0,0,0,.55); }
+.gh-login svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
+.reader-note { font-size: 12px; color: var(--cab-muted); margin: 0; line-height: 1.5; }
+.reader-card { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 0 12px; align-items: center; padding: 10px 12px 8px; }
+.reader-photo { grid-row: span 2; width: 40px; height: 40px; border-radius: 2px; overflow: hidden; background: rgba(0,0,0,.14); box-shadow: 0 0 0 1px rgba(0,0,0,.3); }
+.reader-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.reader-name { font-size: 14px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; align-self: end; }
+.reader-login { font: 400 12px/1.4 var(--font-type); direction: ltr; text-align: right; align-self: start; }
+.reader-actions { grid-column: 1 / -1; display: flex; gap: 16px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,.28); }
+.reader-actions button { font: 700 12px/1.4 var(--font-body); color: var(--holder-ink); background: none; border: 0; padding: 2px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.reader-actions button:hover { text-decoration-thickness: 2px; }
+.reader-actions .danger { font-weight: 400; margin-inline-start: auto; }
 
 /* drawers: the table of contents */
 .toc { display: grid; gap: 16px; }
@@ -458,6 +484,12 @@ details.panel { box-shadow: var(--lift); }
   .seal b { font-size: 20px; }
   .seal small { font-size: 11px; }
   .done-of { font-size: 14px; }
+  .reader-note { display: none; }
+  .gh-login { padding: 8px 12px; font-size: 13px; }
+  .reader-card { grid-template-columns: 32px minmax(0, 1fr) auto; padding: 7px 10px; }
+  .reader-photo { width: 32px; height: 32px; }
+  .reader-actions { grid-column: 3; grid-row: 1 / span 2; flex-direction: column; align-items: flex-end; gap: 0; margin: 0; padding: 0; border: 0; }
+  .reader-actions .danger { margin: 0; }
   .toc { display: flex; gap: 6px; overflow-x: auto; margin-inline: -16px; padding: 2px 16px 6px; scroll-snap-type: x proximity; }
   .toc-group { flex: none; display: flex; align-items: center; gap: 6px; }
   .toc-tier { margin: 0; font-size: 0; }
@@ -506,7 +538,25 @@ details.panel { box-shadow: var(--lift); }
     <div class="seal"><b id="pct">0%</b><small>נלמד</small></div>
     <div>
       <p class="done-of" id="done-of">0 מתוך 0</p>
-      <p class="save-status">ההתקדמות נשמרת רק בדפדפן הזה.</p>
+      <p class="save-status" id="save-status" role="status">ההתקדמות נשמרת רק בדפדפן הזה.</p>
+    </div>
+  </div>
+  <div class="reader" id="reader">
+    <div class="reader-guest">
+      <a class="gh-login" id="gh-login" href="#">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        התחברות עם GitHub
+      </a>
+      <p class="reader-note">שומרת את ההתקדמות בין מכשירים, ומראה לחברים מה כבר סיימת.</p>
+    </div>
+    <div class="reader-card" hidden>
+      <span class="reader-photo"></span>
+      <span class="reader-name"></span>
+      <span class="reader-login" dir="ltr"></span>
+      <div class="reader-actions">
+        <button type="button" data-act="logout">התנתקות</button>
+        <button type="button" class="danger" data-act="delete">מחיקת החשבון</button>
+      </div>
     </div>
   </div>
   <nav class="toc" aria-label="תוכן עניינים"><div class="toc-group" data-tier="1"><div class="toc-tier">עדיפות 1</div><ol><li><a href="#s1"><span class="toc-num">1</span><span class="toc-title"><bdi>Frontend System Design</bdi></span><span class="toc-count" data-count-for="s1"></span></a></li><li><a href="#s2"><span class="toc-num">2</span><span class="toc-title">ארכיטקטורה ופריימוורק</span><span class="toc-count" data-count-for="s2"></span></a></li><li><a href="#s3"><span class="toc-num">3</span><span class="toc-title"><bdi>AI</bdi> לאורך ה־<bdi>SDLC (agentic engineering)</bdi></span><span class="toc-count" data-count-for="s3"></span></a></li><li><a href="#s4"><span class="toc-num">4</span><span class="toc-title">הובלה טכנית</span><span class="toc-count" data-count-for="s4"></span></a></li></ol></div><div class="toc-group" data-tier="2"><div class="toc-tier">עדיפות 2</div><ol><li><a href="#s5"><span class="toc-num">5</span><span class="toc-title">ביצועים</span><span class="toc-count" data-count-for="s5"></span></a></li><li><a href="#s6"><span class="toc-num">6</span><span class="toc-title">אסטרטגיית בדיקות</span><span class="toc-count" data-count-for="s6"></span></a></li><li><a href="#s7"><span class="toc-num">7</span><span class="toc-title">יסודות <bdi>JS</bdi>/דפדפן ו־<bdi>live coding</bdi></span><span class="toc-count" data-count-for="s7"></span></a></li><li><a href="#s8"><span class="toc-num">8</span><span class="toc-title"><bdi>TypeScript</bdi> מתקדם</span><span class="toc-count" data-count-for="s8"></span></a></li><li><a href="#s9"><span class="toc-num">9</span><span class="toc-title">מגמות רוחב בין פריימוורקים</span><span class="toc-count" data-count-for="s9"></span></a></li><li><a href="#s10"><span class="toc-num">10</span><span class="toc-title">השוואה ובחירת פריימוורק</span><span class="toc-count" data-count-for="s10"></span></a></li></ol></div><div class="toc-group" data-tier="3"><div class="toc-tier">עדיפות 3</div><ol><li><a href="#s11"><span class="toc-num">11</span><span class="toc-title">אבטחה</span><span class="toc-count" data-count-for="s11"></span></a></li><li><a href="#s12"><span class="toc-num">12</span><span class="toc-title">נגישות</span><span class="toc-count" data-count-for="s12"></span></a></li><li><a href="#s13"><span class="toc-num">13</span><span class="toc-title"><bdi>Design Systems</bdi> ו־<bdi>Web Components</bdi></span><span class="toc-count" data-count-for="s13"></span></a></li><li><a href="#s14"><span class="toc-num">14</span><span class="toc-title">כלים, <bdi>CI/CD</bdi> ו־<bdi>Observability</bdi></span><span class="toc-count" data-count-for="s14"></span></a></li><li><a href="#s15"><span class="toc-num">15</span><span class="toc-title">פיצ'רים של <bdi>AI</bdi> בצד הלקוח</span><span class="toc-count" data-count-for="s15"></span></a></li><li><a href="#s16"><span class="toc-num">16</span><span class="toc-title">פולסטאק ובקאנד</span><span class="toc-count" data-count-for="s16"></span></a></li></ol></div><div class="toc-group" data-tier="end"><div class="toc-tier">לסיום</div><ol><li><a href="#star"><span class="toc-title">בנק סיפורי <bdi>STAR</bdi></span><span class="toc-count" data-count-for="star"></span></a></li><li><a href="#ask"><span class="toc-title">שאלות למראיין</span><span class="toc-count" data-count-for="ask"></span></a></li><li><a href="#final"><span class="toc-title">שבועיים לפני הריאיון</span><span class="toc-count" data-count-for="final"></span></a></li></ol></div></nav>
@@ -551,7 +601,7 @@ details.panel { box-shadow: var(--lift); }
           <li><strong>מספר מיון:</strong> לכל מקור יש מספר, למשל 3.12: הנושא, ואחריו המיקום של המקור בנושא.</li>
           <li><strong>תגיות:</strong> <span class="tag video">וידאו</span> מסמן סרטון, ו־<span class="tag video">פלייליסט</span> מסמן סדרה או כנס שלם. קישור "חלק מסדרה" מוביל לפלייליסט המלא של הסדרה. <span class="tag old">ישן</span> מסמן חומר ישן: העקרונות נכונים, אבל כדאי לשים לב לתאריך.</li>
           <li><strong>סדר מומלץ בכל נושא:</strong> קודם סקירה, אחר כך בינוני, ועומק רק בנושאים שרוצים להעמיק בהם. בסוף עוברים על השאלות הצפויות ומנסחים תשובה בקול.</li>
-          <li><strong>מעקב:</strong> מסמנים כל מקור כשמסיימים, והוא מקבל חותמת עם התאריך. ההתקדמות נשמרת בדפדפן הזה בלבד, ולא עולה לשום מקום. בדפדפן אחר או במחשב אחר היא תתחיל מאפס.</li>
+          <li><strong>מעקב:</strong> מסמנים כל מקור כשמסיימים, והוא מקבל חותמת עם התאריך. בלי התחברות, ההתקדמות נשמרת רק בדפדפן הזה. התחברות עם GitHub שומרת אותה בחשבון, כך שהיא עוברת בין מכשירים, וגלויה לחברים שמשתמשים בתכנית. נשמרים רק שם המשתמש, השם והתמונה מ־GitHub, ואילו מקורות סימנת ומתי.</li>
           <li><strong>מסלולי Vue ו־React:</strong> בנושא 2 עוברים בין המסלולים בלשוניות. הספירה כוללת את שני המסלולים.</li>
         </ul></div>
     </details>
@@ -612,12 +662,13 @@ details.panel { box-shadow: var(--lift); }
     }
   }
 
-  // ---------- toggling (progress lives only in this browser's storage) ----------
+  // ---------- toggling (saved in this browser; with an account, also in the account) ----------
   function onToggle(el, on) {
     const id = el.dataset.id;
     if (on) { doneSet.add(id); state.dates[id] = Date.now(); } else { doneSet.delete(id); delete state.dates[id]; }
     state = { done: [...doneSet], dates: state.dates, updatedAt: Date.now() };
     lsSet(PROGRESS_KEY, state);
+    markChanged();
     el.classList.remove('just-stamped');
     paint(el, on);
     if (on) { void el.offsetWidth; el.classList.add('just-stamped'); }
@@ -741,10 +792,203 @@ details.panel { box-shadow: var(--lift); }
     for (const s of document.querySelectorAll('.topic')) io.observe(s);
   }
 
+  // ---------- account: GitHub login, progress kept in the account (api/ in this repo) ----------
+  // Without a login nothing changes: progress stays in this browser only. With one, this
+  // browser's copy is a cache of the account: every change is saved to it (debounced), and the
+  // account's copy is loaded on each visit. Changes not yet confirmed carry `pending`, so an
+  // offline change wins over the account's older copy on the next visit.
+  const API = (() => {
+    // a local page can point at `wrangler dev`: ?api=http://localhost:8787
+    if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      const q = new URLSearchParams(location.search).get('api');
+      if (q && /^https?:\/\/[^/]+$/.test(q.replace(/\/+$/, ''))) return q.replace(/\/+$/, '');
+    }
+    return 'https://tech-lead-curriculum-api.bmusty.workers.dev';
+  })();
+  const SESSION_KEY = 'tl-plan-session-v1';
+  const AVATAR_HOST = 'https://avatars.githubusercontent.com/';
+  const MSG = {
+    guest: 'ההתקדמות נשמרת רק בדפדפן הזה.',
+    loading: 'טוען את ההתקדמות מהחשבון…',
+    saving: 'שומר בחשבון…',
+    saved: 'שמור בחשבון, בכל המכשירים.',
+    retry: 'לא נשמר בחשבון. ננסה שוב בסימון הבא או כשהחיבור יחזור.',
+    offline: 'אין כרגע חיבור לחשבון. ההתקדמות נשמרת בדפדפן הזה.',
+    denied: 'ההתחברות בוטלה.',
+    failed: 'ההתחברות נכשלה. אפשר לנסות שוב.',
+    expired: 'ההתחברות פגה. צריך להתחבר שוב כדי לשמור בחשבון.',
+    loggedOut: 'התנתקת. ההתקדמות נשארת בדפדפן הזה.',
+    deleted: 'החשבון נמחק. ההתקדמות נשארת בדפדפן הזה.',
+    deleteFailed: 'המחיקה לא הצליחה. אפשר לנסות שוב.',
+    confirmDelete: 'למחוק את החשבון ואת ההתקדמות השמורה בו? בדפדפן הזה ההתקדמות תישאר.',
+  };
+  const statusEl = document.getElementById('save-status');
+  const reader = document.getElementById('reader');
+  const guestEl = reader.querySelector('.reader-guest');
+  const cardEl = reader.querySelector('.reader-card');
+  const setStatus = (key, kind = '') => { statusEl.textContent = MSG[key]; statusEl.dataset.state = kind; };
+
+  let session = lsGet(SESSION_KEY);
+  if (!session || typeof session.token !== 'string') session = null;
+
+  // coming back from GitHub: #session=<token> or #auth_error=denied|failed (the token never leaves the fragment)
+  let justLoggedIn = false;
+  let authNote = null;
+  const frag = new URLSearchParams(location.hash.slice(1));
+  if (frag.has('session') || frag.has('auth_error')) {
+    if (frag.get('session')) {
+      session = { token: frag.get('session'), user: null };
+      lsSet(SESSION_KEY, session);
+      justLoggedIn = true;
+    } else authNote = frag.get('auth_error') === 'denied' ? 'denied' : 'failed';
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+
+  function renderAccount() {
+    guestEl.hidden = !!session;
+    cardEl.hidden = !session;
+    document.getElementById('gh-login').href = `${API}/auth/login?return=${encodeURIComponent(location.origin + location.pathname + location.search)}`;
+    if (!session) return;
+    const u = session.user;
+    // user data is only ever set as text or as an image address on GitHub's avatar host
+    cardEl.querySelector('.reader-name').textContent = u ? (u.name || u.login) : '…';
+    cardEl.querySelector('.reader-login').textContent = u ? '@' + u.login : '';
+    const photo = cardEl.querySelector('.reader-photo');
+    photo.replaceChildren();
+    if (u && typeof u.avatar === 'string' && u.avatar.startsWith(AVATAR_HOST)) {
+      const img = new Image(40, 40);
+      img.alt = '';
+      img.src = u.avatar + (u.avatar.includes('?') ? '&' : '?') + 's=80';
+      photo.append(img);
+    }
+  }
+
+  function endSession(note) {
+    session = null;
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* storage unavailable */ }
+    clearTimeout(saveTimer);
+    renderAccount();
+    setStatus(note, note === 'expired' ? 'error' : '');
+  }
+
+  async function api(path, init = {}) {
+    const headers = { ...(init.headers || {}) };
+    if (session) headers.Authorization = `Bearer ${session.token}`;
+    const signal = AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined;
+    const res = await fetch(API + path, { ...init, headers, signal });
+    if (res.status === 401 && session) { endSession('expired'); throw new Error('login required'); }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  // the account's copy replaces this browser's
+  function adopt(p) {
+    state = { done: [...p.done], dates: { ...(p.dates || {}) }, updatedAt: Date.now() };
+    doneSet = new Set(state.done);
+    lsSet(PROGRESS_KEY, state);
+    applyChecks();
+    updateCounts();
+    if (filters.hideDone) applyFilters();
+  }
+
+  // first login on this browser: keep both copies' stamps, the earlier date where both have one
+  function merged(server, local) {
+    const done = new Set([...server.done, ...local.done]);
+    const dates = {};
+    for (const id of done) {
+      const a = server.dates?.[id], b = local.dates?.[id];
+      const d = a && b ? Math.min(a, b) : a || b;
+      if (d) dates[id] = d;
+    }
+    return { done: [...done], dates };
+  }
+  const sameProgress = (a, b) => a.done.length === b.done.length && a.done.every(id => b.done.includes(id))
+    && Object.keys(a.dates).length === Object.keys(b.dates || {}).length && Object.entries(a.dates).every(([id, d]) => b.dates[id] === d);
+
+  let saveTimer = 0, saving = false, saveAgain = false;
+  function markChanged() {
+    if (!session) return;
+    state.pending = true;
+    lsSet(PROGRESS_KEY, state);
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(pushProgress, 800);
+    setStatus('saving');
+  }
+  async function pushProgress(keepalive = false) {
+    clearTimeout(saveTimer);
+    saveTimer = 0;
+    if (!session) return;
+    if (saving) { saveAgain = true; return; }
+    saving = true;
+    const version = state.updatedAt;
+    try {
+      await api('/progress', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ done: [...doneSet], dates: state.dates }),
+        keepalive,
+      });
+      // a change made while saving keeps `pending` and is sent next
+      if (state.updatedAt === version) { delete state.pending; lsSet(PROGRESS_KEY, state); }
+      if (!state.pending) setStatus('saved');
+    } catch (e) {
+      if (session) setStatus('retry', 'error');
+    } finally {
+      saving = false;
+      if (saveAgain) { saveAgain = false; pushProgress(); }
+    }
+  }
+
+  let loaded = false;
+  async function startAccount() {
+    renderAccount();
+    if (!session) { setStatus(authNote || 'guest', authNote ? 'error' : ''); return; }
+    setStatus('loading');
+    try {
+      const [{ user }, server] = await Promise.all([api('/me'), api('/progress')]);
+      session = { ...session, user };
+      lsSet(SESSION_KEY, session);
+      renderAccount();
+      loaded = true;
+      if (justLoggedIn) {
+        const both = merged(server, state);
+        adopt(both);
+        if (sameProgress(both, server)) setStatus('saved'); else markChanged();
+      } else if (state.pending) {
+        markChanged();
+      } else {
+        adopt(server);
+        setStatus('saved');
+      }
+      justLoggedIn = false;
+    } catch (e) {
+      if (session) setStatus('offline', 'error');
+    }
+  }
+
+  cardEl.querySelector('[data-act="logout"]').addEventListener('click', () => endSession('loggedOut'));
+  cardEl.querySelector('[data-act="delete"]').addEventListener('click', async () => {
+    if (!confirm(MSG.confirmDelete)) return;
+    try {
+      await api('/me', { method: 'DELETE' });
+      endSession('deleted');
+    } catch (e) {
+      if (session) setStatus('deleteFailed', 'error');
+    }
+  });
+  addEventListener('online', () => {
+    if (!session) return;
+    if (!loaded) startAccount(); else if (state.pending) pushProgress();
+  });
+  // leaving with a change still waiting for its debounce: send it on the way out
+  addEventListener('pagehide', () => { if (saveTimer) pushProgress(true); });
+
   applyChecks();
   updateCounts();
   applyFilters();
+  startAccount();
 })();
 </script>
 </body>
 </html>
+
