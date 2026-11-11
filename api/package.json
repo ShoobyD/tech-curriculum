@@ -10,7 +10,11 @@
     "migrate:remote": "wrangler d1 migrations apply tech-lead-curriculum --remote",
     "db:seed:local": "wrangler d1 execute tech-lead-curriculum --local --file=./scripts/seed-dev.sql",
     "dev:token": "node scripts/dev-token.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node test/run.mjs"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "5.20261024.1",

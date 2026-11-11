@@ -81,6 +81,32 @@ To serve the page against the local API, run `python -m http.server 4399` in the
 
 On Windows, stopping wrangler sometimes leaves `workerd.exe` running in the background, still holding port 8787 with old code. If answers look stale, end it in Task Manager.
 
+## Test
+
+```sh
+cd api
+npm test                  # every suite, about a minute
+npm test -- api live      # only some: api, live, account, friends, livepage
+```
+
+The runner (`test/run.mjs`) builds a throwaway setup and removes it at the end:
+
+- `wrangler dev` on port 8788 with its own D1 under `.wrangler/test-state` (your dev database isn't touched) and test secrets passed as `--var`, so it needs no `.dev.vars`;
+- the built page (`../index.html`, run `node build.mjs` first after changing the template) served on port 4398, the only origin the test API allows;
+- headless Chrome for the page suites. It is found in the usual install locations, or set `CHROME_PATH`; without it those suites are skipped.
+
+The five made-up users of `scripts/seed-dev.sql` are reseeded before each suite.
+
+| Suite | Covers |
+| --- | --- |
+| `api` | Tokens (expired, forged, non-canonical), validation, origin checks, CORS, the login redirect, deleting an account |
+| `live` | Who may join `/live`, ping/pong, saves and deletions pushed to every page |
+| `account` | The page as a guest, the first-login merge, saving, a second device, offline and pending changes, a bad token, a cancelled login, logout, delete |
+| `friends` | Friends' photos on the cards: order, "+N", the letter fallback, never yourself, aligned columns |
+| `livepage` | Live updates between two devices and from a friend, without reloads; a tick is never undone by its own echo |
+
+Ports 8788 and 4398 must be free; the usual dev ports (8787, 4399) can stay in use.
+
 ## Deploy (once)
 
 ```sh
