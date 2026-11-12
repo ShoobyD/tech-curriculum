@@ -276,6 +276,10 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .toc.arranging .toc-count { display: none; }
 .toc.arranging a { grid-template-columns: 26px minmax(0, 1fr); gap: 6px; padding-inline: 6px; }
 .toc.arranging .move { gap: 3px; }
+.move .i-show, .is-hidden > .move .i-hide { display: none; }
+.is-hidden > .move .i-show { display: block; }
+.toc li.is-hidden > a { opacity: .45; }
+.toc li.is-hidden > a .toc-title { text-decoration: line-through; text-decoration-thickness: 1.5px; }
 .toc.arranging a[aria-current="true"] { transform: none; }
 .toc li.dragging { position: relative; z-index: 2; }
 .toc li.dragging .grip { cursor: grabbing; color: var(--cab-ink); }
@@ -355,8 +359,8 @@ th { color: var(--muted); font-weight: 700; font-size: 12px; }
 td:first-child { font-weight: 700; white-space: nowrap; }
 
 .topic { margin-top: 44px; scroll-margin-top: 96px; }
-.topic-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
-.topic-head:not(:has(.topic-num)) { grid-template-columns: minmax(0, 1fr) auto; }
+.topic-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 14px; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.topic-head:not(:has(.topic-num)) { grid-template-columns: minmax(0, 1fr) auto auto; }
 .topic-num { font: 700 26px/1 var(--font-type); color: var(--muted); direction: ltr; }
 .topic-head h3 { font-size: 24px; font-weight: 700; margin: 0; line-height: 1.25; min-width: 0; letter-spacing: -.01em; }
 .count { font: 400 13px var(--font-type); color: var(--muted); white-space: nowrap; direction: ltr; }
@@ -438,6 +442,33 @@ span.friend { display: grid; place-items: center; font: 700 11px/1 var(--font-bo
   100% { opacity: .82; transform: rotate(-7deg) scale(1); }
 }
 .empty-note { color: var(--muted); font-size: 14px; font-style: italic; }
+
+/* hiding: a quiet control under each card's checkbox; what I hid comes back faded with "הצג מוסתרים" */
+.hide-btn {
+  grid-column: 5; grid-row: 1; align-self: start; justify-self: center; margin-top: 32px;
+  width: 28px; height: 24px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 2px;
+  background: none; color: var(--muted); cursor: pointer; opacity: .4;
+}
+/* quiet at rest among 400+ cards; full on the card's hover, on focus, and always on touch screens */
+.item:hover .hide-btn, .hide-btn:focus-visible { opacity: 1; }
+.hide-btn:hover { color: var(--ink); background: color-mix(in srgb, var(--line) 55%, transparent); }
+.hide-btn svg { width: 17px; height: 17px; }
+.hide-btn .i-show, .is-hidden .hide-btn .i-hide { display: none; }
+.is-hidden .hide-btn .i-show { display: block; }
+@media (hover: none) { .hide-btn { opacity: 1; } }
+.item.is-hidden { opacity: .6; outline: 1.5px dashed var(--muted); outline-offset: -1px; }
+.item.is-hidden .hide-btn { opacity: 1; color: var(--ink); }
+.topic.is-hidden > .topic-body { opacity: .6; }
+.topic.is-hidden .topic-head { border-bottom-style: dashed; }
+.topic.is-hidden .topic-head h3, .topic.is-hidden .topic-num { color: var(--muted); }
+.topic-hidden {
+  font: 700 13px/1.3 var(--font-body); color: var(--muted); background: none; border: 0; padding: 2px 0; cursor: pointer;
+  white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.topic-hidden:hover { color: var(--ink); text-decoration-thickness: 2px; }
+.topic.is-hidden .topic-hidden { color: var(--ink); }
+.chip-n { font: 700 12px var(--font-type); }
+
 /* checklist items outside the source lists (closing section) */
 .tasks { margin-top: 8px; }
 
@@ -550,7 +581,8 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   .item-body { grid-column: 1 / -1; grid-row: 2; }
   .box { grid-column: 2; grid-row: 1; }
   .stamp { grid-column: 1; grid-row: 1; font-size: 12px; margin-top: -2px; }
-  .friends { grid-column: 1 / -1; grid-row: 3; justify-self: end; margin-top: 4px; }
+  .friends { grid-column: 1; grid-row: 3; justify-self: end; margin-top: 4px; }
+  .hide-btn { grid-column: 2; grid-row: 3; margin-top: 0; align-self: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -623,6 +655,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
         <div class="fgroup">
           <button type="button" class="chip" data-f="video" aria-pressed="false">וידאו בלבד</button>
           <button type="button" class="chip" data-f="hideDone" aria-pressed="false">הסתר מה שסיימתי</button>
+          <button type="button" class="chip" data-f="showHidden" aria-pressed="false" hidden>הצג מוסתרים <span class="chip-n"></span></button>
         </div>
       </div>
     </div>
@@ -725,7 +758,23 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
       const li = tocList.querySelector(`a[href="#${id}"]`).parentElement;
       s.parentElement.insertBefore(s, AFTER_TOPICS);
       tocList.append(li);
-      s.hidden = li.hidden = hiddenTopicSet.has(id);
+    }
+    applyTopicVisibility();
+  }
+  // A hidden topic is gone from the page and the cabinet; with "הצג מוסתרים" it comes back faded,
+  // and while arranging its drawer stays in the cabinet so it can be shown again.
+  function applyTopicVisibility() {
+    const arranging = !!document.querySelector('.toc.arranging');
+    for (const id of DEFAULT_ORDER) {
+      const s = document.getElementById(id);
+      const li = document.querySelector(`.toc a[href="#${id}"]`).parentElement;
+      const hid = hiddenTopicSet.has(id);
+      s.classList.toggle('is-hidden', hid);
+      li.classList.toggle('is-hidden', hid);
+      s.hidden = hid && !filters.showHidden;
+      li.hidden = hid && !filters.showHidden && !arranging;
+      const eye = li.querySelector('[data-act="hide"]');
+      if (eye) eye.setAttribute('aria-label', `${hid ? 'החזרת הנושא' : 'הסתרת הנושא'}: ${li.querySelector('.toc-title').textContent}`);
     }
   }
   // a change of layout: kept in this browser and, with an account, sent with the progress
@@ -789,10 +838,11 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     depth: new Set(prefs.depth || ['o', 'm', 'd']),
     video: !!prefs.video,
     hideDone: !!prefs.hideDone,
+    showHidden: !!prefs.showHidden,
     tabs: prefs.tabs || {},
     palette: prefs.palette || 'green',
   };
-  const savePrefs = () => lsSet(PREFS_KEY, { depth: [...filters.depth], video: filters.video, hideDone: filters.hideDone, tabs: filters.tabs, palette: filters.palette });
+  const savePrefs = () => lsSet(PREFS_KEY, { depth: [...filters.depth], video: filters.video, hideDone: filters.hideDone, showHidden: filters.showHidden, tabs: filters.tabs, palette: filters.palette });
 
   // ---------- palette (green is the default and carries no attribute) ----------
   const CABINET = { green: '#0f241d', oak: '#2b1d14', steel: '#26303b', navy: '#101a33' };
@@ -809,7 +859,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
 
   function itemVisible(el) {
     const d = el.dataset;
-    if (isHidden(el)) return false;
+    if (isHidden(el) && !filters.showHidden) return false;
     if (filters.hideDone && doneSet.has(d.id)) return false;
     if (d.depth === 'task') return true;
     if (!filters.depth.has(d.depth)) return false;
@@ -817,14 +867,38 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     return true;
   }
 
+  const hiddenLabel = n => (n === 1 ? 'מקור אחד מוסתר' : `${n} מוסתרים`);
   function applyFilters() {
-    for (const el of items) el.hidden = !itemVisible(el);
+    // nothing left to show: the toggle goes off, so the next source hidden really leaves the page
+    const hiddenCount = items.filter(isHidden).length;
+    if (!hiddenCount && filters.showHidden) { filters.showHidden = false; savePrefs(); }
+    applyTopicVisibility();
+    for (const el of items) {
+      el.hidden = !itemVisible(el);
+      const hid = hiddenItemSet.has(el.dataset.id);
+      if (el.classList.contains('is-hidden') !== hid) {
+        el.classList.toggle('is-hidden', hid);
+        const b = el.querySelector('.hide-btn');
+        if (b) b.setAttribute('aria-label', `${hid ? 'החזרת המקור' : 'הסתרת המקור'}: ${b.dataset.title}`);
+      }
+    }
     for (const g of document.querySelectorAll('.depth-group')) g.hidden = !g.querySelector('.item:not([hidden])');
-    for (const s of document.querySelectorAll('.topic')) {
-      const all = s.querySelectorAll('.item');
+    for (const s of topics) {
+      const all = [...s.querySelectorAll('.item')];
       const note = s.querySelector('.empty-note');
       note.hidden = !all.length || !!s.querySelector('.item:not([hidden])');
+      note.textContent = all.length && all.every(el => hiddenItemSet.has(el.dataset.id)) ? 'כל המקורות בנושא הזה מוסתרים.' : 'אין כאן מקורות שמתאימים לסינון הנוכחי.';
+      // the topic head says what I hid here, and brings it back
+      const t = s.querySelector('.topic-hidden');
+      if (!t) continue;
+      const n = all.filter(el => hiddenItemSet.has(el.dataset.id)).length;
+      if (hiddenTopicSet.has(s.id)) { t.hidden = false; t.textContent = 'החזרת הנושא'; t.removeAttribute('aria-pressed'); }
+      else if (n) { t.hidden = false; t.textContent = hiddenLabel(n); t.setAttribute('aria-pressed', String(filters.showHidden)); }
+      else t.hidden = true;
     }
+    const chip = document.querySelector('[data-f="showHidden"]');
+    chip.hidden = !hiddenCount;
+    chip.querySelector('.chip-n').textContent = hiddenCount;
     for (const b of document.querySelectorAll('.chip')) {
       const f = b.dataset.f;
       const on = f === 'depth' ? filters.depth.has(b.dataset.v) : filters[f];
@@ -904,6 +978,8 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   const ICON_UP = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 10 8 5.5 12.5 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const ICON_DOWN = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const drawerTitle = li => li.querySelector('.toc-title').textContent;
+  const ICON_HIDE = '<svg class="i-hide" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8S4 3.6 8 3.6 14.2 8 14.2 8 12 12.4 8 12.4 1.8 8 1.8 8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.5 13.5 13.5 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+  const ICON_SHOW = '<svg class="i-show" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8S4 3.6 8 3.6 14.2 8 14.2 8 12 12.4 8 12.4 1.8 8 1.8 8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
   for (const li of tocList.children) {
     const grip = document.createElement('span');
     grip.className = 'grip';
@@ -912,7 +988,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     grip.innerHTML = arrangeBtn.querySelector('svg').outerHTML;
     const move = document.createElement('span');
     move.className = 'move';
-    move.innerHTML = `<button type="button" data-dir="-1">${ICON_UP}</button><button type="button" data-dir="1">${ICON_DOWN}</button>`;
+    move.innerHTML = `<button type="button" data-dir="-1">${ICON_UP}</button><button type="button" data-dir="1">${ICON_DOWN}</button><button type="button" data-act="hide">${ICON_HIDE}${ICON_SHOW}</button>`;
     const [up, down] = move.children;
     up.setAttribute('aria-label', `הזזה למעלה: ${drawerTitle(li)}`);
     down.setAttribute('aria-label', `הזזה למטה: ${drawerTitle(li)}`);
@@ -943,6 +1019,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   }
   function setArranging(on) {
     toc.classList.toggle('arranging', on);
+    applyTopicVisibility();
     arrangeBtn.setAttribute('aria-pressed', String(on));
     arrangeBtn.querySelector('span').textContent = on ? 'סיום' : 'סידור';
     resetBtn.hidden = !on;
@@ -958,12 +1035,65 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   tocList.addEventListener('click', e => {
     const b = e.target.closest('.move button');
     if (!b || b.disabled) return;
+    if (b.dataset.act === 'hide') { toggleTopic(b.closest('li').querySelector('a').getAttribute('href').slice(1), 'drawer'); return; }
     const li = b.closest('li'), dir = Number(b.dataset.dir);
     const shown = shownDrawers();
     const other = shown[shown.indexOf(li) + dir];
     if (!other) return;
     tocList.insertBefore(li, dir < 0 ? other : other.nextElementSibling);
     commitOrder(li, dir);
+  });
+
+  // ---------- hiding: a source from its card, a topic from its drawer (in the mode) ----------
+  for (const el of items) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'hide-btn';
+    b.dataset.title = el.querySelector('input').getAttribute('aria-label').replace(/^נלמד: /, '');
+    b.title = 'הסתרה מהתכנית שלי';
+    b.setAttribute('aria-label', `הסתרת המקור: ${b.dataset.title}`);
+    b.innerHTML = ICON_HIDE + ICON_SHOW;
+    el.append(b);
+  }
+  for (const s of topics) {
+    const t = document.createElement('button');
+    t.type = 'button';
+    t.className = 'topic-hidden';
+    t.hidden = true;
+    s.querySelector('.topic-head .count').before(t);
+  }
+  function toggleItem(el) {
+    const id = el.dataset.id, hide = !hiddenItemSet.has(id);
+    const set = new Set(layout.hiddenItems);
+    if (hide) set.add(id); else set.delete(id);
+    setLayout({ ...layout, hiddenItems: [...set] });
+    const topic = el.closest('.topic');
+    const n = [...topic.querySelectorAll('.item')].filter(x => hiddenItemSet.has(x.dataset.id)).length;
+    arrangeStatus.textContent = hide ? `המקור הוסתר. בנושא הזה: ${hiddenLabel(n)}.` : 'המקור הוחזר.';
+    // a card that just left the page hands the focus to the line that can bring it back
+    (el.hidden ? topic.querySelector('.topic-hidden') : el.querySelector('.hide-btn')).focus();
+  }
+  function toggleTopic(id, from) {
+    const set = new Set(layout.hiddenTopics), hide = !set.has(id);
+    if (hide) set.add(id); else set.delete(id);
+    setLayout({ ...layout, hiddenTopics: [...set] });
+    const li = document.querySelector(`.toc a[href="#${id}"]`).parentElement;
+    arrangeStatus.textContent = `${drawerTitle(li)}: ${hide ? 'הנושא הוסתר' : 'הנושא הוחזר'}`;
+    if (toc.classList.contains('arranging')) updateArrangeTools();
+    if (from === 'drawer') li.querySelector('[data-act="hide"]').focus();
+    else if (!hide) document.getElementById(id).querySelector('h3').scrollIntoView({ block: 'nearest' });
+  }
+  document.querySelector('main').addEventListener('click', e => {
+    const b = e.target.closest('.hide-btn');
+    if (b) { toggleItem(b.closest('.item')); return; }
+    const t = e.target.closest('.topic-hidden');
+    if (!t) return;
+    const s = t.closest('.topic');
+    if (hiddenTopicSet.has(s.id)) { toggleTopic(s.id); t.focus(); return; }
+    filters.showHidden = !filters.showHidden;
+    savePrefs();
+    applyFilters();
+    t.focus();
   });
 
   // dragging: pointer events, so a mouse, a pen and a finger all work; the grip alone starts it
@@ -973,13 +1103,13 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     const grip = e.target.closest('.grip');
     if (!grip || !toc.classList.contains('arranging') || e.button > 0) return;
     e.preventDefault();
-    grip.setPointerCapture(e.pointerId);
     const li = grip.closest('li');
     drag = { li, pointer: e.pointerId, before: drawerOrder().join() };
     li.classList.add('dragging');
     document.documentElement.classList.add('dragging-drawer');
   });
-  tocList.addEventListener('pointermove', e => {
+  // moving the drawer in the DOM drops its pointer capture, so the drag is followed on the whole window
+  addEventListener('pointermove', e => {
     if (!drag || e.pointerId !== drag.pointer) return;
     const y = e.clientY;
     // the drawer goes before the first other drawer whose middle is below the pointer
@@ -1000,8 +1130,8 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     document.documentElement.classList.remove('dragging-drawer');
     if (drawerOrder().join() !== before) commitOrder(li);
   };
-  tocList.addEventListener('pointerup', endDrag);
-  tocList.addEventListener('pointercancel', endDrag);
+  addEventListener('pointerup', endDrag);
+  addEventListener('pointercancel', endDrag);
 
   // ---------- the desk: how to use and tool status open as dialogs ----------
   // Native modal dialogs: focus moves in and stays, Esc closes. Closing returns focus to the button
