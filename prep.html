@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Miriam+Libre:wght@400;700&display=swap">
 <style>
 /* Layout: a card cabinet (title, stamped progress, one drawer per topic) beside the open drawer:
-   tiers as guide cards, sources as ruled index cards with call numbers, done as a dated ink stamp. */
+   sources as ruled index cards with call numbers, done as a dated ink stamp. */
 /* Palettes: the green reading room is the default; oak, steel and navy are chosen in the cabinet header
    (html[data-palette]). Each palette sets the same tokens for light and dark. */
 :root {
@@ -33,8 +33,6 @@
   --ground: #e7eae3; --card: #fefefb; --ink: #19201c; --muted: #536059; --line: #ccd3c9;
   --rule-red: #c4432f; --rule-blue: #c8d9e3;
   --link: #1f4f8a; --stamp: #7b2a6c; --stamp-soft: #f3e5ef;
-  --t1: #b3402a; --t2: #876000; --t3: #2f5b8c;
-  --t-end: #5d554d; --on-t: #ffffff;
   --shadow: 0 1px 0 rgba(0,0,0,.08), 0 8px 18px -12px rgba(0,0,0,.42);
   --font-body: "Miriam Libre", "Segoe UI", Arial, sans-serif;
   --font-type: "Courier Prime", "Courier New", monospace;
@@ -48,8 +46,6 @@
   --ground: #141b18; --card: #1e2622; --ink: #e8eee9; --muted: #a8b6ae; --line: #2f3a34;
   --rule-red: #d6654f; --rule-blue: #2c3638;
   --link: #9cc0ff; --stamp: #e08fd0; --stamp-soft: #34222f;
-  --t1: #ef8a6c; --t2: #e2b552; --t3: #86b4ec; --on-t: #0d1310;
-  --t-end: #a8b0ab;
   --shadow: 0 1px 0 rgba(0,0,0,.4), 0 10px 22px -14px rgba(0,0,0,.9);
   color-scheme: dark;
   }
@@ -61,8 +57,6 @@
   --ground: #141b18; --card: #1e2622; --ink: #e8eee9; --muted: #a8b6ae; --line: #2f3a34;
   --rule-red: #d6654f; --rule-blue: #2c3638;
   --link: #9cc0ff; --stamp: #e08fd0; --stamp-soft: #34222f;
-  --t1: #ef8a6c; --t2: #e2b552; --t3: #86b4ec; --on-t: #0d1310;
-  --t-end: #a8b0ab;
   --shadow: 0 1px 0 rgba(0,0,0,.4), 0 10px 22px -14px rgba(0,0,0,.9);
   color-scheme: dark;
 }
@@ -73,7 +67,6 @@
   --ground: #e6e5e0; --card: #fdfdfb; --ink: #1f1a16; --muted: #5d554d; --line: #d3cfc6;
   --rule-red: #cf4134; --rule-blue: #cddbeb;
   --link: #2c4da3; --stamp: #5b3ea8; --stamp-soft: #ece7f7;
-  --t1: #b9382c; --t2: #8a5700; --t3: #276b63;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-palette="oak"]:not([data-theme="light"]) {
@@ -83,7 +76,6 @@
   --ground: #1d1915; --card: #28211b; --ink: #ece4da; --muted: #b2a595; --line: #3b3029;
   --rule-red: #d8624f; --rule-blue: #2f3238;
   --link: #9fb6ff; --stamp: #b39bff; --stamp-soft: #2b2340;
-  --t1: #f08167; --t2: #e3ab4c; --t3: #63c4b6; --on-t: #17120e;
   }
 }
 :root[data-palette="oak"][data-theme="dark"] {
@@ -93,7 +85,6 @@
   --ground: #1d1915; --card: #28211b; --ink: #ece4da; --muted: #b2a595; --line: #3b3029;
   --rule-red: #d8624f; --rule-blue: #2f3238;
   --link: #9fb6ff; --stamp: #b39bff; --stamp-soft: #2b2340;
-  --t1: #f08167; --t2: #e3ab4c; --t3: #63c4b6; --on-t: #17120e;
 }
 :root[data-palette="steel"] {
   --oak-0: #26303b; --oak-1: #364352; --oak-front: #485869; --oak-front-on: #5a6e84; --oak-edge: #171e26;
@@ -102,7 +93,6 @@
   --ground: #e3e7eb; --card: #ffffff; --ink: #141a21; --muted: #515f6d; --line: #cbd3dc;
   --rule-red: #df4f37; --rule-blue: #c5d5e6;
   --link: #1b5cab; --stamp: #c8441c; --stamp-soft: #fbe7de;
-  --t1: #b8410f; --t2: #7d6400; --t3: #0f6f68;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-palette="steel"]:not([data-theme="light"]) {
@@ -112,7 +102,6 @@
   --ground: #161b21; --card: #1f262e; --ink: #e8edf2; --muted: #a6b2bf; --line: #313b46;
   --rule-red: #e86a52; --rule-blue: #2c3540;
   --link: #8fb8ff; --stamp: #ff8a5c; --stamp-soft: #3a2620;
-  --t1: #ff8d5c; --t2: #e3c04f; --t3: #4fc4b8; --on-t: #10151b;
   }
 }
 :root[data-palette="steel"][data-theme="dark"] {
@@ -122,7 +111,6 @@
   --ground: #161b21; --card: #1f262e; --ink: #e8edf2; --muted: #a6b2bf; --line: #313b46;
   --rule-red: #e86a52; --rule-blue: #2c3540;
   --link: #8fb8ff; --stamp: #ff8a5c; --stamp-soft: #3a2620;
-  --t1: #ff8d5c; --t2: #e3c04f; --t3: #4fc4b8; --on-t: #10151b;
 }
 :root[data-palette="navy"] {
   --oak-0: #101a33; --oak-1: #1a2a4f; --oak-front: #243866; --oak-front-on: #2f4a85; --oak-edge: #080e1f;
@@ -131,7 +119,6 @@
   --ground: #dfe3eb; --card: #ffffff; --ink: #131a2a; --muted: #4f5a72; --line: #c8cfdc;
   --rule-red: #d0453a; --rule-blue: #c6d3ea;
   --link: #2442b0; --stamp: #b81f38; --stamp-soft: #fbe4e7;
-  --t1: #c14d22; --t2: #8a6500; --t3: #23705f;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-palette="navy"]:not([data-theme="light"]) {
@@ -141,7 +128,6 @@
   --ground: #131828; --card: #1c2236; --ink: #e8ecf7; --muted: #a6afc6; --line: #2e3650;
   --rule-red: #e0675b; --rule-blue: #29314a;
   --link: #9db4ff; --stamp: #ff7a8c; --stamp-soft: #3a2029;
-  --t1: #f28a5e; --t2: #e4bd57; --t3: #5cc6ad; --on-t: #0b1020;
   }
 }
 :root[data-palette="navy"][data-theme="dark"] {
@@ -151,7 +137,6 @@
   --ground: #131828; --card: #1c2236; --ink: #e8ecf7; --muted: #a6afc6; --line: #2e3650;
   --rule-red: #e0675b; --rule-blue: #29314a;
   --link: #9db4ff; --stamp: #ff7a8c; --stamp-soft: #3a2029;
-  --t1: #f28a5e; --t2: #e4bd57; --t3: #5cc6ad; --on-t: #0b1020;
 }
 
 * { box-sizing: border-box; }
@@ -240,12 +225,6 @@ h1, h2, h3, h4 { text-wrap: balance; }
 
 /* drawers: the table of contents */
 .toc { display: grid; gap: 16px; }
-.toc-tier { font-size: 12px; font-weight: 700; color: var(--cab-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-.toc-tier::before { content: ""; width: 10px; height: 10px; border-radius: 2px 2px 0 0; background: var(--tc); }
-.toc-group { --tc: var(--t-end); }
-.toc-group[data-tier="1"] { --tc: var(--t1); }
-.toc-group[data-tier="2"] { --tc: var(--t2); }
-.toc-group[data-tier="3"] { --tc: var(--t3); }
 .toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .toc a {
   display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: center;
@@ -255,7 +234,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
   transition: transform .35s cubic-bezier(.16,1,.3,1), background-color .2s;
 }
 .toc a:not(:has(.toc-num)) { grid-template-columns: minmax(0, 1fr) auto; }
-.toc-num { font: 700 12px var(--font-type); text-align: center; border-top: 3px solid var(--tc); padding-top: 1px; }
+.toc-num { font: 700 12px var(--font-type); text-align: center; border-top: 3px solid var(--brass); padding-top: 1px; }
 .toc-title {
   background: var(--holder); color: var(--holder-ink); border: 2px solid var(--brass); border-radius: 2px;
   padding: 2px 7px; font-weight: 700; line-height: 1.3;
@@ -264,7 +243,6 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .toc-count.complete { color: var(--cab-ink); font-weight: 700; }
 .toc a:hover { background: var(--oak-front-on); }
 .toc a[aria-current="true"] { background: var(--oak-front-on); transform: translateX(-22px); box-shadow: 0 8px 16px -6px rgba(0,0,0,.7); }
-.toc li.is-off { opacity: .4; }
 
 /* ---------- the open drawer ---------- */
 .field { min-width: 0; }
@@ -338,31 +316,10 @@ th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--li
 th { color: var(--muted); font-weight: 700; font-size: 12px; }
 td:first-child { font-weight: 700; white-space: nowrap; }
 
-/* tiers are guide cards: a coloured tab standing above the cards behind it */
-.tier { margin-top: 72px; --tc: var(--t-end); }
-.tier[data-tier="1"] { --tc: var(--t1); }
-.tier[data-tier="2"] { --tc: var(--t2); }
-.tier[data-tier="3"] { --tc: var(--t3); }
-.tier-head {
-  display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px; position: relative;
-  background: var(--tc); color: var(--on-t); border-radius: 0 0 4px 4px; padding: 22px 24px 20px; margin-top: 40px;
-  box-shadow: var(--shadow);
-}
-.tier-head h2 { margin: 0; font: 700 30px/1.2 var(--font-body); letter-spacing: -.01em; }
-.tier-tab {
-  position: absolute; top: -36px; inset-inline-start: 0; height: 36px; display: flex; align-items: center;
-  background: var(--tc); border-radius: 8px 8px 0 0; padding: 0 18px; font-size: 15px;
-}
-.tier-line { display: block; }
-.tier-head .count { color: var(--on-t); font-size: 15px; }
-
 .topic { margin-top: 44px; scroll-margin-top: 96px; }
 .topic-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
 .topic-head:not(:has(.topic-num)) { grid-template-columns: minmax(0, 1fr) auto; }
-.topic-num { font: 700 26px/1 var(--font-type); color: var(--tier-ink, var(--muted)); direction: ltr; }
-.topic[data-tier="1"] { --tier-ink: var(--t1); }
-.topic[data-tier="2"] { --tier-ink: var(--t2); }
-.topic[data-tier="3"] { --tier-ink: var(--t3); }
+.topic-num { font: 700 26px/1 var(--font-type); color: var(--muted); direction: ltr; }
 .topic-head h3 { font-size: 24px; font-weight: 700; margin: 0; line-height: 1.25; min-width: 0; letter-spacing: -.01em; }
 .count { font: 400 13px var(--font-type); color: var(--muted); white-space: nowrap; direction: ltr; }
 .count.complete { color: var(--stamp); font-weight: 700; }
@@ -497,11 +454,6 @@ body { background-image: var(--grain); }
 .item:hover { transform: translateY(-2px); box-shadow: var(--lift-hover); }
 .depth-label { box-shadow: 0 -1px 0 var(--line), 0 -6px 12px -8px rgba(0,0,0,.25); }
 .stamp { -webkit-mask: var(--ink-bite) 0 0 / 140px 60px; mask: var(--ink-bite) 0 0 / 140px 60px; }
-.tier-head {
-  background-image: var(--grain), linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,0,0,.10));
-  box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 18px 30px -16px rgba(0,0,0,.55);
-}
-.tier-tab { background-image: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); box-shadow: 0 -4px 10px -6px rgba(0,0,0,.3); }
 .desk-btn { box-shadow: var(--lift); transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s cubic-bezier(.16,1,.3,1); }
 .desk-btn:hover { transform: translateY(-2px); box-shadow: var(--lift-hover); }
 dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,.18), 0 34px 70px -24px rgba(0,0,0,.7); }
@@ -532,8 +484,6 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   .reader-actions .danger { margin: 0; }
   .toc { display: flex; gap: 6px; overflow-x: auto; margin-inline: -16px; padding: 2px 16px 6px; scroll-snap-type: x proximity; }
   .toc-group { flex: none; display: flex; align-items: center; gap: 6px; }
-  .toc-tier { margin: 0; font-size: 0; }
-  .toc-tier::before { width: 6px; height: 30px; border-radius: 2px; }
   .toc ol { display: flex; gap: 6px; }
   .toc li { flex: none; scroll-snap-align: start; }
   .toc-title { white-space: nowrap; }
@@ -542,8 +492,6 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   .controls { --controls-pad: 16px; }
   .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
   main { padding-inline: 16px; }
-  .tier-head h2 { font-size: 22px; }
-  .tier-head { padding: 18px 16px 16px; }
   .topic-head h3 { font-size: 20px; }
   .desk { gap: 8px; margin-bottom: 18px; }
   .desk-btn { font-size: 14px; padding: 14px 12px 8px; }
@@ -585,7 +533,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   <main class="prep">
     <p class="note">הדף הזה משלים את <a href="./">תכנית הלימודים</a>: התכנית מכינה את החומר המקצועי, והדף הזה מכין את הריאיון עצמו.</p>
 
-    <section class="topic" id="star" data-tier="prep"><header class="topic-head"><h3>בנק סיפורי STAR</h3><span class="count" data-count-for="star"></span></header><div class="topic-body"><p>לכל סיפור כדאי להכין:</p><ul class="prose-list"><li><strong>Situation:</strong> המצב.</li><li><strong>Task:</strong> המשימה.</li><li><strong>Action:</strong> מה עשית.</li><li><strong>Result:</strong> התוצאה.</li><li><strong>Insight:</strong> מה למדת.</li></ul><p>את התשובה כדאי לתרגל בקול, בשתיים עד שלוש דקות.</p><p>כדאי להכין סיפור אחד לפחות מכל סוג:</p><div class="table-wrap"><table><thead><tr><th>#</th><th>סוג הסיפור</th><th>מתאים לשאלות על</th></tr></thead><tbody><tr><td>1</td><td>הטמעת טכנולוגיה חדשה או מיגרציה הדרגתית ממערכת legacy</td><td>בחירת טכנולוגיה, השפעה בלי סמכות, מיגרציה</td></tr><tr><td>2</td><td>פירוק קוד מונוליתי לרכיבים או למודולים</td><td>ארכיטקטורה, חוב טכני, ריפקטור</td></tr><tr><td>3</td><td>החלטה טכנית שהתבססה על בדיקה, מדידה או PoC</td><td>החלטה מבוססת נתונים, ‏trade-offs</td></tr><tr><td>4</td><td>הפיכת קוד ייחודי לפיצ'ר לתשתית משותפת</td><td>‏reuse, תכנון לטווח ארוך</td></tr><tr><td>5</td><td>אבחון תקלה קשה, גם מחוץ לקוד של הצוות</td><td>debugging, עבודה בין צוותים, אחריות</td></tr><tr><td>6</td><td>מערכת שהיית האחראי הראשי עליה לאורך זמן</td><td>אחריות מקצה לקצה, היקף</td></tr><tr><td>7</td><td>בניית מוצר או מערכת מאפס</td><td>בנייה מאפס, עבודה עצמאית</td></tr><tr><td>8</td><td>הובלת אימוץ של כלי או תהליך בצוות, למשל AI</td><td>השפעה על הצוות, ניהול שינוי</td></tr><tr><td>9</td><td>חניכה, הוראה או הסבר של נושא מורכב</td><td>חניכה, תקשורת</td></tr><tr><td>10</td><td>כלי פנימי שבנית כדי להסיר חיכוך</td><td>יוזמה, שיפור תהליכים</td></tr></tbody></table></div><h4>כדאי להכין גם</h4><ul class="prose-list"><li>סיפור על <strong>כישלון</strong> או הערכה שגויה, ומה למדת ממנו.</li><li>סיפור על <strong>אי־הסכמה</strong> עם עמית או מנהל.</li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section><section class="topic" id="ask" data-tier="prep"><header class="topic-head"><h3>שאלות למראיין</h3><span class="count" data-count-for="ask"></span></header><div class="topic-body"><ol class="prose-list"><li>איך נראית הצלחה בתפקיד אחרי 3, אחרי 6 ואחרי 12 חודשים?</li><li>איך מתקבלות ומתועדות החלטות ארכיטקטורה (RFC, ‏ADR), ומי מכריע בסוף?</li><li>מה היחס בתפקיד בין כתיבת קוד להובלה, באחוזים?</li><li>מה הכאב הכי גדול כרגע ב־frontend: חוב טכני, ביצועים, build ו־CI, או חוסר אחידות?</li><li>איך מתעדפים חוב טכני מול ה־roadmap, ומי מחליט?</li><li>יש design system או ספריית קומפוננטות משותפת? מי מתחזק אותה?</li><li>איך נראה תהליך הבדיקות והשחרור: זמן CI, ‏feature flags, תדירות deploy?</li><li>איך מטפלים בנגישות ובאבטחה: הן חלק מה־Definition of Done, נבדקות ב־audits, או מטופלות בדיעבד?</li><li><strong>מה מצב אימוץ ה־AI בצוות?</strong> אילו כלים יש, אילו כללים, ואיך מודדים את ההשפעה?</li><li>מה גודל הצוות, ואיך עובדים יחד frontend, ‏backend, מוצר ועיצוב?</li><li>למה המשרה פתוחה, ומה הוביל להצלחה (או לכישלון) של מי שהיה בה לפני?</li></ol><p>עוד מאגרים:</p><ul class="prose-list"><li><a href="https://www.techinterviewhandbook.org/final-questions/" target="_blank" rel="noopener">Tech Interview Handbook: Final questions</a></li><li><a href="https://github.com/viraptor/reverse-interview" target="_blank" rel="noopener">reverse-interview</a></li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section><section class="topic" id="final" data-tier="prep"><header class="topic-head"><h3>שבועיים לפני הריאיון</h3><span class="count" data-count-for="final"></span></header><div class="topic-body"><ul class="items tasks"><li class="item" data-id="70vukg" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>System Design:</strong> לחזור על מסגרת RADIO, ולפתור שני תרגילים בקול עם טיימר של 45 דקות.</div><span class="kind"></span><input type="checkbox" id="c-70vukg" aria-label="נלמד: System Design: לחזור על מסגרת RADIO, ולפתור שני תרגילים בקול עם טיימר של 45 דקות."><label for="c-70vukg" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="aj5l0d" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>מבנה הריאיון:</strong> לברר מראש איזה סטאק משתמשת החברה ואילו סבבים יש. לפי זה לבחור את מסלול Vue או React.</div><span class="kind"></span><input type="checkbox" id="c-aj5l0d" aria-label="נלמד: מבנה הריאיון: לברר מראש איזה סטאק משתמשת החברה ואילו סבבים יש. לפי זה לבחור את מסלול Vue או React."><label for="c-aj5l0d" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="m1emo6" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>סיפורים:</strong> לחזור על <a href="#star">בנק ה־STAR</a>, ולהקליט את עצמך עונה על 3 סיפורים.</div><span class="kind"></span><input type="checkbox" id="c-m1emo6" aria-label="נלמד: בנק ה־STAR"><label for="c-m1emo6" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="8x5vyt" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>תרגיל קוד:</strong> לפתור 3–4 תרגילים מ־BFE.dev או GreatFrontEnd. אחד מהם יהיה hook או composable.</div><span class="kind"></span><input type="checkbox" id="c-8x5vyt" aria-label="נלמד: תרגיל קוד: לפתור 3–4 תרגילים מ־BFE.dev או GreatFrontEnd. אחד מהם יהיה hook או composable."><label for="c-8x5vyt" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="1ah4amy" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>שאלת ה־AI:</strong> לחזור על התשובה ל־&quot;איך הובלת אימוץ AI&quot; ועל נקודות ה־DORA.</div><span class="kind"></span><input type="checkbox" id="c-1ah4amy" aria-label="נלמד: שאלת ה־AI: לחזור על התשובה ל־&quot;איך הובלת אימוץ AI&quot; ועל נקודות ה־DORA."><label for="c-1ah4amy" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="vj0d0z" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>ריאיון סימולציה:</strong> לעשות ריאיון סימולציה עם חבר או ב־<a href="https://www.pramp.com/" target="_blank" rel="noopener">Pramp</a>, שהוא חינמי ודורש הרשמה.</div><span class="kind"></span><input type="checkbox" id="c-vj0d0z" aria-label="נלמד: Pramp"><label for="c-vj0d0z" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="2melc" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>מצב הכלים:</strong> לעבור שוב על טבלת <a href="./#status">מצב הכלים</a> בתכנית, ולבדוק אם יצאו מאז גרסאות חדשות.</div><span class="kind"></span><input type="checkbox" id="c-2melc" aria-label="נלמד: מצב הכלים"><label for="c-2melc" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="1uf9ynd" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>שאלות למראיין:</strong> להכין 3–4 <a href="#ask">שאלות</a> שמתאימות לחברה הספציפית.</div><span class="kind"></span><input type="checkbox" id="c-1uf9ynd" aria-label="נלמד: שאלות"><label for="c-1uf9ynd" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section>
+    <section class="topic" id="star"><header class="topic-head"><h3>בנק סיפורי STAR</h3><span class="count" data-count-for="star"></span></header><div class="topic-body"><p>לכל סיפור כדאי להכין:</p><ul class="prose-list"><li><strong>Situation:</strong> המצב.</li><li><strong>Task:</strong> המשימה.</li><li><strong>Action:</strong> מה עשית.</li><li><strong>Result:</strong> התוצאה.</li><li><strong>Insight:</strong> מה למדת.</li></ul><p>את התשובה כדאי לתרגל בקול, בשתיים עד שלוש דקות.</p><p>כדאי להכין סיפור אחד לפחות מכל סוג:</p><div class="table-wrap"><table><thead><tr><th>#</th><th>סוג הסיפור</th><th>מתאים לשאלות על</th></tr></thead><tbody><tr><td>1</td><td>הטמעת טכנולוגיה חדשה או מיגרציה הדרגתית ממערכת legacy</td><td>בחירת טכנולוגיה, השפעה בלי סמכות, מיגרציה</td></tr><tr><td>2</td><td>פירוק קוד מונוליתי לרכיבים או למודולים</td><td>ארכיטקטורה, חוב טכני, ריפקטור</td></tr><tr><td>3</td><td>החלטה טכנית שהתבססה על בדיקה, מדידה או PoC</td><td>החלטה מבוססת נתונים, ‏trade-offs</td></tr><tr><td>4</td><td>הפיכת קוד ייחודי לפיצ'ר לתשתית משותפת</td><td>‏reuse, תכנון לטווח ארוך</td></tr><tr><td>5</td><td>אבחון תקלה קשה, גם מחוץ לקוד של הצוות</td><td>debugging, עבודה בין צוותים, אחריות</td></tr><tr><td>6</td><td>מערכת שהיית האחראי הראשי עליה לאורך זמן</td><td>אחריות מקצה לקצה, היקף</td></tr><tr><td>7</td><td>בניית מוצר או מערכת מאפס</td><td>בנייה מאפס, עבודה עצמאית</td></tr><tr><td>8</td><td>הובלת אימוץ של כלי או תהליך בצוות, למשל AI</td><td>השפעה על הצוות, ניהול שינוי</td></tr><tr><td>9</td><td>חניכה, הוראה או הסבר של נושא מורכב</td><td>חניכה, תקשורת</td></tr><tr><td>10</td><td>כלי פנימי שבנית כדי להסיר חיכוך</td><td>יוזמה, שיפור תהליכים</td></tr></tbody></table></div><h4>כדאי להכין גם</h4><ul class="prose-list"><li>סיפור על <strong>כישלון</strong> או הערכה שגויה, ומה למדת ממנו.</li><li>סיפור על <strong>אי־הסכמה</strong> עם עמית או מנהל.</li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section><section class="topic" id="ask"><header class="topic-head"><h3>שאלות למראיין</h3><span class="count" data-count-for="ask"></span></header><div class="topic-body"><ol class="prose-list"><li>איך נראית הצלחה בתפקיד אחרי 3, אחרי 6 ואחרי 12 חודשים?</li><li>איך מתקבלות ומתועדות החלטות ארכיטקטורה (RFC, ‏ADR), ומי מכריע בסוף?</li><li>מה היחס בתפקיד בין כתיבת קוד להובלה, באחוזים?</li><li>מה הכאב הכי גדול כרגע ב־frontend: חוב טכני, ביצועים, build ו־CI, או חוסר אחידות?</li><li>איך מתעדפים חוב טכני מול ה־roadmap, ומי מחליט?</li><li>יש design system או ספריית קומפוננטות משותפת? מי מתחזק אותה?</li><li>איך נראה תהליך הבדיקות והשחרור: זמן CI, ‏feature flags, תדירות deploy?</li><li>איך מטפלים בנגישות ובאבטחה: הן חלק מה־Definition of Done, נבדקות ב־audits, או מטופלות בדיעבד?</li><li><strong>מה מצב אימוץ ה־AI בצוות?</strong> אילו כלים יש, אילו כללים, ואיך מודדים את ההשפעה?</li><li>מה גודל הצוות, ואיך עובדים יחד frontend, ‏backend, מוצר ועיצוב?</li><li>למה המשרה פתוחה, ומה הוביל להצלחה (או לכישלון) של מי שהיה בה לפני?</li></ol><p>עוד מאגרים:</p><ul class="prose-list"><li><a href="https://www.techinterviewhandbook.org/final-questions/" target="_blank" rel="noopener">Tech Interview Handbook: Final questions</a></li><li><a href="https://github.com/viraptor/reverse-interview" target="_blank" rel="noopener">reverse-interview</a></li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section><section class="topic" id="final"><header class="topic-head"><h3>שבועיים לפני הריאיון</h3><span class="count" data-count-for="final"></span></header><div class="topic-body"><ul class="items tasks"><li class="item" data-id="70vukg" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>System Design:</strong> לחזור על מסגרת RADIO, ולפתור שני תרגילים בקול עם טיימר של 45 דקות.</div><span class="kind"></span><input type="checkbox" id="c-70vukg" aria-label="נלמד: System Design: לחזור על מסגרת RADIO, ולפתור שני תרגילים בקול עם טיימר של 45 דקות."><label for="c-70vukg" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="aj5l0d" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>מבנה הריאיון:</strong> לברר מראש איזה סטאק משתמשת החברה ואילו סבבים יש. לפי זה לבחור את מסלול Vue או React.</div><span class="kind"></span><input type="checkbox" id="c-aj5l0d" aria-label="נלמד: מבנה הריאיון: לברר מראש איזה סטאק משתמשת החברה ואילו סבבים יש. לפי זה לבחור את מסלול Vue או React."><label for="c-aj5l0d" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="m1emo6" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>סיפורים:</strong> לחזור על <a href="#star">בנק ה־STAR</a>, ולהקליט את עצמך עונה על 3 סיפורים.</div><span class="kind"></span><input type="checkbox" id="c-m1emo6" aria-label="נלמד: בנק ה־STAR"><label for="c-m1emo6" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="8x5vyt" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>תרגיל קוד:</strong> לפתור 3–4 תרגילים מ־BFE.dev או GreatFrontEnd. אחד מהם יהיה hook או composable.</div><span class="kind"></span><input type="checkbox" id="c-8x5vyt" aria-label="נלמד: תרגיל קוד: לפתור 3–4 תרגילים מ־BFE.dev או GreatFrontEnd. אחד מהם יהיה hook או composable."><label for="c-8x5vyt" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="1ah4amy" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>שאלת ה־AI:</strong> לחזור על התשובה ל־&quot;איך הובלת אימוץ AI&quot; ועל נקודות ה־DORA.</div><span class="kind"></span><input type="checkbox" id="c-1ah4amy" aria-label="נלמד: שאלת ה־AI: לחזור על התשובה ל־&quot;איך הובלת אימוץ AI&quot; ועל נקודות ה־DORA."><label for="c-1ah4amy" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="vj0d0z" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>ריאיון סימולציה:</strong> לעשות ריאיון סימולציה עם חבר או ב־<a href="https://www.pramp.com/" target="_blank" rel="noopener">Pramp</a>, שהוא חינמי ודורש הרשמה.</div><span class="kind"></span><input type="checkbox" id="c-vj0d0z" aria-label="נלמד: Pramp"><label for="c-vj0d0z" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="2melc" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>מצב הכלים:</strong> לעבור שוב על טבלת <a href="./#status">מצב הכלים</a> בתכנית, ולבדוק אם יצאו מאז גרסאות חדשות.</div><span class="kind"></span><input type="checkbox" id="c-2melc" aria-label="נלמד: מצב הכלים"><label for="c-2melc" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="1uf9ynd" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>שאלות למראיין:</strong> להכין 3–4 <a href="#ask">שאלות</a> שמתאימות לחברה הספציפית.</div><span class="kind"></span><input type="checkbox" id="c-1uf9ynd" aria-label="נלמד: שאלות"><label for="c-1uf9ynd" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section>
 
     <footer>רשימת הסימון של "שבועיים לפני הריאיון" נשמרת רק בדפדפן הזה, ולא בחשבון. היא לא נספרת בהתקדמות של התכנית.</footer>
   </main>

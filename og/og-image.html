@@ -9,7 +9,7 @@
   --oak-0: #0f241d; --oak-1: #1a3a30; --oak-front: #24493c; --oak-edge: #08140f;
   --brass: #c9a352; --holder: #efe6cc; --cab-ink: #eef3ec; --cab-muted: #a9c3b5;
   --card: #fefefb; --ink: #19201c; --muted: #536059; --rule-red: #c4432f; --rule-blue: #c8d9e3;
-  --stamp: #7b2a6c; --t1: #b3402a; --t2: #876000; --t3: #2f5b8c;
+  --stamp: #7b2a6c;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --wood: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='300'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .09' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
   --ink-bite: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
@@ -29,7 +29,7 @@ body {
   box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 6px 12px -4px rgba(0,0,0,.7);
 }
 .drawer.out { transform: translateX(-26px); background-color: #2f5d4d; box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 16px 24px -8px rgba(0,0,0,.8); }
-.dn { font: 700 17px "Courier Prime"; text-align: center; border-top: 4px solid var(--tc); padding-top: 2px; }
+.dn { font: 700 17px "Courier Prime"; text-align: center; border-top: 4px solid var(--brass); padding-top: 2px; }
 .holder { background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(0,0,0,.04)), var(--holder); color: var(--oak-0); border: 0; box-shadow: 0 0 0 3px var(--brass), 0 0 0 4px rgba(0,0,0,.35), inset 0 1px 3px rgba(0,0,0,.28); border-radius: 2px; padding: 3px 10px; font: 700 19px "Miriam Libre"; white-space: nowrap; }
 .cnt { font: 400 15px "Courier Prime"; color: var(--cab-muted); direction: ltr; }
 /* the index card pulled out of the drawer */
@@ -46,8 +46,10 @@ body {
 h1 { font: 700 70px/76px "Miriam Libre"; margin-top: 22px; letter-spacing: -.01em; }
 .line { font: 400 25px/38px "Miriam Libre"; color: var(--ink); }
 .line b { font: 700 25px "Courier Prime"; }
-.tiers { display: flex; gap: 10px; margin-top: 28px; }
-.tiers span { font: 700 17px "Miriam Libre"; color: #fff; padding: 6px 14px 5px; border-radius: 7px 7px 0 0; }
+.depths { display: flex; gap: 10px; margin-top: 28px; }
+.depths span { display: flex; align-items: center; gap: 8px; font: 700 17px "Miriam Libre"; color: var(--ink); background: var(--card); border: 1.5px solid var(--ink); border-bottom: 0; padding: 6px 14px 5px; border-radius: 7px 7px 0 0; }
+.depths i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--ink); }
+.depths .d-m { background: linear-gradient(90deg, var(--ink) 50%, transparent 50%); } .depths .d-d { background: var(--ink); }
 .stamp {
   position: absolute; left: 52px; bottom: 50px; transform: rotate(-8deg);
   border: 4px solid var(--stamp); outline: 2px solid var(--stamp); outline-offset: 3px; border-radius: 6px;
@@ -65,17 +67,17 @@ h1 { font: 700 70px/76px "Miriam Libre"; margin-top: 22px; letter-spacing: -.01e
     <h1>תכנית לימודים<br>לטק ליד</h1>
     <p class="role">FRONTEND ARCHITECT / TECH LEAD</p>
     <p class="line"><b data-stat="topics">16</b> נושאים · <b data-stat="sources">429</b> מקורות חינמיים · <b data-stat="playlists">92</b> פלייליסטים</p>
-    <div class="tiers"><span style="background:var(--t1)">עדיפות 1</span><span style="background:var(--t2)">עדיפות 2</span><span style="background:var(--t3)">עדיפות 3</span></div>
+    <div class="depths"><span><i class="d-o"></i>סקירה</span><span><i class="d-m"></i>בינוני</span><span><i class="d-d"></i>עומק</span></div>
     <div class="stamp">4 NOV 2026</div>
   </div>
   <div class="drawers" aria-hidden="true">
-    <div class="drawer out" style="--tc:var(--t1)"><span class="dn">1</span><span class="holder">System Design</span><span class="cnt" data-stat="s1">12</span></div>
-    <div class="drawer" style="--tc:var(--t1)"><span class="dn">2</span><span class="holder">Vue / React</span><span class="cnt" data-stat="s2">99</span></div>
-    <div class="drawer" style="--tc:var(--t1)"><span class="dn">3</span><span class="holder">AI ב־SDLC</span><span class="cnt" data-stat="s3">54</span></div>
-    <div class="drawer" style="--tc:var(--t2)"><span class="dn">5</span><span class="holder">ביצועים</span><span class="cnt" data-stat="s5">11</span></div>
-    <div class="drawer" style="--tc:var(--t3)"><span class="dn">16</span><span class="holder">פולסטאק</span><span class="cnt" data-stat="s16">95</span></div>
+    <div class="drawer out"><span class="dn">1</span><span class="holder">System Design</span><span class="cnt" data-stat="s1">12</span></div>
+    <div class="drawer"><span class="dn">2</span><span class="holder">Vue / React</span><span class="cnt" data-stat="s2">99</span></div>
+    <div class="drawer"><span class="dn">3</span><span class="holder">AI ב־SDLC</span><span class="cnt" data-stat="s3">54</span></div>
+    <div class="drawer"><span class="dn">5</span><span class="holder">ביצועים</span><span class="cnt" data-stat="s5">11</span></div>
+    <div class="drawer"><span class="dn">16</span><span class="holder">פולסטאק</span><span class="cnt" data-stat="s16">95</span></div>
   </div>
-  <p class="foot">מדורג לפי חשיבות בריאיון ולפי עומק. <b>עדיפות לווידאו.</b></p>
+  <p class="foot">כל נושא מסודר לפי עומק, מסקירה קצרה ועד קורס מלא. <b>עדיפות לווידאו.</b></p>
 </body>
 </html>
 

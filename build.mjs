@@ -66,42 +66,34 @@ function inline(src) {
 }
 
 // ---------- document model ----------
-const TIERS = {
-  '🔥 עדיפות 1': { key: '1', label: 'עדיפות 1', sub: 'עולה כמעט בכל ריאיון. מתחילים כאן.' },
-  '⭐ עדיפות 2': { key: '2', label: 'עדיפות 2', sub: 'נשאל לעתים קרובות, לפעמים לעומק.' },
-  '➕ עדיפות 3': { key: '3', label: 'עדיפות 3', sub: 'מראה רוחב. בדרך כלל נשאל בקצרה.' },
-};
-
+// The intro sections (how to use, tool status, table of contents) come first; the first numbered
+// heading ("## 1. …") starts the topics, and every heading after it must be numbered too.
 const intro = { note: '', how: [], status: [], statusWhen: '' };
-const tiers = [];
-let tier = null, section = null, sub = null, introKey = null;
+const sections = [];
+let section = null, sub = null, introKey = null;
 const target = () => (sub ? sub.lines : section ? section.lines : null);
 
 for (const line of lines.slice(1)) {
   let m;
-  if ((m = line.match(/^# (.+)$/))) {
-    tier = { ...TIERS[m[1].trim()], sections: [] };
-    tiers.push(tier); section = null; sub = null; introKey = null; continue;
-  }
   if ((m = line.match(/^## (.+)$/))) {
     const title = m[1].trim();
-    if (!tier) {
+    const nm = title.match(/^(\d+)\. (.+)$/);
+    if (!nm && !section) {
       introKey = title.startsWith('איך') ? 'how' : title.startsWith('מצב') ? 'status' : null;
       // "מצב הכלים נכון לסוף אוקטובר 2026" → "סוף אוקטובר 2026", for the button and the dialog title
       if (introKey === 'status') intro.statusWhen = title.replace(/^.*?נכון ל/, '');
       continue;
     }
-    const nm = title.match(/^(\d+)\. (.+)$/);
     if (!nm) throw new Error(`README.md: a topic heading needs its number ("## 17. …"): ${title}`);
     section = { id: 's' + nm[1], num: nm[1], title: nm[2], lines: [], subs: [] };
-    tier.sections.push(section); sub = null; continue;
+    sections.push(section); sub = null; continue;
   }
   if ((m = line.match(/^### (.+)$/))) {
     sub = { title: m[1].trim(), lines: [] };
     section.subs.push(sub); continue;
   }
   if (line.trim() === '---') continue;
-  if (!tier) {
+  if (!section) {
     if (line.startsWith('> ') && !intro.note) intro.note = line.slice(2);
     else if (introKey) intro[introKey].push(line);
     continue;
@@ -145,7 +137,7 @@ function renderItem(text, ctx) {
   const call = ctx.num ? `${ctx.num}.${String(++ctx.counter.n).padStart(2, '0')}` : '';
   const title = (text.match(/\[((?:[^\[\]]|\[[^\]]*\])+)\]\(/) || [, text])[1].replace(/[*`]/g, '');
   const kind = video ? (playlist ? 'פלייליסט' : 'וידאו') : 'קריאה';
-  return `<li class="item" data-id="${id}" data-tier="${ctx.tier}" data-depth="${ctx.depth}" data-video="${video ? 1 : 0}">` +
+  return `<li class="item" data-id="${id}" data-depth="${ctx.depth}" data-video="${video ? 1 : 0}">` +
     `<span class="call">${call}</span>` +
     `<div class="item-body">${body}</div>` +
     // a checklist task (outside any depth group) is neither reading nor video, and has no length
@@ -253,8 +245,8 @@ const bdi = html => html.replace(/[A-Za-z][\w.+#-]*(?:[ ()/&+.:-]+[\w.+#-]+)*\)?
   return `<bdi>${run}</bdi>${m.slice(run.length)}`;
 });
 
-function renderSection(s, t) {
-  const ctx = { tier: t.key, depth: 'task', num: s.num, counter: { n: 0 } };
+function renderSection(s) {
+  const ctx = { depth: 'task', num: s.num, counter: { n: 0 } };
   let body = sourcesFirst(renderBlocks(s.lines, ctx));
   if (s.subs.length) {
     const tabs = s.subs.map((sb, k) => {
@@ -268,7 +260,7 @@ function renderSection(s, t) {
       tabs.map((tb, k) => `<div class="tabpanel" role="tabpanel" id="${tb.id}-panel" aria-labelledby="${tb.id}" tabindex="0"${k ? ' hidden' : ''}>${tb.html}</div>`).join('') +
       `</div>`;
   }
-  return `<section class="topic" id="${s.id}" data-tier="${t.key}">` +
+  return `<section class="topic" id="${s.id}">` +
     `<header class="topic-head">${s.num ? `<span class="topic-num">${s.num}</span>` : ''}<h3>${inline(s.title)}</h3><span class="count" data-count-for="${s.id}"></span></header>` +
     `<div class="topic-body">${body}<p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section>`;
 }
@@ -284,17 +276,14 @@ const countSection = (s, html) => {
   return html;
 };
 
-const tiersHtml = tiers.map(t =>
-  `<div class="tier" data-tier="${t.key}" id="tier-${t.key}"><div class="tier-head"><h2><span class="tier-tab">${t.label}</span><span class="tier-line">${t.sub}</span></h2><span class="count" data-count-for="tier-${t.key}"></span></div>` +
-  t.sections.map(s => countSection(s, renderSection(s, t))).join('') + `</div>`).join('');
+const sectionsHtml = sections.map(s => countSection(s, renderSection(s))).join('');
 
-const toc = tiers.map(t =>
-  `<div class="toc-group" data-tier="${t.key}"><div class="toc-tier">${t.label}</div><ol>` +
-  t.sections.map(s => `<li><a href="#${s.id}">${s.num ? `<span class="toc-num">${s.num}</span>` : ''}<span class="toc-title">${bdi(inline(s.title))}</span><span class="toc-count" data-count-for="${s.id}"></span></a></li>`).join('') +
-  `</ol></div>`).join('');
+const toc = `<div class="toc-group"><ol>` +
+  sections.map(s => `<li><a href="#${s.id}"><span class="toc-num">${s.num}</span><span class="toc-title">${bdi(inline(s.title))}</span><span class="toc-count" data-count-for="${s.id}"></span></a></li>`).join('') +
+  `</ol></div>`;
 
-const howHtml = renderBlocks(intro.how, { tier: 'intro', depth: 'task' });
-const statusHtml = renderBlocks(intro.status, { tier: 'intro', depth: 'task' });
+const howHtml = renderBlocks(intro.how, { depth: 'task' });
+const statusHtml = renderBlocks(intro.status, { depth: 'task' });
 
 const tpl = readFileSync(new URL('./template.html', import.meta.url), 'utf8');
 const out = tpl
@@ -303,7 +292,7 @@ const out = tpl
   .replace('{{STATUS}}', statusHtml)
   .replaceAll('{{STATUS_WHEN}}', intro.statusWhen)
   .replace('{{TOC}}', toc)
-  .replace('{{TIERS}}', tiersHtml)
+  .replace('{{SECTIONS}}', () => sectionsHtml)
   .replace(/\{\{(TOPICS|SOURCES|PLAYLISTS)\}\}/g, (_, k) => stats[k.toLowerCase()]);
 writeFileSync(outPath, out.replace(/\r?\n/g, '\r\n'));
 console.log('index.html  topics:', stats.topics, 'sources:', stats.sources, 'playlists:', stats.playlists, 'bytes:', Buffer.byteLength(out));
@@ -340,12 +329,11 @@ for (const line of readLines(new URL('interview-prep.md', here)).slice(1)) {
   else if (line.trim()) prep.intro.push(line);
 }
 const planItems = itemCount;
-const prepKind = { key: 'prep' };
 // the intro's link to this very page means nothing on it
 const prepIntro = prep.intro.map(l => inline(l.replace(/^\*\*\[[^\]]+\]\([^)]+\)\*\*\.\s*/, ''))).join(' ');
 const prepToc = `<div class="toc-group"><ol>` + prep.sections.map(s =>
   `<li><a href="#${s.id}"><span class="toc-title">${bdi(inline(s.title))}</span><span class="toc-count" data-count-for="${s.id}"></span></a></li>`).join('') + `</ol></div>`;
-const prepHtml = prep.sections.map(s => renderSection(s, prepKind)).join('');
+const prepHtml = prep.sections.map(s => renderSection(s)).join('');
 // one stylesheet for both pages: the palette script, the fonts and the styles, from template.html's head
 const shared = tpl.slice(tpl.indexOf('<script>try'), tpl.indexOf('</style>') + '</style>'.length);
 const prepOut = readFileSync(new URL('./prep-template.html', import.meta.url), 'utf8')

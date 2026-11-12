@@ -4,12 +4,12 @@
 <title>תכנית לימודים לטק ליד</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="תכנית לימודים לריאיונות Frontend Architect / Tech Lead: {{TOPICS}} נושאים מדורגים לפי חשיבות, {{SOURCES}} מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
+<meta name="description" content="תכנית לימודים לריאיונות Frontend Architect / Tech Lead: {{TOPICS}} נושאים, {{SOURCES}} מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="he_IL">
 <meta property="og:site_name" content="tech-lead-curriculum">
 <meta property="og:title" content="תכנית לימודים לטק ליד">
-<meta property="og:description" content="{{TOPICS}} נושאים מדורגים לפי חשיבות, {{SOURCES}} מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
+<meta property="og:description" content="{{TOPICS}} נושאים, {{SOURCES}} מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
 <meta property="og:url" content="https://shoobyd.github.io/tech-lead-curriculum/">
 <meta property="og:image" content="https://shoobyd.github.io/tech-lead-curriculum/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Miriam+Libre:wght@400;700&display=swap">
 <style>
 /* Layout: a card cabinet (title, stamped progress, one drawer per topic) beside the open drawer:
-   tiers as guide cards, sources as ruled index cards with call numbers, done as a dated ink stamp. */
+   sources as ruled index cards with call numbers, done as a dated ink stamp. */
 /* Palettes: the green reading room is the default; oak, steel and navy are chosen in the cabinet header
    (html[data-palette]). Each palette sets the same tokens for light and dark. */
 :root {
@@ -33,8 +33,6 @@
   --ground: #e7eae3; --card: #fefefb; --ink: #19201c; --muted: #536059; --line: #ccd3c9;
   --rule-red: #c4432f; --rule-blue: #c8d9e3;
   --link: #1f4f8a; --stamp: #7b2a6c; --stamp-soft: #f3e5ef;
-  --t1: #b3402a; --t2: #876000; --t3: #2f5b8c;
-  --t-end: #5d554d; --on-t: #ffffff;
   --shadow: 0 1px 0 rgba(0,0,0,.08), 0 8px 18px -12px rgba(0,0,0,.42);
   --font-body: "Miriam Libre", "Segoe UI", Arial, sans-serif;
   --font-type: "Courier Prime", "Courier New", monospace;
@@ -48,8 +46,6 @@
   --ground: #141b18; --card: #1e2622; --ink: #e8eee9; --muted: #a8b6ae; --line: #2f3a34;
   --rule-red: #d6654f; --rule-blue: #2c3638;
   --link: #9cc0ff; --stamp: #e08fd0; --stamp-soft: #34222f;
-  --t1: #ef8a6c; --t2: #e2b552; --t3: #86b4ec; --on-t: #0d1310;
-  --t-end: #a8b0ab;
   --shadow: 0 1px 0 rgba(0,0,0,.4), 0 10px 22px -14px rgba(0,0,0,.9);
   color-scheme: dark;
   }
@@ -61,8 +57,6 @@
   --ground: #141b18; --card: #1e2622; --ink: #e8eee9; --muted: #a8b6ae; --line: #2f3a34;
   --rule-red: #d6654f; --rule-blue: #2c3638;
   --link: #9cc0ff; --stamp: #e08fd0; --stamp-soft: #34222f;
-  --t1: #ef8a6c; --t2: #e2b552; --t3: #86b4ec; --on-t: #0d1310;
-  --t-end: #a8b0ab;
   --shadow: 0 1px 0 rgba(0,0,0,.4), 0 10px 22px -14px rgba(0,0,0,.9);
   color-scheme: dark;
 }
@@ -73,7 +67,6 @@
   --ground: #e6e5e0; --card: #fdfdfb; --ink: #1f1a16; --muted: #5d554d; --line: #d3cfc6;
   --rule-red: #cf4134; --rule-blue: #cddbeb;
   --link: #2c4da3; --stamp: #5b3ea8; --stamp-soft: #ece7f7;
-  --t1: #b9382c; --t2: #8a5700; --t3: #276b63;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-palette="oak"]:not([data-theme="light"]) {
@@ -83,7 +76,6 @@
   --ground: #1d1915; --card: #28211b; --ink: #ece4da; --muted: #b2a595; --line: #3b3029;
   --rule-red: #d8624f; --rule-blue: #2f3238;
   --link: #9fb6ff; --stamp: #b39bff; --stamp-soft: #2b2340;
-  --t1: #f08167; --t2: #e3ab4c; --t3: #63c4b6; --on-t: #17120e;
   }
 }
 :root[data-palette="oak"][data-theme="dark"] {
@@ -93,7 +85,6 @@
   --ground: #1d1915; --card: #28211b; --ink: #ece4da; --muted: #b2a595; --line: #3b3029;
   --rule-red: #d8624f; --rule-blue: #2f3238;
   --link: #9fb6ff; --stamp: #b39bff; --stamp-soft: #2b2340;
-  --t1: #f08167; --t2: #e3ab4c; --t3: #63c4b6; --on-t: #17120e;
 }
 :root[data-palette="steel"] {
   --oak-0: #26303b; --oak-1: #364352; --oak-front: #485869; --oak-front-on: #5a6e84; --oak-edge: #171e26;
@@ -102,7 +93,6 @@
   --ground: #e3e7eb; --card: #ffffff; --ink: #141a21; --muted: #515f6d; --line: #cbd3dc;
   --rule-red: #df4f37; --rule-blue: #c5d5e6;
   --link: #1b5cab; --stamp: #c8441c; --stamp-soft: #fbe7de;
-  --t1: #b8410f; --t2: #7d6400; --t3: #0f6f68;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-palette="steel"]:not([data-theme="light"]) {
@@ -112,7 +102,6 @@
   --ground: #161b21; --card: #1f262e; --ink: #e8edf2; --muted: #a6b2bf; --line: #313b46;
   --rule-red: #e86a52; --rule-blue: #2c3540;
   --link: #8fb8ff; --stamp: #ff8a5c; --stamp-soft: #3a2620;
-  --t1: #ff8d5c; --t2: #e3c04f; --t3: #4fc4b8; --on-t: #10151b;
   }
 }
 :root[data-palette="steel"][data-theme="dark"] {
@@ -122,7 +111,6 @@
   --ground: #161b21; --card: #1f262e; --ink: #e8edf2; --muted: #a6b2bf; --line: #313b46;
   --rule-red: #e86a52; --rule-blue: #2c3540;
   --link: #8fb8ff; --stamp: #ff8a5c; --stamp-soft: #3a2620;
-  --t1: #ff8d5c; --t2: #e3c04f; --t3: #4fc4b8; --on-t: #10151b;
 }
 :root[data-palette="navy"] {
   --oak-0: #101a33; --oak-1: #1a2a4f; --oak-front: #243866; --oak-front-on: #2f4a85; --oak-edge: #080e1f;
@@ -131,7 +119,6 @@
   --ground: #dfe3eb; --card: #ffffff; --ink: #131a2a; --muted: #4f5a72; --line: #c8cfdc;
   --rule-red: #d0453a; --rule-blue: #c6d3ea;
   --link: #2442b0; --stamp: #b81f38; --stamp-soft: #fbe4e7;
-  --t1: #c14d22; --t2: #8a6500; --t3: #23705f;
 }
 @media (prefers-color-scheme: dark) {
   :root[data-palette="navy"]:not([data-theme="light"]) {
@@ -141,7 +128,6 @@
   --ground: #131828; --card: #1c2236; --ink: #e8ecf7; --muted: #a6afc6; --line: #2e3650;
   --rule-red: #e0675b; --rule-blue: #29314a;
   --link: #9db4ff; --stamp: #ff7a8c; --stamp-soft: #3a2029;
-  --t1: #f28a5e; --t2: #e4bd57; --t3: #5cc6ad; --on-t: #0b1020;
   }
 }
 :root[data-palette="navy"][data-theme="dark"] {
@@ -151,7 +137,6 @@
   --ground: #131828; --card: #1c2236; --ink: #e8ecf7; --muted: #a6afc6; --line: #2e3650;
   --rule-red: #e0675b; --rule-blue: #29314a;
   --link: #9db4ff; --stamp: #ff7a8c; --stamp-soft: #3a2029;
-  --t1: #f28a5e; --t2: #e4bd57; --t3: #5cc6ad; --on-t: #0b1020;
 }
 
 * { box-sizing: border-box; }
@@ -240,12 +225,6 @@ h1, h2, h3, h4 { text-wrap: balance; }
 
 /* drawers: the table of contents */
 .toc { display: grid; gap: 16px; }
-.toc-tier { font-size: 12px; font-weight: 700; color: var(--cab-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-.toc-tier::before { content: ""; width: 10px; height: 10px; border-radius: 2px 2px 0 0; background: var(--tc); }
-.toc-group { --tc: var(--t-end); }
-.toc-group[data-tier="1"] { --tc: var(--t1); }
-.toc-group[data-tier="2"] { --tc: var(--t2); }
-.toc-group[data-tier="3"] { --tc: var(--t3); }
 .toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .toc a {
   display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: center;
@@ -255,7 +234,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
   transition: transform .35s cubic-bezier(.16,1,.3,1), background-color .2s;
 }
 .toc a:not(:has(.toc-num)) { grid-template-columns: minmax(0, 1fr) auto; }
-.toc-num { font: 700 12px var(--font-type); text-align: center; border-top: 3px solid var(--tc); padding-top: 1px; }
+.toc-num { font: 700 12px var(--font-type); text-align: center; border-top: 3px solid var(--brass); padding-top: 1px; }
 .toc-title {
   background: var(--holder); color: var(--holder-ink); border: 2px solid var(--brass); border-radius: 2px;
   padding: 2px 7px; font-weight: 700; line-height: 1.3;
@@ -264,7 +243,6 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .toc-count.complete { color: var(--cab-ink); font-weight: 700; }
 .toc a:hover { background: var(--oak-front-on); }
 .toc a[aria-current="true"] { background: var(--oak-front-on); transform: translateX(-22px); box-shadow: 0 8px 16px -6px rgba(0,0,0,.7); }
-.toc li.is-off { opacity: .4; }
 
 /* ---------- the open drawer ---------- */
 .field { min-width: 0; }
@@ -338,31 +316,10 @@ th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--li
 th { color: var(--muted); font-weight: 700; font-size: 12px; }
 td:first-child { font-weight: 700; white-space: nowrap; }
 
-/* tiers are guide cards: a coloured tab standing above the cards behind it */
-.tier { margin-top: 72px; --tc: var(--t-end); }
-.tier[data-tier="1"] { --tc: var(--t1); }
-.tier[data-tier="2"] { --tc: var(--t2); }
-.tier[data-tier="3"] { --tc: var(--t3); }
-.tier-head {
-  display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px; position: relative;
-  background: var(--tc); color: var(--on-t); border-radius: 0 0 4px 4px; padding: 22px 24px 20px; margin-top: 40px;
-  box-shadow: var(--shadow);
-}
-.tier-head h2 { margin: 0; font: 700 30px/1.2 var(--font-body); letter-spacing: -.01em; }
-.tier-tab {
-  position: absolute; top: -36px; inset-inline-start: 0; height: 36px; display: flex; align-items: center;
-  background: var(--tc); border-radius: 8px 8px 0 0; padding: 0 18px; font-size: 15px;
-}
-.tier-line { display: block; }
-.tier-head .count { color: var(--on-t); font-size: 15px; }
-
 .topic { margin-top: 44px; scroll-margin-top: 96px; }
 .topic-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
 .topic-head:not(:has(.topic-num)) { grid-template-columns: minmax(0, 1fr) auto; }
-.topic-num { font: 700 26px/1 var(--font-type); color: var(--tier-ink, var(--muted)); direction: ltr; }
-.topic[data-tier="1"] { --tier-ink: var(--t1); }
-.topic[data-tier="2"] { --tier-ink: var(--t2); }
-.topic[data-tier="3"] { --tier-ink: var(--t3); }
+.topic-num { font: 700 26px/1 var(--font-type); color: var(--muted); direction: ltr; }
 .topic-head h3 { font-size: 24px; font-weight: 700; margin: 0; line-height: 1.25; min-width: 0; letter-spacing: -.01em; }
 .count { font: 400 13px var(--font-type); color: var(--muted); white-space: nowrap; direction: ltr; }
 .count.complete { color: var(--stamp); font-weight: 700; }
@@ -497,11 +454,6 @@ body { background-image: var(--grain); }
 .item:hover { transform: translateY(-2px); box-shadow: var(--lift-hover); }
 .depth-label { box-shadow: 0 -1px 0 var(--line), 0 -6px 12px -8px rgba(0,0,0,.25); }
 .stamp { -webkit-mask: var(--ink-bite) 0 0 / 140px 60px; mask: var(--ink-bite) 0 0 / 140px 60px; }
-.tier-head {
-  background-image: var(--grain), linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,0,0,.10));
-  box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 18px 30px -16px rgba(0,0,0,.55);
-}
-.tier-tab { background-image: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); box-shadow: 0 -4px 10px -6px rgba(0,0,0,.3); }
 .desk-btn { box-shadow: var(--lift); transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s cubic-bezier(.16,1,.3,1); }
 .desk-btn:hover { transform: translateY(-2px); box-shadow: var(--lift-hover); }
 dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,.18), 0 34px 70px -24px rgba(0,0,0,.7); }
@@ -532,8 +484,6 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   .reader-actions .danger { margin: 0; }
   .toc { display: flex; gap: 6px; overflow-x: auto; margin-inline: -16px; padding: 2px 16px 6px; scroll-snap-type: x proximity; }
   .toc-group { flex: none; display: flex; align-items: center; gap: 6px; }
-  .toc-tier { margin: 0; font-size: 0; }
-  .toc-tier::before { width: 6px; height: 30px; border-radius: 2px; }
   .toc ol { display: flex; gap: 6px; }
   .toc li { flex: none; scroll-snap-align: start; }
   .toc-title { white-space: nowrap; }
@@ -542,8 +492,6 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   .controls { --controls-pad: 16px; }
   .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
   main { padding-inline: 16px; }
-  .tier-head h2 { font-size: 22px; }
-  .tier-head { padding: 18px 16px 16px; }
   .topic-head h3 { font-size: 20px; }
   .desk { gap: 8px; margin-bottom: 18px; }
   .desk-btn { font-size: 14px; padding: 14px 12px 8px; }
@@ -614,11 +562,6 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   <div class="controls">
     <div class="controls-in">
       <div class="filters" role="group" aria-label="סינון">
-        <div class="fgroup"><span class="fgroup-label">עדיפות</span>
-          <button type="button" class="chip" data-f="tier" data-v="1" aria-pressed="true">1</button>
-          <button type="button" class="chip" data-f="tier" data-v="2" aria-pressed="true">2</button>
-          <button type="button" class="chip" data-f="tier" data-v="3" aria-pressed="true">3</button>
-        </div>
         <div class="fgroup"><span class="fgroup-label">עומק</span>
           <button type="button" class="chip" data-f="depth" data-v="o" aria-pressed="true"><span class="dot d-o"></span>סקירה</button>
           <button type="button" class="chip" data-f="depth" data-v="m" aria-pressed="true"><span class="dot d-m"></span>בינוני</button>
@@ -640,7 +583,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     </nav>
     <p class="note">{{NOTE}}</p>
 
-    {{TIERS}}
+    {{SECTIONS}}
 
     <dialog class="sheet" id="status" aria-labelledby="status-title">
       <div class="sheet-head"><h2 id="status-title">מצב הכלים, {{STATUS_WHEN}}</h2><button type="button" class="sheet-close" data-close aria-label="סגירה"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
@@ -649,7 +592,6 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     <dialog class="sheet" id="how" aria-labelledby="how-title">
       <div class="sheet-head"><h2 id="how-title">איך להשתמש בתכנית</h2><button type="button" class="sheet-close" data-close aria-label="סגירה"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
       <div class="sheet-body"><ul class="prose-list">
-          <li><strong>עדיפות:</strong> עדיפות 1 עולה כמעט בכל ריאיון, ומתחילים ממנה. עדיפות 2 נשאלת לעתים קרובות, לפעמים לעומק. עדיפות 3 מראה רוחב ונשאלת בדרך כלל בקצרה.</li>
           <li><strong>עומק המקור:</strong> <span class="dot d-o"></span> סקירה, עד חצי שעה. <span class="dot d-m"></span> בינוני, הרצאה או קורס קצר של שעה עד שלוש. <span class="dot d-d"></span> עומק, קורס מלא, תיעוד, מפרט או ספר.</li>
           <li><strong>מספר מיון:</strong> לכל מקור יש מספר, למשל 3.12: הנושא, ואחריו המיקום של המקור בנושא.</li>
           <li><strong>תגיות:</strong> <span class="tag video">וידאו</span> מסמן סרטון, ו־<span class="tag video">פלייליסט</span> מסמן סדרה או כנס שלם. קישור "חלק מסדרה" מוביל לפלייליסט המלא של הסדרה. <span class="tag old">ישן</span> מסמן חומר ישן: העקרונות נכונים, אבל כדאי לשים לב לתאריך.</li>
@@ -733,14 +675,13 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   // ---------- filters ----------
   const prefs = lsGet(PREFS_KEY) || {};
   const filters = {
-    tier: new Set(prefs.tier || ['1', '2', '3']),
     depth: new Set(prefs.depth || ['o', 'm', 'd']),
     video: !!prefs.video,
     hideDone: !!prefs.hideDone,
     tabs: prefs.tabs || {},
     palette: prefs.palette || 'green',
   };
-  const savePrefs = () => lsSet(PREFS_KEY, { tier: [...filters.tier], depth: [...filters.depth], video: filters.video, hideDone: filters.hideDone, tabs: filters.tabs, palette: filters.palette });
+  const savePrefs = () => lsSet(PREFS_KEY, { depth: [...filters.depth], video: filters.video, hideDone: filters.hideDone, tabs: filters.tabs, palette: filters.palette });
 
   // ---------- palette (green is the default and carries no attribute) ----------
   const CABINET = { green: '#0f241d', oak: '#2b1d14', steel: '#26303b', navy: '#101a33' };
@@ -763,22 +704,18 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     if (filters.video && d.video !== '1') return false;
     return true;
   }
-  const tierOn = t => t === 'end' || filters.tier.has(t);
 
   function applyFilters() {
     for (const el of items) el.hidden = !itemVisible(el);
     for (const g of document.querySelectorAll('.depth-group')) g.hidden = !g.querySelector('.item:not([hidden])');
-    for (const t of document.querySelectorAll('.tier')) t.hidden = !tierOn(t.dataset.tier);
     for (const s of document.querySelectorAll('.topic')) {
       const all = s.querySelectorAll('.item');
       const note = s.querySelector('.empty-note');
       note.hidden = !all.length || !!s.querySelector('.item:not([hidden])');
-      const li = document.querySelector(`.toc a[href="#${s.id}"]`)?.parentElement;
-      if (li) li.classList.toggle('is-off', !tierOn(s.dataset.tier));
     }
     for (const b of document.querySelectorAll('.chip')) {
       const f = b.dataset.f;
-      const on = f === 'tier' || f === 'depth' ? filters[f].has(b.dataset.v) : filters[f];
+      const on = f === 'depth' ? filters.depth.has(b.dataset.v) : filters[f];
       b.setAttribute('aria-pressed', String(on));
     }
   }
@@ -787,8 +724,8 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     const b = e.target.closest('.chip');
     if (!b) return;
     const f = b.dataset.f;
-    if (f === 'tier' || f === 'depth') {
-      const set = filters[f];
+    if (f === 'depth') {
+      const set = filters.depth;
       if (set.has(b.dataset.v)) { if (set.size > 1) set.delete(b.dataset.v); } else set.add(b.dataset.v);
     } else filters[f] = !filters[f];
     savePrefs();
