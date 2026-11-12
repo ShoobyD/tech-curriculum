@@ -288,11 +288,40 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .chip[aria-pressed="false"] .dot { opacity: .5; }
 
 main { max-width: 920px; margin: 0 auto; padding: 28px max(16px, 3vw) 0; }
-main > details.panel:first-of-type { margin-top: 72px; }
 .note { color: var(--muted); margin: 0 0 18px; max-width: 70ch; font-size: 15px; }
 
-details.panel { background: var(--card); border-radius: 3px; box-shadow: var(--shadow); margin-top: 12px; }
-details.panel > summary { cursor: pointer; padding: 13px 18px; font-weight: 700; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+/* the desk: what to read before the drawers, as small index cards; two open a dialog, one leads to the prep page */
+.desk { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 22px; }
+.desk-btn {
+  font: 700 15px/1.3 var(--font-body); color: var(--ink); text-decoration: none; cursor: pointer;
+  display: inline-flex; align-items: baseline; gap: 10px; border: 0; border-radius: 2px; padding: 16px 16px 10px;
+  background: var(--card) linear-gradient(var(--rule-red), var(--rule-red)) 0 7px / 100% 2px no-repeat; box-shadow: var(--shadow);
+}
+.desk-btn:hover { color: var(--ink); }
+.desk-sub { font: 400 12px var(--font-type); color: var(--muted); white-space: nowrap; }
+.desk-btn svg { width: 14px; height: 14px; align-self: center; flex: none; }
+
+/* a dialog is an index card lifted off the desk; the backdrop is the cabinet's wood, dimmed */
+dialog.sheet {
+  width: min(760px, calc(100vw - 32px)); max-height: min(86vh, 920px); padding: 0; border: 0; border-radius: 2px;
+  background: var(--card); color: var(--ink); overflow: hidden; flex-direction: column;
+}
+dialog.sheet[open] { display: flex; }
+/* the dialog itself takes focus when it opens (long content starts at its top); its edge needs no ring */
+dialog.sheet:focus-visible { outline: none; }
+dialog.sheet::backdrop { background: color-mix(in srgb, var(--oak-0) 64%, transparent); }
+html:has(dialog.sheet[open]) { overflow: hidden; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px 14px; border-bottom: 2px solid var(--rule-red); }
+.sheet-head h2 { margin: 0; font: 700 22px/1.25 var(--font-body); letter-spacing: -.01em; }
+.sheet-close {
+  width: 36px; height: 36px; flex: none; display: grid; place-items: center; cursor: pointer;
+  color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 2px;
+}
+.sheet-close:hover { border-color: var(--muted); }
+.sheet-close svg { width: 14px; height: 14px; }
+.sheet-body { padding: 4px 22px 22px; overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+.sheet-body > .prose-list, .sheet-body > p { max-width: 70ch; }
+.sheet-body .prose-list li { margin-block: 8px; }
 details > summary::-webkit-details-marker { display: none; }
 details > summary::after { content: ""; flex: none; width: 14px; height: 14px; background: var(--muted); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E") center / contain no-repeat; }
 details[open] > summary::after { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E"); }
@@ -303,7 +332,6 @@ details.brief > summary { cursor: pointer; list-style: none; display: flex; just
 details.brief > summary:hover { color: var(--ink); }
 details.brief .brief-body { padding-bottom: 12px; }
 details.brief .brief-body > p, details.brief .brief-body > .prose-list, details.brief .brief-body > ol { max-width: 70ch; }
-details.panel .panel-body { padding: 0 18px 16px; min-width: 0; }
 .table-wrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -474,11 +502,13 @@ body { background-image: var(--grain); }
   box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 18px 30px -16px rgba(0,0,0,.55);
 }
 .tier-tab { background-image: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); box-shadow: 0 -4px 10px -6px rgba(0,0,0,.3); }
-details.panel { box-shadow: var(--lift); }
+.desk-btn { box-shadow: var(--lift); transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s cubic-bezier(.16,1,.3,1); }
+.desk-btn:hover { transform: translateY(-2px); box-shadow: var(--lift-hover); }
+dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,.18), 0 34px 70px -24px rgba(0,0,0,.7); }
 .chip { box-shadow: 0 1px 2px rgba(0,0,0,.10); }
 .chip[aria-pressed="true"] { box-shadow: inset 0 1px 2px rgba(0,0,0,.35); }
 .controls { box-shadow: 0 8px 16px -14px rgba(0,0,0,.45); }
-@media (prefers-reduced-motion: reduce) { .item { transition: none; } .item:hover { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .item, .desk-btn { transition: none; } .item:hover, .desk-btn:hover { transform: none; } }
 
 /* ---------- phone: the cabinet becomes a header with a strip of drawers ---------- */
 @media (max-width: 900px) {
@@ -515,6 +545,13 @@ details.panel { box-shadow: var(--lift); }
   .tier-head h2 { font-size: 22px; }
   .tier-head { padding: 18px 16px 16px; }
   .topic-head h3 { font-size: 20px; }
+  .desk { gap: 8px; margin-bottom: 18px; }
+  .desk-btn { font-size: 14px; padding: 14px 12px 8px; }
+  .desk-sub { display: none; }
+  dialog.sheet { width: calc(100vw - 24px); max-height: 88dvh; }
+  .sheet-head { padding: 14px 16px 12px; }
+  .sheet-head h2 { font-size: 19px; }
+  .sheet-body { padding: 2px 16px 18px; }
   .topic-num { font-size: 21px; }
   .item { grid-template-columns: minmax(0, 1fr) 28px; gap: 2px 12px; padding-inline: 14px; }
   .call { grid-column: 1; grid-row: 1; font-size: 18px; }
@@ -596,17 +633,22 @@ details.panel { box-shadow: var(--lift); }
   </div>
 
   <main>
+    <nav class="desk" aria-label="לפני שמתחילים">
+      <button type="button" class="desk-btn" data-open="how" aria-haspopup="dialog">איך להשתמש בתכנית</button>
+      <button type="button" class="desk-btn" data-open="status" aria-haspopup="dialog">מצב הכלים<span class="desk-sub">{{STATUS_WHEN}}</span></button>
+      <a class="desk-btn" href="prep.html">הכנה לריאיון<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8 10 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </nav>
     <p class="note">{{NOTE}}</p>
 
     {{TIERS}}
 
-    <details class="panel">
-      <summary>מצב הכלים, סוף אוקטובר 2026</summary>
-      <div class="panel-body">{{STATUS}}</div>
-    </details>
-    <details class="panel">
-      <summary>איך להשתמש בתכנית</summary>
-      <div class="panel-body"><ul class="prose-list">
+    <dialog class="sheet" id="status" aria-labelledby="status-title">
+      <div class="sheet-head"><h2 id="status-title">מצב הכלים, {{STATUS_WHEN}}</h2><button type="button" class="sheet-close" data-close aria-label="סגירה"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+      <div class="sheet-body">{{STATUS}}</div>
+    </dialog>
+    <dialog class="sheet" id="how" aria-labelledby="how-title">
+      <div class="sheet-head"><h2 id="how-title">איך להשתמש בתכנית</h2><button type="button" class="sheet-close" data-close aria-label="סגירה"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+      <div class="sheet-body"><ul class="prose-list">
           <li><strong>עדיפות:</strong> עדיפות 1 עולה כמעט בכל ריאיון, ומתחילים ממנה. עדיפות 2 נשאלת לעתים קרובות, לפעמים לעומק. עדיפות 3 מראה רוחב ונשאלת בדרך כלל בקצרה.</li>
           <li><strong>עומק המקור:</strong> <span class="dot d-o"></span> סקירה, עד חצי שעה. <span class="dot d-m"></span> בינוני, הרצאה או קורס קצר של שעה עד שלוש. <span class="dot d-d"></span> עומק, קורס מלא, תיעוד, מפרט או ספר.</li>
           <li><strong>מספר מיון:</strong> לכל מקור יש מספר, למשל 3.12: הנושא, ואחריו המיקום של המקור בנושא.</li>
@@ -615,9 +657,9 @@ details.panel { box-shadow: var(--lift); }
           <li><strong>מעקב:</strong> מסמנים כל מקור כשמסיימים, והוא מקבל חותמת עם התאריך. בלי התחברות, ההתקדמות נשמרת רק בדפדפן הזה. התחברות עם GitHub שומרת אותה בחשבון, כך שהיא עוברת בין מכשירים, וגלויה לחברים שמשתמשים בתכנית. נשמרים רק שם המשתמש, השם והתמונה מ־GitHub, ואילו מקורות סימנת ומתי.</li>
           <li><strong>מסלולי Vue ו־React:</strong> בנושא 2 עוברים בין המסלולים בלשוניות. הספירה כוללת את שני המסלולים.</li>
         </ul></div>
-    </details>
+    </dialog>
 
-    <footer>בנק סיפורי STAR, שאלות למראיין ורשימה לשבועיים לפני הריאיון נמצאים ב<a href="prep.html">דף ההכנה לריאיון</a>. המקורות נבדקו ב־31.10.2026. כל התוכן חינמי. אותה תכנית שמורה גם כקובץ Markdown, וממנו נבנה הדף. ההתחברות וההתקדמות המשותפת רצות על שרת קטן ב־Cloudflare.</footer>
+    <footer>המקורות נבדקו ב־31.10.2026. כל התוכן חינמי. אותה תכנית שמורה גם כקובץ Markdown, וממנו נבנה הדף. ההתחברות וההתקדמות המשותפת רצות על שרת קטן ב־Cloudflare.</footer>
   </main>
 </div>
 </div>
@@ -802,6 +844,31 @@ details.panel { box-shadow: var(--lift); }
     }, { rootMargin: '-20% 0px -70% 0px' });
     for (const s of document.querySelectorAll('.topic')) io.observe(s);
   }
+
+  // ---------- the desk: how to use and tool status open as dialogs ----------
+  // Native modal dialogs: focus moves in and stays, Esc closes. Closing returns focus to the button
+  // that opened it. A link to #how or #status (the prep page has one) opens that dialog.
+  const sheets = new Map([...document.querySelectorAll('dialog.sheet')].map(d => [d.id, d]));
+  let opener = null;
+  const openSheet = (id, from = null) => {
+    const d = sheets.get(id);
+    if (!d || d.open) return;
+    opener = from;
+    d.showModal();
+  };
+  for (const b of document.querySelectorAll('[data-open]')) b.addEventListener('click', () => openSheet(b.dataset.open, b));
+  for (const d of sheets.values()) {
+    // a click on the backdrop lands on the dialog itself; its content fills it edge to edge
+    d.addEventListener('click', e => { if (e.target === d || e.target.closest('[data-close]')) d.close(); });
+    d.addEventListener('close', () => {
+      (opener ?? document.querySelector(`[data-open="${d.id}"]`))?.focus();
+      opener = null;
+      if (location.hash === '#' + d.id) history.replaceState(null, '', location.pathname + location.search);
+    });
+  }
+  const sheetFromHash = () => openSheet(location.hash.slice(1));
+  sheetFromHash();
+  addEventListener('hashchange', sheetFromHash);
 
   // ---------- account: GitHub login, progress kept in the account (api/ in this repo) ----------
   // Without a login nothing changes: progress stays in this browser only. With one, this

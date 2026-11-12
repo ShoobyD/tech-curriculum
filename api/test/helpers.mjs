@@ -96,6 +96,17 @@ export async function launchBrowser(chromePath) {
 			checked: () => evaluate(`[...document.querySelectorAll('.item input:checked')].map(i => i.closest('.item').dataset.id)`),
 			click: n => evaluate(`(() => { const box = document.querySelectorAll('.item .box')[${n}]; box.scrollIntoView({ block: 'center' }); box.click(); return box.closest('.item').dataset.id; })()`),
 			idAt: n => evaluate(`document.querySelectorAll('.item')[${n}].dataset.id`),
+			// real input events, for what a script click can't show (Esc on a modal, a click on its backdrop)
+			async key(key) {
+				const code = { Escape: 27, Tab: 9, Enter: 13 }[key];
+				await s('Input.dispatchKeyEvent', { type: 'keyDown', key, code: key, windowsVirtualKeyCode: code });
+				await s('Input.dispatchKeyEvent', { type: 'keyUp', key, code: key, windowsVirtualKeyCode: code });
+				await sleep(150);
+			},
+			async tap(x, y) {
+				for (const type of ['mousePressed', 'mouseReleased']) await s('Input.dispatchMouseEvent', { type, x, y, button: 'left', clickCount: 1 });
+				await sleep(150);
+			},
 		};
 	}
 

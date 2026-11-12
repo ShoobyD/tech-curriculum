@@ -33,6 +33,7 @@ const SUITES = [
 	{ name: 'account', file: './account.test.mjs', browser: true },
 	{ name: 'friends', file: './friends.test.mjs', browser: true },
 	{ name: 'livepage', file: './livepage.test.mjs', browser: true },
+	{ name: 'pages', file: './pages.test.mjs', browser: true },
 ];
 const only = process.argv.slice(2);
 const selected = only.length ? SUITES.filter(s => only.includes(s.name)) : SUITES;

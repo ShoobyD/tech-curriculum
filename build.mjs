@@ -19,13 +19,13 @@ const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&
 const PREP_IDS = { 'בנק סיפורי STAR': 'star', 'שאלות למראיין': 'ask', 'שבועיים לפני הריאיון': 'final' };
 const ANCHORS = Object.fromEntries(Object.entries(PREP_IDS).map(([title, id]) => ['#' + title.toLowerCase().replace(/ /g, '-'), '#' + id]));
 // Links between the two markdown files become links between the two pages (same tab).
-// README anchors (the tool status table) have no target on the page yet, so they open the plan.
-const PAGES = [[/^interview-prep\.md(#.*)?$/, 'prep.html', true], [/^README\.md(#.*)?$/, './', false]];
+// README's intro sections are dialogs on the plan page: a link to one opens it (#how, #status).
+const README_ANCHORS = [[/^#איך-להשתמש/, '#how'], [/^#מצב-הכלים/, '#status']];
 const localHref = href => {
-  for (const [re, page, keepAnchor] of PAGES) {
-    const m = href.match(re);
-    if (m) return page + (keepAnchor && m[1] ? ANCHORS[decodeURI(m[1])] ?? '' : '');
-  }
+  let m = href.match(/^interview-prep\.md(#.*)?$/);
+  if (m) return 'prep.html' + (m[1] ? ANCHORS[decodeURI(m[1])] ?? '' : '');
+  m = href.match(/^README\.md(#.*)?$/);
+  if (m) return './' + (m[1] ? README_ANCHORS.find(([re]) => re.test(decodeURI(m[1])))?.[1] ?? '' : '');
   return null;
 };
 
@@ -72,7 +72,7 @@ const TIERS = {
   '➕ עדיפות 3': { key: '3', label: 'עדיפות 3', sub: 'מראה רוחב. בדרך כלל נשאל בקצרה.' },
 };
 
-const intro = { note: '', how: [], status: [] };
+const intro = { note: '', how: [], status: [], statusWhen: '' };
 const tiers = [];
 let tier = null, section = null, sub = null, introKey = null;
 const target = () => (sub ? sub.lines : section ? section.lines : null);
@@ -87,6 +87,8 @@ for (const line of lines.slice(1)) {
     const title = m[1].trim();
     if (!tier) {
       introKey = title.startsWith('איך') ? 'how' : title.startsWith('מצב') ? 'status' : null;
+      // "מצב הכלים נכון לסוף אוקטובר 2026" → "סוף אוקטובר 2026", for the button and the dialog title
+      if (introKey === 'status') intro.statusWhen = title.replace(/^.*?נכון ל/, '');
       continue;
     }
     const nm = title.match(/^(\d+)\. (.+)$/);
@@ -299,6 +301,7 @@ const out = tpl
   .replace('{{NOTE}}', inline(intro.note))
   .replace('{{HOW}}', howHtml)
   .replace('{{STATUS}}', statusHtml)
+  .replaceAll('{{STATUS_WHEN}}', intro.statusWhen)
   .replace('{{TOC}}', toc)
   .replace('{{TIERS}}', tiersHtml)
   .replace(/\{\{(TOPICS|SOURCES|PLAYLISTS)\}\}/g, (_, k) => stats[k.toLowerCase()]);
