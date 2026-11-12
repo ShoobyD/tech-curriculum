@@ -29,13 +29,19 @@ export default async function liveSuite({ API, ORIGIN, token, ids, check }) {
 	check('a save reaches every page', !!msg.friend && A.inbox.some(m => m.includes('"progress"')), `${Date.now() - start} ms after the PUT`);
 	check('the message has the /friends shape', msg.friend?.id === 1 && msg.friend.login === 'dev-dana' && msg.friend.done?.[ids[0]] === 1762000000000 && typeof msg.friend.updatedAt === 'number');
 
+	const count = () => B.inbox.filter(m => m.includes('"progress"')).length;
+	await put(T1, { done: [ids[0]], layout: { order: ['s2', 's1'], hiddenTopics: ['s16'], hiddenItems: [ids[4]] } });
+	await waitFor(() => count() === 2, 3000);
+	const withLayout = B.inbox.filter(m => m.includes('"progress"'))[1] ?? '';
+	check('a save with a layout is pushed without it', withLayout !== '' && !withLayout.includes('layout') && !withLayout.includes('s16') && !withLayout.includes(ids[4]), withLayout.slice(0, 120));
+
 	await fetch(`${API}/me`, { method: 'DELETE', headers: { Authorization: `Bearer ${T3}`, Origin: ORIGIN } });
 	check('a deletion is pushed', (await waitFor(() => A.inbox.includes('{"type":"deleted","id":3}'), 3000)) >= 0);
 
 	A.ws.close();
 	await sleep(300);
 	await put(T1, { done: [] });
-	check('a closed page does not break the others', (await waitFor(() => B.inbox.filter(m => m.includes('"progress"')).length === 2, 3000)) >= 0);
+	check('a closed page does not break the others', (await waitFor(() => count() === 3, 3000)) >= 0);
 	B.ws.close();
 }
 

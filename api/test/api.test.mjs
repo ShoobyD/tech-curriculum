@@ -40,6 +40,28 @@ export default async function apiSuite({ API, ORIGIN, SECRET, token, ids, check 
 	check('PUT valid is 200', (await status('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: good })) === 200);
 	const saved = await (await call('/progress', { auth: T1 })).json();
 	check('saved: duplicate id once, stray date dropped', saved.done.length === 2 && saved.dates[ids[0]] === 1762000000000 && !(ids[5] in saved.dates), JSON.stringify(saved));
+
+	// layout: the person's own order and hidden topics and sources
+	const empty = { order: [], hiddenTopics: [], hiddenItems: [] };
+	check('layout: empty before one is saved', JSON.stringify(saved.layout) === JSON.stringify(empty), JSON.stringify(saved.layout));
+	const layout = { order: ['s3', 's1', 's3', 's2'], hiddenTopics: ['s16'], hiddenItems: [ids[2], ids[2]] };
+	check('layout: PUT with a layout is 200', (await status('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: { ...good, layout } })) === 200);
+	const withLayout = (await (await call('/progress', { auth: T1 })).json()).layout;
+	check('layout: saved without repeats', JSON.stringify(withLayout) === JSON.stringify({ order: ['s3', 's1', 's2'], hiddenTopics: ['s16'], hiddenItems: [ids[2]] }), JSON.stringify(withLayout));
+	await call('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: good });
+	const kept = await (await call('/progress', { auth: T1 })).json();
+	check('layout: a PUT without one keeps the saved one', JSON.stringify(kept.layout) === JSON.stringify(withLayout) && kept.done.length === 2);
+	await call('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: { ...good, layout: empty } });
+	check('layout: an empty one clears it', JSON.stringify((await (await call('/progress', { auth: T1 })).json()).layout) === JSON.stringify(empty));
+	const badLayout = async l => (await status('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: { ...good, layout: l } })) === 422;
+	check('layout: bad topic id is 422', await badLayout({ ...empty, order: ['3'] }));
+	check('layout: bad hidden item id is 422', await badLayout({ ...empty, hiddenItems: ['<img>'] }));
+	check('layout: a missing list is 422', await badLayout({ order: [], hiddenTopics: [] }));
+	check('layout: not an object is 422', await badLayout(['s1']));
+	check('layout: 201 topics is 422', await badLayout({ ...empty, order: Array.from({ length: 201 }, (_, i) => `s${i}`) }));
+	check('layout: 2001 hidden items is 422', await badLayout({ ...empty, hiddenItems: Array.from({ length: 2001 }, (_, i) => 'a' + i.toString(36)) }));
+	await call('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: { ...good, layout } });
+
 	check('PUT bad item id is 422', (await status('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: { done: ['<img>'] } })) === 422);
 	check('PUT negative date is 422', (await status('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: { done: [ids[0]], dates: { [ids[0]]: -5 } } })) === 422);
 	check('PUT not JSON is 400', (await status('/progress', { method: 'PUT', auth: T1, origin: ORIGIN, body: 'nope' })) === 400);
@@ -55,6 +77,7 @@ export default async function apiSuite({ API, ORIGIN, SECRET, token, ids, check 
 	check('friends: most recently active first', list.map(f => f.login).join() === 'dev-yoav,dev-dana');
 	check('friends: done is a map of dates', list[1].done[ids[0]] === 1762000000000 && list[1].done[ids[1]] === 0);
 	check('friends: cached 30 s', friends.headers.get('Cache-Control') === 'public, max-age=30');
+	check("friends: dana's layout is not shown", list.every(f => !('layout' in f)) && !JSON.stringify(list).includes('s16'), Object.keys(list[1]).join());
 
 	// CORS
 	const pre = await call('/progress', { method: 'OPTIONS', origin: ORIGIN, headers: { 'Access-Control-Request-Method': 'PUT' } });

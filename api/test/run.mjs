@@ -8,13 +8,14 @@
 //   npm test -- api live     only these
 import { spawn, spawnSync } from 'node:child_process';
 import { createServer } from 'node:http';
+import { createConnection } from 'node:net';
 import { readFileSync, rmSync, existsSync } from 'node:fs';
 import { extname, join, normalize, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { findChrome, launchBrowser, reporter } from './helpers.mjs';
 import { sessionToken } from '../scripts/tokens.mjs';
 
-const API_PORT = 8788, SITE_PORT = 4398;
+const API_PORT = 8798, SITE_PORT = 4398;
 const API = `http://localhost:${API_PORT}`;
 const SITE = `http://localhost:${SITE_PORT}`;
 const ORIGIN = SITE;
@@ -62,6 +63,16 @@ function stopTree(child) {
 	else try { process.kill(-child.pid, 'SIGTERM'); } catch { child.kill('SIGTERM'); }
 }
 
+// On Windows a second server can bind a port that is already taken, and requests then reach
+// either one; so a busy port is refused up front rather than tested against someone else's server.
+function assertFree(port) {
+	return new Promise((resolve, reject) => {
+		const probe = createConnection({ port, host: '127.0.0.1' });
+		probe.once('connect', () => { probe.destroy(); reject(new Error(`port ${port} is already in use; stop whatever listens there and run again`)); });
+		probe.once('error', () => resolve());
+	});
+}
+
 function startApi() {
 	const child = spawn(process.execPath, [wranglerBin, 'dev', '--port', String(API_PORT), '--persist-to', stateDir, '--show-interactive-dev-session=false',
 		'--var', `ALLOWED_ORIGINS:${ORIGIN}`, '--var', `SESSION_SECRET:${SECRET}`, '--var', 'GITHUB_CLIENT_ID:test-client', '--var', 'GITHUB_CLIENT_SECRET:test-secret'],
@@ -84,6 +95,7 @@ const results = [];
 let api, site, browser;
 try {
 	console.log('setting up: a fresh local database, the API, the page');
+	await Promise.all([assertFree(API_PORT), assertFree(SITE_PORT)]);
 	rmSync(stateDir, { recursive: true, force: true });
 	wrangler(['d1', 'migrations', 'apply', 'tech-lead-curriculum', '--local', '--persist-to', stateDir]);
 	reseed();

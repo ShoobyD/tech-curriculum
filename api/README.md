@@ -14,8 +14,10 @@ Friends log in with GitHub, and their progress follows them between devices. Eve
 | `GET` | `/live` | | WebSocket upgrade, only from `ALLOWED_ORIGINS` (see [Live updates](#live-updates)); a plain request gets 426 |
 | `GET` | `/me` | Bearer | `{ user: { id, login, name, avatar } }` |
 | `DELETE` | `/me` | Bearer | `{ deleted: true }`: the account and its progress |
-| `GET` | `/progress` | Bearer | `{ done, dates, updatedAt }` (empty with `updatedAt: 0` before the first save) |
-| `PUT` | `/progress` | Bearer | Body `{ done: [itemId], dates: { itemId: timestamp } }` → `{ saved: true, updatedAt }`. Replaces the whole document |
+| `GET` | `/progress` | Bearer | `{ done, dates, layout, updatedAt }` (empty, with `updatedAt: 0`, before the first save) |
+| `PUT` | `/progress` | Bearer | Body `{ done: [itemId], dates: { itemId: timestamp }, layout? }` → `{ saved: true, updatedAt }`. Replaces the whole document; without `layout`, the saved layout is kept |
+
+The layout is the person's own arrangement of the plan: `{ order: [topicId], hiddenTopics: [topicId], hiddenItems: [itemId] }`, with topic ids `s1`…`s16` from `build.mjs`. It is private: `/friends` and the live room carry only `done`, never the layout. A page that doesn't send one (an older copy still open) leaves it as it was.
 
 "Bearer" means `Authorization: Bearer <token>`, the token from the login. It is valid for 90 days.
 
@@ -27,7 +29,7 @@ Errors are `{ error }` with one of:
 | 403 | `origin` | A write (`PUT`, `DELETE`) or a `/live` connection not from one of `ALLOWED_ORIGINS` |
 | 413 | `too_large` | A progress body over 128 KB |
 | 400 | `bad_json` | The body isn't JSON |
-| 422 | `invalid` | Not a progress document: item ids must look like `build.mjs` makes them (`^[0-9a-z]{1,8}(-\d{1,3})?$`), at most 2000, dates positive numbers |
+| 422 | `invalid` | Not a progress document: item ids must look like `build.mjs` makes them (`^[0-9a-z]{1,8}(-\d{1,3})?$`), at most 2000, dates positive numbers; a layout needs all three lists, topic ids `^s\d{1,3}$` (at most 200) and item ids as above (at most 2000) |
 | 500 | `not_configured` | A secret is missing |
 
 ## Live updates
@@ -91,7 +93,7 @@ npm test -- api live      # only some: api, live, account, friends, livepage
 
 The runner (`test/run.mjs`) builds a throwaway setup and removes it at the end:
 
-- `wrangler dev` on port 8788 with its own D1 under `.wrangler/test-state` (your dev database isn't touched) and test secrets passed as `--var`, so it needs no `.dev.vars`;
+- `wrangler dev` on port 8798 with its own D1 under `.wrangler/test-state` (your dev database isn't touched) and test secrets passed as `--var`, so it needs no `.dev.vars`;
 - the built page (`../index.html`, run `node build.mjs` first after changing the template) served on port 4398, the only origin the test API allows;
 - headless Chrome for the page suites. It is found in the usual install locations, or set `CHROME_PATH`; without it those suites are skipped.
 
@@ -99,13 +101,13 @@ The five made-up users of `scripts/seed-dev.sql` are reseeded before each suite.
 
 | Suite | Covers |
 | --- | --- |
-| `api` | Tokens (expired, forged, non-canonical), validation, origin checks, CORS, the login redirect, deleting an account |
-| `live` | Who may join `/live`, ping/pong, saves and deletions pushed to every page |
+| `api` | Tokens (expired, forged, non-canonical), validation, the private layout, origin checks, CORS, the login redirect, deleting an account |
+| `live` | Who may join `/live`, ping/pong, saves and deletions pushed to every page, never a layout |
 | `account` | The page as a guest, the first-login merge, saving, a second device, offline and pending changes, a bad token, a cancelled login, logout, delete |
 | `friends` | Friends' photos on the cards: order, "+N", the letter fallback, never yourself, aligned columns |
 | `livepage` | Live updates between two devices and from a friend, without reloads; a tick is never undone by its own echo |
 
-Ports 8788 and 4398 must be free; the usual dev ports (8787, 4399) can stay in use.
+Ports 8798 and 4398 must be free (the runner stops with a message if not); the usual dev ports (8787, 4399) can stay in use.
 
 ## Deploy (once)
 

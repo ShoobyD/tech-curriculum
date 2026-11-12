@@ -1,4 +1,4 @@
-import { type Progress, readStored } from './progress';
+import { EMPTY_LAYOUT, type Progress, readStored } from './progress';
 
 export interface User {
 	id: number;
@@ -53,9 +53,11 @@ export async function deleteUser(db: D1Database, id: number) {
 	]);
 }
 
-export async function getProgress(db: D1Database, userId: number): Promise<Progress & { updatedAt: number }> {
+/** My own document, always with a layout (empty lists when none was saved yet). */
+export async function getProgress(db: D1Database, userId: number): Promise<Required<Progress> & { updatedAt: number }> {
 	const row = await db.prepare('SELECT data, updated_at AS updatedAt FROM progress WHERE user_id = ?').bind(userId).first<{ data: string; updatedAt: number }>();
-	return row ? { ...readStored(row.data), updatedAt: row.updatedAt } : { done: [], dates: {}, updatedAt: 0 };
+	const { done, dates, layout } = row ? readStored(row.data) : { done: [], dates: {}, layout: undefined };
+	return { done, dates, layout: layout ?? EMPTY_LAYOUT, updatedAt: row?.updatedAt ?? 0 };
 }
 
 /** Replaces the whole document: the page always sends its full state (last write wins). */

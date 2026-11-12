@@ -7,8 +7,11 @@
  *   GET    /live                      WebSocket: every change, the moment it is saved (public, see room.ts)
  *   GET    /me                        the logged-in person                    Authorization: Bearer
  *   DELETE /me                        deletes the account and its progress    Authorization: Bearer
- *   GET    /progress                  my progress                             Authorization: Bearer
- *   PUT    /progress                  {done, dates}: replaces my progress     Authorization: Bearer
+ *   GET    /progress                  my progress and layout                  Authorization: Bearer
+ *   PUT    /progress                  {done, dates, layout?}: replaces them   Authorization: Bearer
+ *
+ * The layout (my topic order and what I hid) never leaves its owner: /friends and the live room
+ * carry only what each person finished.
  *
  * The site is static; this Worker is the only thing that writes to the database. Writes, and
  * joining the live room, are accepted only from the allowed origins.
@@ -89,6 +92,11 @@ async function saveProgress(request: Request, env: Env, ctx: ExecutionContext, u
 	}
 	const progress = parseProgress(body);
 	if (!progress) return json({ error: 'invalid' }, 422, cors);
+	// A page that doesn't know about layouts (an older copy, still open) must not erase one.
+	if (!progress.layout) {
+		const { layout } = await getProgress(env.DB, user.id);
+		progress.layout = layout;
+	}
 	const now = Date.now();
 	await putProgress(env.DB, user.id, progress, now);
 	announce(env, ctx, { type: 'progress', friend: asFriend(user, progress, now) });
