@@ -8,11 +8,11 @@ web
 
 ## Users
 
-Experienced frontend developers preparing for Frontend Tech Lead / Architect interviews. They come back to the page many times over weeks: they pick the next topic, open a video or course, and tick it off. The author is one of them; the page is public, and a circle of friends uses it together, seeing who has already finished each source.
+Developers preparing for technical interviews: frontend, Tech Lead, Architect and full-stack roles. They come back to the page many times over weeks: they pick the next topic, open a video or course, and tick it off. The author is one of them; the page is public, and a circle of friends uses it together, seeing who has already finished each source.
 
 ## Product Purpose
 
-A free, video-first study plan for tech-lead interviews: 16 topics, and within each topic the sources ranked by depth (overview / intermediate / in depth). There is no importance ranking of topics; each reader puts the topics in their own order and hides the sources and topics that aren't relevant to them. A separate prep page holds what belongs to the interview itself rather than the study: a STAR story bank, questions for the interviewer, and a checklist for the last two weeks. Success: a visitor always knows what to study next and can see how far along they are.
+A free, video-first study plan for technical interviews: 16 topics, and within each topic the sources ranked by depth (overview / intermediate / in depth). There is no importance ranking of topics; each reader puts the topics in their own order and hides the sources and topics that aren't relevant to them. A separate prep page holds what belongs to the interview itself rather than the study: a STAR story bank, questions for the interviewer, and a checklist for the last two weeks. Success: a visitor always knows what to study next and can see how far along they are.
 
 ## Positioning
 
