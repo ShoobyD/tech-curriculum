@@ -41,7 +41,7 @@ Workers don't share memory between requests and D1 doesn't announce changes, so 
 { "type": "deleted", "id": 1 }
 ```
 
-The `friend` object has the same shape as an entry of `GET /friends`, and holds nothing that isn't already public there. The page's own devices receive their owner's changes the same way.
+The `friend` object has the same shape as an entry of `GET /friends`, and holds nothing that isn't already public there. The page's own devices receive their owner's changes the same way; since the layout is private and not in the message, a page that sees its own user's change fetches `GET /progress` for it.
 
 The room accepts sockets with the Hibernation API: while nothing happens it sleeps and isn't billed for duration, even with pages connected. Pages send `ping` to keep the connection open, and the runtime answers `pong` without waking the room. A page that was disconnected reloads `/friends` and `/progress` when it reconnects, so a missed message only delays a change. The room stores nothing.
 
