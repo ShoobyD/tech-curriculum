@@ -103,6 +103,16 @@ export async function launchBrowser(chromePath) {
 				await s('Input.dispatchKeyEvent', { type: 'keyUp', key, code: key, windowsVirtualKeyCode: code });
 				await sleep(150);
 			},
+			// press, move in small steps, release: a drag as a mouse does it (pointer events follow)
+			async drag(x1, y1, x2, y2, steps = 12) {
+				await s('Input.dispatchMouseEvent', { type: 'mousePressed', x: x1, y: y1, button: 'left', clickCount: 1 });
+				for (let i = 1; i <= steps; i++) {
+					await s('Input.dispatchMouseEvent', { type: 'mouseMoved', x: x1 + (x2 - x1) * i / steps, y: y1 + (y2 - y1) * i / steps, button: 'left', buttons: 1 });
+					await sleep(16);
+				}
+				await s('Input.dispatchMouseEvent', { type: 'mouseReleased', x: x2, y: y2, button: 'left', clickCount: 1 });
+				await sleep(150);
+			},
 			async tap(x, y) {
 				for (const type of ['mousePressed', 'mouseReleased']) await s('Input.dispatchMouseEvent', { type, x, y, button: 'left', clickCount: 1 });
 				await sleep(150);

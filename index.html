@@ -244,6 +244,44 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .toc a:hover { background: var(--oak-front-on); }
 .toc a[aria-current="true"] { background: var(--oak-front-on); transform: translateX(-22px); box-shadow: 0 8px 16px -6px rgba(0,0,0,.7); }
 
+/* arranging the drawers: a toggle above them; in the mode each drawer gets a grip to drag it and up/down buttons */
+.drawers { display: grid; gap: 10px; }
+.drawers-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; }
+.drawers-label { font-size: 12px; font-weight: 700; color: var(--cab-muted); }
+.drawers-tools { display: flex; align-items: center; gap: 14px; }
+.drawers-tools button {
+  font: 700 12px/1.3 var(--font-body); color: var(--cab-ink); background: none; border: 0; padding: 4px 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.drawers-tools button:hover { text-decoration-thickness: 2px; }
+.drawers-tools button:disabled { color: var(--cab-muted); text-decoration: none; cursor: default; }
+.drawers-tools svg { width: 14px; height: 14px; flex: none; }
+.arrange[aria-pressed="true"] {
+  color: var(--holder-ink); background: var(--holder); text-decoration: none; padding: 4px 10px; border-radius: 2px;
+  box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35);
+}
+.grip, .move { display: none; }
+.toc.arranging li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 4px; align-items: center; }
+.toc.arranging .grip { display: grid; place-items: center; height: 34px; color: var(--cab-muted); cursor: grab; touch-action: none; border-radius: 3px; }
+.toc.arranging .grip:hover { color: var(--cab-ink); }
+.toc.arranging .move { display: flex; }
+.move button {
+  width: 26px; height: 26px; display: grid; place-items: center; cursor: pointer; padding: 0;
+  color: var(--cab-ink); background-color: var(--oak-front); border: 1px solid rgba(0,0,0,.4); border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 3px 5px -2px rgba(0,0,0,.6);
+}
+.move button:hover { background-color: var(--oak-front-on); }
+.move button:disabled { opacity: .35; cursor: default; box-shadow: none; }
+.move svg, .grip svg { width: 14px; height: 14px; }
+.toc.arranging .toc-count { display: none; }
+.toc.arranging a { grid-template-columns: 26px minmax(0, 1fr); gap: 6px; padding-inline: 6px; }
+.toc.arranging .move { gap: 3px; }
+.toc.arranging a[aria-current="true"] { transform: none; }
+.toc li.dragging { position: relative; z-index: 2; }
+.toc li.dragging .grip { cursor: grabbing; color: var(--cab-ink); }
+.toc li.dragging a { background-color: var(--oak-front-on); transform: translateX(-10px) rotate(-1deg); box-shadow: 0 18px 28px -10px rgba(0,0,0,.85); transition: none; }
+html.dragging-drawer, html.dragging-drawer * { cursor: grabbing !important; user-select: none; }
+
 /* ---------- the open drawer ---------- */
 .field { min-width: 0; }
 .controls {
@@ -488,6 +526,11 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   .toc li { flex: none; scroll-snap-align: start; }
   .toc-title { white-space: nowrap; }
   .toc a[aria-current="true"] { transform: none; }
+  /* arranging on the phone: the strip becomes a list, so up and down mean what they say */
+  .toc.arranging { display: block; overflow: visible; margin-inline: 0; padding: 0; }
+  .toc.arranging .toc-group, .toc.arranging ol { display: grid; gap: 6px; }
+  .toc.arranging .toc-title { white-space: normal; }
+  .toc.arranging li.dragging a { transform: rotate(-1deg); }
   .filters { -webkit-mask-image: linear-gradient(to left, #000 82%, transparent); mask-image: linear-gradient(to left, #000 82%, transparent); padding-inline-end: 32px; }
   .controls { --controls-pad: 16px; }
   .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
@@ -555,7 +598,17 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
       </div>
     </div>
   </div>
-  <nav class="toc" aria-label="תוכן עניינים"><div class="toc-group"><ol><li><a href="#s1"><span class="toc-num">1</span><span class="toc-title"><bdi>Frontend System Design</bdi></span><span class="toc-count" data-count-for="s1"></span></a></li><li><a href="#s2"><span class="toc-num">2</span><span class="toc-title">ארכיטקטורה ופריימוורק</span><span class="toc-count" data-count-for="s2"></span></a></li><li><a href="#s3"><span class="toc-num">3</span><span class="toc-title"><bdi>AI</bdi> לאורך ה־<bdi>SDLC (agentic engineering)</bdi></span><span class="toc-count" data-count-for="s3"></span></a></li><li><a href="#s4"><span class="toc-num">4</span><span class="toc-title">הובלה טכנית</span><span class="toc-count" data-count-for="s4"></span></a></li><li><a href="#s5"><span class="toc-num">5</span><span class="toc-title">ביצועים</span><span class="toc-count" data-count-for="s5"></span></a></li><li><a href="#s6"><span class="toc-num">6</span><span class="toc-title">אסטרטגיית בדיקות</span><span class="toc-count" data-count-for="s6"></span></a></li><li><a href="#s7"><span class="toc-num">7</span><span class="toc-title">יסודות <bdi>JS</bdi>/דפדפן ו־<bdi>live coding</bdi></span><span class="toc-count" data-count-for="s7"></span></a></li><li><a href="#s8"><span class="toc-num">8</span><span class="toc-title"><bdi>TypeScript</bdi> מתקדם</span><span class="toc-count" data-count-for="s8"></span></a></li><li><a href="#s9"><span class="toc-num">9</span><span class="toc-title">מגמות רוחב בין פריימוורקים</span><span class="toc-count" data-count-for="s9"></span></a></li><li><a href="#s10"><span class="toc-num">10</span><span class="toc-title">השוואה ובחירת פריימוורק</span><span class="toc-count" data-count-for="s10"></span></a></li><li><a href="#s11"><span class="toc-num">11</span><span class="toc-title">אבטחה</span><span class="toc-count" data-count-for="s11"></span></a></li><li><a href="#s12"><span class="toc-num">12</span><span class="toc-title">נגישות</span><span class="toc-count" data-count-for="s12"></span></a></li><li><a href="#s13"><span class="toc-num">13</span><span class="toc-title"><bdi>Design Systems</bdi> ו־<bdi>Web Components</bdi></span><span class="toc-count" data-count-for="s13"></span></a></li><li><a href="#s14"><span class="toc-num">14</span><span class="toc-title">כלים, <bdi>CI/CD</bdi> ו־<bdi>Observability</bdi></span><span class="toc-count" data-count-for="s14"></span></a></li><li><a href="#s15"><span class="toc-num">15</span><span class="toc-title">פיצ'רים של <bdi>AI</bdi> בצד הלקוח</span><span class="toc-count" data-count-for="s15"></span></a></li><li><a href="#s16"><span class="toc-num">16</span><span class="toc-title">פולסטאק ובקאנד</span><span class="toc-count" data-count-for="s16"></span></a></li></ol></div></nav>
+  <div class="drawers">
+    <div class="drawers-head">
+      <span class="drawers-label">נושאים</span>
+      <div class="drawers-tools">
+        <button type="button" class="reset-order" hidden>סדר מקורי</button>
+        <button type="button" class="arrange" aria-pressed="false" aria-controls="toc"><svg viewBox="0 0 16 16" aria-hidden="true"><g fill="currentColor"><circle cx="5.5" cy="3.5" r="1.4"/><circle cx="10.5" cy="3.5" r="1.4"/><circle cx="5.5" cy="8" r="1.4"/><circle cx="10.5" cy="8" r="1.4"/><circle cx="5.5" cy="12.5" r="1.4"/><circle cx="10.5" cy="12.5" r="1.4"/></g></svg><span>סידור</span></button>
+      </div>
+    </div>
+    <nav class="toc" id="toc" aria-label="תוכן עניינים"><div class="toc-group"><ol><li><a href="#s1"><span class="toc-num">1</span><span class="toc-title"><bdi>Frontend System Design</bdi></span><span class="toc-count" data-count-for="s1"></span></a></li><li><a href="#s2"><span class="toc-num">2</span><span class="toc-title">ארכיטקטורה ופריימוורק</span><span class="toc-count" data-count-for="s2"></span></a></li><li><a href="#s3"><span class="toc-num">3</span><span class="toc-title"><bdi>AI</bdi> לאורך ה־<bdi>SDLC (agentic engineering)</bdi></span><span class="toc-count" data-count-for="s3"></span></a></li><li><a href="#s4"><span class="toc-num">4</span><span class="toc-title">הובלה טכנית</span><span class="toc-count" data-count-for="s4"></span></a></li><li><a href="#s5"><span class="toc-num">5</span><span class="toc-title">ביצועים</span><span class="toc-count" data-count-for="s5"></span></a></li><li><a href="#s6"><span class="toc-num">6</span><span class="toc-title">אסטרטגיית בדיקות</span><span class="toc-count" data-count-for="s6"></span></a></li><li><a href="#s7"><span class="toc-num">7</span><span class="toc-title">יסודות <bdi>JS</bdi>/דפדפן ו־<bdi>live coding</bdi></span><span class="toc-count" data-count-for="s7"></span></a></li><li><a href="#s8"><span class="toc-num">8</span><span class="toc-title"><bdi>TypeScript</bdi> מתקדם</span><span class="toc-count" data-count-for="s8"></span></a></li><li><a href="#s9"><span class="toc-num">9</span><span class="toc-title">מגמות רוחב בין פריימוורקים</span><span class="toc-count" data-count-for="s9"></span></a></li><li><a href="#s10"><span class="toc-num">10</span><span class="toc-title">השוואה ובחירת פריימוורק</span><span class="toc-count" data-count-for="s10"></span></a></li><li><a href="#s11"><span class="toc-num">11</span><span class="toc-title">אבטחה</span><span class="toc-count" data-count-for="s11"></span></a></li><li><a href="#s12"><span class="toc-num">12</span><span class="toc-title">נגישות</span><span class="toc-count" data-count-for="s12"></span></a></li><li><a href="#s13"><span class="toc-num">13</span><span class="toc-title"><bdi>Design Systems</bdi> ו־<bdi>Web Components</bdi></span><span class="toc-count" data-count-for="s13"></span></a></li><li><a href="#s14"><span class="toc-num">14</span><span class="toc-title">כלים, <bdi>CI/CD</bdi> ו־<bdi>Observability</bdi></span><span class="toc-count" data-count-for="s14"></span></a></li><li><a href="#s15"><span class="toc-num">15</span><span class="toc-title">פיצ'רים של <bdi>AI</bdi> בצד הלקוח</span><span class="toc-count" data-count-for="s15"></span></a></li><li><a href="#s16"><span class="toc-num">16</span><span class="toc-title">פולסטאק ובקאנד</span><span class="toc-count" data-count-for="s16"></span></a></li></ol></div></nav>
+    <p class="sr" id="arrange-status" role="status"></p>
+  </div>
 </aside>
 
 <div class="field">
@@ -694,6 +747,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     applyLayout();
     applyFilters();
     updateCounts();
+    if (document.querySelector('.toc.arranging')) updateArrangeTools();
   }
 
   // ---------- counts (what I hid is not counted) ----------
@@ -839,6 +893,115 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     }, { rootMargin: '-20% 0px -70% 0px' });
     for (const s of document.querySelectorAll('.topic')) io.observe(s);
   }
+
+  // ---------- arranging the topics: drag a drawer by its grip, or move it with up/down ----------
+  // The order is the layout's (setLayout): it moves the topics on the page and is saved like a tick.
+  const toc = document.getElementById('toc');
+  const tocList = toc.querySelector('ol');
+  const arrangeBtn = document.querySelector('.arrange');
+  const resetBtn = document.querySelector('.reset-order');
+  const arrangeStatus = document.getElementById('arrange-status');
+  const ICON_UP = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 10 8 5.5 12.5 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const ICON_DOWN = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const drawerTitle = li => li.querySelector('.toc-title').textContent;
+  for (const li of tocList.children) {
+    const grip = document.createElement('span');
+    grip.className = 'grip';
+    grip.setAttribute('aria-hidden', 'true');
+    grip.title = 'גרירה';
+    grip.innerHTML = arrangeBtn.querySelector('svg').outerHTML;
+    const move = document.createElement('span');
+    move.className = 'move';
+    move.innerHTML = `<button type="button" data-dir="-1">${ICON_UP}</button><button type="button" data-dir="1">${ICON_DOWN}</button>`;
+    const [up, down] = move.children;
+    up.setAttribute('aria-label', `הזזה למעלה: ${drawerTitle(li)}`);
+    down.setAttribute('aria-label', `הזזה למטה: ${drawerTitle(li)}`);
+    li.prepend(grip);
+    li.append(move);
+  }
+  const drawerOrder = () => [...tocList.children].map(li => li.querySelector('a').getAttribute('href').slice(1));
+  const shownDrawers = () => [...tocList.children].filter(li => !li.hidden);
+  function updateArrangeTools() {
+    const shown = shownDrawers();
+    shown.forEach((li, i) => {
+      li.querySelector('[data-dir="-1"]').disabled = i === 0;
+      li.querySelector('[data-dir="1"]').disabled = i === shown.length - 1;
+    });
+    resetBtn.disabled = fullOrder().join() === DEFAULT_ORDER.join();
+  }
+  // the drawers already stand in the new order; the layout takes it from them
+  function commitOrder(li, focusDir) {
+    setLayout({ ...layout, order: drawerOrder() });
+    const shown = shownDrawers();
+    arrangeStatus.textContent = `${drawerTitle(li)}: מקום ${shown.indexOf(li) + 1} מתוך ${shown.length}`;
+    updateArrangeTools();
+    if (focusDir) {
+      // focus stays on the button that moved it; at the edge, on the other one
+      const b = li.querySelector(`[data-dir="${focusDir}"]`);
+      (b.disabled ? li.querySelector(`[data-dir="${-focusDir}"]`) : b).focus();
+    }
+  }
+  function setArranging(on) {
+    toc.classList.toggle('arranging', on);
+    arrangeBtn.setAttribute('aria-pressed', String(on));
+    arrangeBtn.querySelector('span').textContent = on ? 'סיום' : 'סידור';
+    resetBtn.hidden = !on;
+    if (on) updateArrangeTools();
+  }
+  arrangeBtn.addEventListener('click', () => setArranging(arrangeBtn.getAttribute('aria-pressed') !== 'true'));
+  resetBtn.addEventListener('click', () => {
+    setLayout({ ...layout, order: [] });
+    arrangeStatus.textContent = 'הסדר המקורי הוחזר';
+    updateArrangeTools();
+    arrangeBtn.focus();
+  });
+  tocList.addEventListener('click', e => {
+    const b = e.target.closest('.move button');
+    if (!b || b.disabled) return;
+    const li = b.closest('li'), dir = Number(b.dataset.dir);
+    const shown = shownDrawers();
+    const other = shown[shown.indexOf(li) + dir];
+    if (!other) return;
+    tocList.insertBefore(li, dir < 0 ? other : other.nextElementSibling);
+    commitOrder(li, dir);
+  });
+
+  // dragging: pointer events, so a mouse, a pen and a finger all work; the grip alone starts it
+  let drag = null;
+  const scroller = () => (matchMedia('(min-width: 901px)').matches ? document.querySelector('.cabinet') : null);
+  tocList.addEventListener('pointerdown', e => {
+    const grip = e.target.closest('.grip');
+    if (!grip || !toc.classList.contains('arranging') || e.button > 0) return;
+    e.preventDefault();
+    grip.setPointerCapture(e.pointerId);
+    const li = grip.closest('li');
+    drag = { li, pointer: e.pointerId, before: drawerOrder().join() };
+    li.classList.add('dragging');
+    document.documentElement.classList.add('dragging-drawer');
+  });
+  tocList.addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.pointer) return;
+    const y = e.clientY;
+    // the drawer goes before the first other drawer whose middle is below the pointer
+    const target = shownDrawers().filter(li => li !== drag.li).find(li => { const r = li.getBoundingClientRect(); return y < r.top + r.height / 2; });
+    if (target) { if (drag.li.nextElementSibling !== target) tocList.insertBefore(drag.li, target); }
+    else if (tocList.lastElementChild !== drag.li) tocList.append(drag.li);
+    // near the edge of the cabinet (or of the screen, on the phone) it scrolls along
+    const box = scroller();
+    const top = box ? box.getBoundingClientRect().top : 0, bottom = box ? box.getBoundingClientRect().bottom : innerHeight;
+    const step = y < top + 48 ? -12 : y > bottom - 48 ? 12 : 0;
+    if (step) (box || window).scrollBy(0, step);
+  });
+  const endDrag = e => {
+    if (!drag || e.pointerId !== drag.pointer) return;
+    const { li, before } = drag;
+    drag = null;
+    li.classList.remove('dragging');
+    document.documentElement.classList.remove('dragging-drawer');
+    if (drawerOrder().join() !== before) commitOrder(li);
+  };
+  tocList.addEventListener('pointerup', endDrag);
+  tocList.addEventListener('pointercancel', endDrag);
 
   // ---------- the desk: how to use and tool status open as dialogs ----------
   // Native modal dialogs: focus moves in and stays, Esc closes. Closing returns focus to the button
