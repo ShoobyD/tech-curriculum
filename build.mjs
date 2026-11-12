@@ -1,7 +1,9 @@
 // Builds the pages from the markdown, so both stay identical:
 //   README.md         → index.html  the study plan (template.html)
 //   interview-prep.md → prep.html   the interview prep page (prep-template.html, with template.html's styles)
-import { readFileSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 // Usage: node build.mjs [md] [out] [prep-out]. Defaults: README.md, index.html and prep.html next to this script.
 const here = new URL('.', import.meta.url);
@@ -269,9 +271,20 @@ function renderSection(s, t) {
     `<div class="topic-body">${body}<p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section>`;
 }
 
+// The numbers quoted outside the page itself (meta tags, the OG image) come from here, never by hand.
+const stats = { topics: 0, sources: 0, playlists: 0 };
+const countSection = (s, html) => {
+  const n = (html.match(/<li class="item"/g) || []).length;
+  stats[s.id] = n;
+  stats.topics++;
+  stats.sources += n;
+  stats.playlists += (html.match(/<span class="tag video">פלייליסט<\/span>/g) || []).length;
+  return html;
+};
+
 const tiersHtml = tiers.map(t =>
   `<div class="tier" data-tier="${t.key}" id="tier-${t.key}"><div class="tier-head"><h2><span class="tier-tab">${t.label}</span><span class="tier-line">${t.sub}</span></h2><span class="count" data-count-for="tier-${t.key}"></span></div>` +
-  t.sections.map(s => renderSection(s, t)).join('') + `</div>`).join('');
+  t.sections.map(s => countSection(s, renderSection(s, t))).join('') + `</div>`).join('');
 
 const toc = tiers.map(t =>
   `<div class="toc-group" data-tier="${t.key}"><div class="toc-tier">${t.label}</div><ol>` +
@@ -287,9 +300,29 @@ const out = tpl
   .replace('{{HOW}}', howHtml)
   .replace('{{STATUS}}', statusHtml)
   .replace('{{TOC}}', toc)
-  .replace('{{TIERS}}', tiersHtml);
+  .replace('{{TIERS}}', tiersHtml)
+  .replace(/\{\{(TOPICS|SOURCES|PLAYLISTS)\}\}/g, (_, k) => stats[k.toLowerCase()]);
 writeFileSync(outPath, out.replace(/\r?\n/g, '\r\n'));
-console.log('index.html  items:', itemCount, 'sections:', tiers.reduce((a, t) => a + t.sections.length, 0), 'bytes:', Buffer.byteLength(out));
+console.log('index.html  topics:', stats.topics, 'sources:', stats.sources, 'playlists:', stats.playlists, 'bytes:', Buffer.byteLength(out));
+
+// ---------- the OG image: og/og-image.html marks each number with data-stat="topics|sources|playlists|s<N>" ----------
+// When a number changes, the html is rewritten and og-image.png rendered again with headless Chrome.
+const ogHtmlPath = new URL('og/og-image.html', here);
+const ogPngPath = new URL('og-image.png', here);
+const ogBefore = readFileSync(ogHtmlPath, 'utf8');
+const ogAfter = ogBefore.replace(/(data-stat="([\w-]+)"[^>]*>)[^<]*/g, (m, open, key) => {
+  if (!(key in stats)) throw new Error(`og/og-image.html: no number for data-stat="${key}"`);
+  return open + stats[key];
+});
+if (ogAfter !== ogBefore || !existsSync(ogPngPath)) {
+  writeFileSync(ogHtmlPath, ogAfter);
+  const chrome = [process.env.CHROME_PATH, 'C:/Program Files/Google/Chrome/Application/chrome.exe', 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium'].find(p => p && existsSync(p));
+  const args = ['--headless', '--hide-scrollbars', '--window-size=1200,630', '--virtual-time-budget=5000', `--screenshot=${fileURLToPath(ogPngPath)}`, ogHtmlPath.href];
+  const r = chrome ? spawnSync(chrome, args, { stdio: 'ignore' }) : null;
+  console.log(r?.status === 0 ? 'og-image.png rendered again: its numbers changed'
+    : `WARNING: og/og-image.html changed but og-image.png was not rendered${chrome ? '' : ' (Chrome not found; set CHROME_PATH)'}. Run: chrome ${args.join(' ')}`);
+}
 
 // ---------- the interview prep page ----------
 // interview-prep.md: "# title", an intro paragraph, then "## " sections. Its checklist uses the same

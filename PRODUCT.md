@@ -33,7 +33,7 @@ Every source was opened and checked (YouTube oEmbed / HTTP), all content is free
 - Content is Hebrew, RTL; source titles and links are English.
 - Must work well on phone and support dark mode (system preference).
 - Text files use CRLF.
-- Counts at time of writing: 16 topics, 429 sources, 93 playlist items. They change with the README.
+- Counts (topics, sources, playlist items, sources per topic) are never written by hand: `node build.mjs` computes them from the README, fills the page's meta tags and the OG image (rendering `og-image.png` again when a number changes), and prints them.
 
 ## Evidence on Hand
 
