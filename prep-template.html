@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<title>הכנה לריאיון: תכנית לימודים לטק ליד</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="הכנה לריאיון Frontend Architect / Tech Lead: בנק סיפורי STAR, שאלות למראיין ורשימת סימון לשבועיים לפני הריאיון.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:site_name" content="tech-lead-curriculum">
+<meta property="og:title" content="הכנה לריאיון: תכנית לימודים לטק ליד">
+<meta property="og:description" content="בנק סיפורי STAR, שאלות למראיין ורשימת סימון לשבועיים לפני הריאיון.">
+<meta property="og:url" content="https://shoobyd.github.io/tech-lead-curriculum/prep.html">
+<meta property="og:image" content="https://shoobyd.github.io/tech-lead-curriculum/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="תכנית לימודים לטק ליד">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f241d">
+{{SHARED_HEAD}}
+<body>
+<div class="shell">
+<aside class="cabinet" aria-label="תוכן עניינים">
+  <div class="brand">
+    <h1>הכנה לריאיון</h1>
+    <p>Frontend Architect / Tech Lead</p>
+  </div>
+  <a class="holder-link" href="./">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    לתכנית הלימודים
+  </a>
+  <nav class="toc" aria-label="תוכן עניינים">{{TOC}}</nav>
+</aside>
+
+<div class="field">
+  <main class="prep">
+    <p class="note">{{INTRO}}</p>
+
+    {{SECTIONS}}
+
+    <footer>רשימת הסימון של "שבועיים לפני הריאיון" נשמרת רק בדפדפן הזה, ולא בחשבון. היא לא נספרת בהתקדמות של התכנית.</footer>
+  </main>
+</div>
+</div>
+
+<script>
+(() => {
+  // Ticks on this page stay in this browser: a short checklist for the last two weeks, not part of the plan.
+  const KEY = 'tl-prep-v1';
+  const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const items = [...document.querySelectorAll('.item')];
+  let state = { done: [], dates: {} };
+  try { const v = JSON.parse(localStorage.getItem(KEY)); if (v && Array.isArray(v.done)) state = { done: v.done, dates: v.dates || {} }; } catch (e) { /* storage unavailable */ }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ } };
+  const isDone = id => state.done.includes(id);
+
+  const stampText = ts => {
+    if (!ts) return 'בוצע';
+    const d = new Date(ts);
+    return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  };
+  const paint = (el, on) => {
+    el.classList.toggle('is-done', on);
+    el.querySelector('input').checked = on;
+    el.querySelector('.stamp').textContent = on ? stampText(state.dates[el.dataset.id]) : '';
+  };
+  const updateCounts = () => {
+    for (const c of document.querySelectorAll('[data-count-for]')) {
+      const its = document.getElementById(c.dataset.countFor)?.querySelectorAll('.item') ?? [];
+      const d = [...its].filter(el => isDone(el.dataset.id)).length;
+      c.textContent = its.length ? `${d}/${its.length}` : '';
+      c.classList.toggle('complete', its.length > 0 && d === its.length);
+    }
+  };
+  for (const el of items) {
+    paint(el, isDone(el.dataset.id));
+    el.querySelector('input').addEventListener('change', e => {
+      const id = el.dataset.id, on = e.target.checked;
+      state.done = state.done.filter(x => x !== id);
+      if (on) { state.done.push(id); state.dates[id] = Date.now(); } else delete state.dates[id];
+      save();
+      el.classList.remove('just-stamped');
+      paint(el, on);
+      if (on) { void el.offsetWidth; el.classList.add('just-stamped'); }
+      updateCounts();
+    });
+  }
+  updateCounts();
+
+  // the drawer you are reading is pulled out of the cabinet, as on the plan
+  const drawers = new Map([...document.querySelectorAll('.toc a')].map(a => [a.getAttribute('href').slice(1), a]));
+  let current = null;
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      for (const en of entries) {
+        if (!en.isIntersecting || en.target.id === current) continue;
+        drawers.get(current)?.removeAttribute('aria-current');
+        current = en.target.id;
+        drawers.get(current)?.setAttribute('aria-current', 'true');
+      }
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    for (const s of document.querySelectorAll('.topic')) io.observe(s);
+  }
+})();
+</script>
+</body>
+</html>
+

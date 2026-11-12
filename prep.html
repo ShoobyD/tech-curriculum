@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<title>הכנה לריאיון: תכנית לימודים לטק ליד</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="הכנה לריאיון Frontend Architect / Tech Lead: בנק סיפורי STAR, שאלות למראיין ורשימת סימון לשבועיים לפני הריאיון.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:site_name" content="tech-lead-curriculum">
+<meta property="og:title" content="הכנה לריאיון: תכנית לימודים לטק ליד">
+<meta property="og:description" content="בנק סיפורי STAR, שאלות למראיין ורשימת סימון לשבועיים לפני הריאיון.">
+<meta property="og:url" content="https://shoobyd.github.io/tech-lead-curriculum/prep.html">
+<meta property="og:image" content="https://shoobyd.github.io/tech-lead-curriculum/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="תכנית לימודים לטק ליד">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f241d">
+<script>try { const p = (JSON.parse(localStorage.getItem('tl-plan-prefs-v1')) || {}).palette; if (p && p !== 'green') document.documentElement.dataset.palette = p; } catch (e) { /* storage unavailable */ }</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Miriam+Libre:wght@400;700&display=swap">
+<style>
+/* Layout: a card cabinet (title, stamped progress, one drawer per topic) beside the open drawer:
+   tiers as guide cards, sources as ruled index cards with call numbers, done as a dated ink stamp. */
+/* Palettes: the green reading room is the default; oak, steel and navy are chosen in the cabinet header
+   (html[data-palette]). Each palette sets the same tokens for light and dark. */
+:root {
+  --oak-0: #0f241d; --oak-1: #1a3a30; --oak-front: #24493c; --oak-front-on: #2f5d4d; --oak-edge: #08140f;
+  --brass: #c9a352; --holder: #efe6cc; --holder-ink: #10241d; --seal: #e9c46a;
+  --cab-ink: #eef3ec; --cab-muted: #a9c3b5;
+  --ground: #e7eae3; --card: #fefefb; --ink: #19201c; --muted: #536059; --line: #ccd3c9;
+  --rule-red: #c4432f; --rule-blue: #c8d9e3;
+  --link: #1f4f8a; --stamp: #7b2a6c; --stamp-soft: #f3e5ef;
+  --t1: #b3402a; --t2: #876000; --t3: #2f5b8c;
+  --t-end: #5d554d; --on-t: #ffffff;
+  --shadow: 0 1px 0 rgba(0,0,0,.08), 0 8px 18px -12px rgba(0,0,0,.42);
+  --font-body: "Miriam Libre", "Segoe UI", Arial, sans-serif;
+  --font-type: "Courier Prime", "Courier New", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --oak-0: #07120e; --oak-1: #0d1f19; --oak-front: #173328; --oak-front-on: #214636; --oak-edge: #030806;
+  --brass: #a88a48; --holder: #d3c9ad; --holder-ink: #0d1f19; --seal: #e3bd62;
+  --cab-ink: #e7efe9; --cab-muted: #9fb8aa;
+  --ground: #141b18; --card: #1e2622; --ink: #e8eee9; --muted: #a8b6ae; --line: #2f3a34;
+  --rule-red: #d6654f; --rule-blue: #2c3638;
+  --link: #9cc0ff; --stamp: #e08fd0; --stamp-soft: #34222f;
+  --t1: #ef8a6c; --t2: #e2b552; --t3: #86b4ec; --on-t: #0d1310;
+  --t-end: #a8b0ab;
+  --shadow: 0 1px 0 rgba(0,0,0,.4), 0 10px 22px -14px rgba(0,0,0,.9);
+  color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --oak-0: #07120e; --oak-1: #0d1f19; --oak-front: #173328; --oak-front-on: #214636; --oak-edge: #030806;
+  --brass: #a88a48; --holder: #d3c9ad; --holder-ink: #0d1f19; --seal: #e3bd62;
+  --cab-ink: #e7efe9; --cab-muted: #9fb8aa;
+  --ground: #141b18; --card: #1e2622; --ink: #e8eee9; --muted: #a8b6ae; --line: #2f3a34;
+  --rule-red: #d6654f; --rule-blue: #2c3638;
+  --link: #9cc0ff; --stamp: #e08fd0; --stamp-soft: #34222f;
+  --t1: #ef8a6c; --t2: #e2b552; --t3: #86b4ec; --on-t: #0d1310;
+  --t-end: #a8b0ab;
+  --shadow: 0 1px 0 rgba(0,0,0,.4), 0 10px 22px -14px rgba(0,0,0,.9);
+  color-scheme: dark;
+}
+:root[data-palette="oak"] {
+  --oak-0: #2b1d14; --oak-1: #3a281b; --oak-front: #563a26; --oak-front-on: #6f4a2e; --oak-edge: #1a110b;
+  --brass: #b58d4f; --holder: #e6d9bf; --holder-ink: #2b1d14; --seal: #b9a3ff;
+  --cab-ink: #f1e9de; --cab-muted: #cdb9a2;
+  --ground: #e6e5e0; --card: #fdfdfb; --ink: #1f1a16; --muted: #5d554d; --line: #d3cfc6;
+  --rule-red: #cf4134; --rule-blue: #cddbeb;
+  --link: #2c4da3; --stamp: #5b3ea8; --stamp-soft: #ece7f7;
+  --t1: #b9382c; --t2: #8a5700; --t3: #276b63;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-palette="oak"]:not([data-theme="light"]) {
+  --oak-0: #140e09; --oak-1: #1e150e; --oak-front: #34241a; --oak-front-on: #4a3322; --oak-edge: #0b0705;
+  --brass: #9c7a45; --holder: #cbbd9f; --holder-ink: #1e150e; --seal: #b39bff;
+  --cab-ink: #ece3d6; --cab-muted: #b9a68f;
+  --ground: #1d1915; --card: #28211b; --ink: #ece4da; --muted: #b2a595; --line: #3b3029;
+  --rule-red: #d8624f; --rule-blue: #2f3238;
+  --link: #9fb6ff; --stamp: #b39bff; --stamp-soft: #2b2340;
+  --t1: #f08167; --t2: #e3ab4c; --t3: #63c4b6; --on-t: #17120e;
+  }
+}
+:root[data-palette="oak"][data-theme="dark"] {
+  --oak-0: #140e09; --oak-1: #1e150e; --oak-front: #34241a; --oak-front-on: #4a3322; --oak-edge: #0b0705;
+  --brass: #9c7a45; --holder: #cbbd9f; --holder-ink: #1e150e; --seal: #b39bff;
+  --cab-ink: #ece3d6; --cab-muted: #b9a68f;
+  --ground: #1d1915; --card: #28211b; --ink: #ece4da; --muted: #b2a595; --line: #3b3029;
+  --rule-red: #d8624f; --rule-blue: #2f3238;
+  --link: #9fb6ff; --stamp: #b39bff; --stamp-soft: #2b2340;
+  --t1: #f08167; --t2: #e3ab4c; --t3: #63c4b6; --on-t: #17120e;
+}
+:root[data-palette="steel"] {
+  --oak-0: #26303b; --oak-1: #364352; --oak-front: #485869; --oak-front-on: #5a6e84; --oak-edge: #171e26;
+  --brass: #b9c3cd; --holder: #f6f4ee; --holder-ink: #1d252e; --seal: #ff9b6a;
+  --cab-ink: #eef2f6; --cab-muted: #b5c2cf;
+  --ground: #e3e7eb; --card: #ffffff; --ink: #141a21; --muted: #515f6d; --line: #cbd3dc;
+  --rule-red: #df4f37; --rule-blue: #c5d5e6;
+  --link: #1b5cab; --stamp: #c8441c; --stamp-soft: #fbe7de;
+  --t1: #b8410f; --t2: #7d6400; --t3: #0f6f68;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-palette="steel"]:not([data-theme="light"]) {
+  --oak-0: #10151b; --oak-1: #19212a; --oak-front: #26313d; --oak-front-on: #33424f; --oak-edge: #080b0e;
+  --brass: #8d98a3; --holder: #d9dde2; --holder-ink: #141a21; --seal: #ff9b6a;
+  --cab-ink: #e8edf2; --cab-muted: #a5b2bf;
+  --ground: #161b21; --card: #1f262e; --ink: #e8edf2; --muted: #a6b2bf; --line: #313b46;
+  --rule-red: #e86a52; --rule-blue: #2c3540;
+  --link: #8fb8ff; --stamp: #ff8a5c; --stamp-soft: #3a2620;
+  --t1: #ff8d5c; --t2: #e3c04f; --t3: #4fc4b8; --on-t: #10151b;
+  }
+}
+:root[data-palette="steel"][data-theme="dark"] {
+  --oak-0: #10151b; --oak-1: #19212a; --oak-front: #26313d; --oak-front-on: #33424f; --oak-edge: #080b0e;
+  --brass: #8d98a3; --holder: #d9dde2; --holder-ink: #141a21; --seal: #ff9b6a;
+  --cab-ink: #e8edf2; --cab-muted: #a5b2bf;
+  --ground: #161b21; --card: #1f262e; --ink: #e8edf2; --muted: #a6b2bf; --line: #313b46;
+  --rule-red: #e86a52; --rule-blue: #2c3540;
+  --link: #8fb8ff; --stamp: #ff8a5c; --stamp-soft: #3a2620;
+  --t1: #ff8d5c; --t2: #e3c04f; --t3: #4fc4b8; --on-t: #10151b;
+}
+:root[data-palette="navy"] {
+  --oak-0: #101a33; --oak-1: #1a2a4f; --oak-front: #243866; --oak-front-on: #2f4a85; --oak-edge: #080e1f;
+  --brass: #d6b25a; --holder: #f3e7c6; --holder-ink: #101a33; --seal: #ffcf6b;
+  --cab-ink: #eef1fb; --cab-muted: #a9b6d8;
+  --ground: #dfe3eb; --card: #ffffff; --ink: #131a2a; --muted: #4f5a72; --line: #c8cfdc;
+  --rule-red: #d0453a; --rule-blue: #c6d3ea;
+  --link: #2442b0; --stamp: #b81f38; --stamp-soft: #fbe4e7;
+  --t1: #c14d22; --t2: #8a6500; --t3: #23705f;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-palette="navy"]:not([data-theme="light"]) {
+  --oak-0: #070c1a; --oak-1: #0e1730; --oak-front: #19264a; --oak-front-on: #233462; --oak-edge: #03060e;
+  --brass: #b3954e; --holder: #d8ccab; --holder-ink: #0e1730; --seal: #ffcf6b;
+  --cab-ink: #e8ecf9; --cab-muted: #a3afd2;
+  --ground: #131828; --card: #1c2236; --ink: #e8ecf7; --muted: #a6afc6; --line: #2e3650;
+  --rule-red: #e0675b; --rule-blue: #29314a;
+  --link: #9db4ff; --stamp: #ff7a8c; --stamp-soft: #3a2029;
+  --t1: #f28a5e; --t2: #e4bd57; --t3: #5cc6ad; --on-t: #0b1020;
+  }
+}
+:root[data-palette="navy"][data-theme="dark"] {
+  --oak-0: #070c1a; --oak-1: #0e1730; --oak-front: #19264a; --oak-front-on: #233462; --oak-edge: #03060e;
+  --brass: #b3954e; --holder: #d8ccab; --holder-ink: #0e1730; --seal: #ffcf6b;
+  --cab-ink: #e8ecf9; --cab-muted: #a3afd2;
+  --ground: #131828; --card: #1c2236; --ink: #e8ecf7; --muted: #a6afc6; --line: #2e3650;
+  --rule-red: #e0675b; --rule-blue: #29314a;
+  --link: #9db4ff; --stamp: #ff7a8c; --stamp-soft: #3a2029;
+  --t1: #f28a5e; --t2: #e4bd57; --t3: #5cc6ad; --on-t: #0b1020;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scrollbar-color: var(--brass) var(--ground); }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font: 400 16px/1.65 var(--font-body); direction: rtl; caret-color: var(--stamp);
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--stamp); color: var(--card); }
+a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--stamp); outline-offset: 2px; border-radius: 3px; }
+code { font-family: var(--font-type); font-size: .92em; background: var(--stamp-soft); padding: 0 5px; border-radius: 3px; direction: ltr; unicode-bidi: isolate; }
+h1, h2, h3, h4 { text-wrap: balance; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.num, .count, .call, .toc-num, .toc-count { font-variant-numeric: tabular-nums; }
+
+.shell { display: grid; grid-template-columns: 312px minmax(0, 1fr); min-height: 100vh; }
+
+/* ---------- the cabinet ---------- */
+.cabinet {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; overscroll-behavior: contain;
+  background: linear-gradient(180deg, var(--oak-1), var(--oak-0) 60%);
+  border-left: 1px solid var(--oak-edge); color: var(--cab-ink);
+  padding: 28px 20px 32px; display: flex; flex-direction: column; gap: 22px;
+  scrollbar-color: var(--oak-front-on) transparent; scrollbar-width: thin;
+}
+.brand h1 { font: 700 27px/1.15 var(--font-body); margin: 0; letter-spacing: -.01em; }
+.palettes { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+.palettes-label { font-size: 12px; color: var(--cab-muted); margin-inline-end: 2px; }
+.swatch {
+  width: 24px; height: 24px; border-radius: 50%; padding: 0; cursor: pointer; border: 0;
+  background: linear-gradient(135deg, var(--sw-a) 50%, var(--sw-b) 50%);
+  box-shadow: 0 0 0 2px var(--oak-0), 0 0 0 3px rgba(255,255,255,.28), 0 2px 4px rgba(0,0,0,.4);
+  transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s;
+}
+.swatch:hover { transform: scale(1.1); }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--oak-0), 0 0 0 4px var(--cab-ink), 0 2px 4px rgba(0,0,0,.4); }
+.swatch[data-palette="green"] { --sw-a: #1a3a30; --sw-b: #c9a352; }
+.swatch[data-palette="oak"] { --sw-a: #3a281b; --sw-b: #b9a3ff; }
+.swatch[data-palette="steel"] { --sw-a: #364352; --sw-b: #ff9b6a; }
+.swatch[data-palette="navy"] { --sw-a: #1a2a4f; --sw-b: #ffcf6b; }
+.brand p { margin: 8px 0 0; font: 400 13px/1.4 var(--font-type); color: var(--cab-muted); direction: ltr; text-align: right; letter-spacing: .04em; }
+
+/* the round library stamp carries the overall progress */
+.ledger { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+.seal {
+  width: 112px; height: 112px; border-radius: 50%; border: 4px solid var(--seal); color: var(--seal);
+  outline: 1.5px solid var(--seal); outline-offset: -11px; opacity: .92;
+  display: grid; place-content: center; text-align: center; transform: rotate(-8deg);
+}
+.seal b { font: 700 30px/1 var(--font-type); display: block; }
+.seal small { font: 700 13px/1.2 var(--font-body); }
+.done-of { font-size: 15px; color: var(--cab-ink); margin: 0; }
+.done-of + .save-status { margin-top: 6px; }
+.save-status { font-size: 12px; color: var(--cab-muted); margin: 0; line-height: 1.5; }
+.save-status[data-state="error"] { color: var(--cab-ink); font-weight: 700; }
+
+/* the reader's card: a paper slip in a brass frame, like the drawer labels, with a square ID photo */
+.reader-guest { display: grid; gap: 8px; }
+.gh-login, .holder-link, .reader-card {
+  color: var(--holder-ink); background-color: var(--holder); border-radius: 2px;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.35), rgba(0,0,0,.04));
+  box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), inset 0 1px 3px rgba(0,0,0,.28);
+}
+/* .holder-link: the same brass-framed slip as a plain link (the prep page's way back to the plan) */
+.gh-login, .holder-link {
+  display: flex; align-items: center; justify-content: center; gap: 9px; padding: 9px 12px;
+  font: 700 14px/1.3 var(--font-body); text-decoration: none;
+  transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s;
+}
+.gh-login:hover, .holder-link:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), 0 6px 10px -4px rgba(0,0,0,.55); }
+.gh-login svg, .holder-link svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
+.reader-note { font-size: 12px; color: var(--cab-muted); margin: 0; line-height: 1.5; }
+.reader-card { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 0 12px; align-items: center; padding: 10px 12px 8px; }
+.reader-photo { grid-row: span 2; width: 40px; height: 40px; border-radius: 2px; overflow: hidden; background: rgba(0,0,0,.14); box-shadow: 0 0 0 1px rgba(0,0,0,.3); }
+.reader-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.reader-name { font-size: 14px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; align-self: end; }
+.reader-login { font: 400 12px/1.4 var(--font-type); direction: ltr; text-align: right; align-self: start; }
+.reader-actions { grid-column: 1 / -1; display: flex; gap: 16px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,.28); }
+.reader-actions button { font: 700 12px/1.4 var(--font-body); color: var(--holder-ink); background: none; border: 0; padding: 2px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.reader-actions button:hover { text-decoration-thickness: 2px; }
+.reader-actions .danger { font-weight: 400; margin-inline-start: auto; }
+
+/* drawers: the table of contents */
+.toc { display: grid; gap: 16px; }
+.toc-tier { font-size: 12px; font-weight: 700; color: var(--cab-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.toc-tier::before { content: ""; width: 10px; height: 10px; border-radius: 2px 2px 0 0; background: var(--tc); }
+.toc-group { --tc: var(--t-end); }
+.toc-group[data-tier="1"] { --tc: var(--t1); }
+.toc-group[data-tier="2"] { --tc: var(--t2); }
+.toc-group[data-tier="3"] { --tc: var(--t3); }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.toc a {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: center;
+  background: var(--oak-front); border-radius: 3px; padding: 6px 8px 7px;
+  box-shadow: 0 3px 6px -2px rgba(0,0,0,.55);
+  color: var(--cab-ink); text-decoration: none; font-size: 13px;
+  transition: transform .35s cubic-bezier(.16,1,.3,1), background-color .2s;
+}
+.toc a:not(:has(.toc-num)) { grid-template-columns: minmax(0, 1fr) auto; }
+.toc-num { font: 700 12px var(--font-type); text-align: center; border-top: 3px solid var(--tc); padding-top: 1px; }
+.toc-title {
+  background: var(--holder); color: var(--holder-ink); border: 2px solid var(--brass); border-radius: 2px;
+  padding: 2px 7px; font-weight: 700; line-height: 1.3;
+}
+.toc-count { font: 400 12px var(--font-type); color: var(--cab-muted); direction: ltr; min-width: 4.2ch; text-align: left; }
+.toc-count.complete { color: var(--cab-ink); font-weight: 700; }
+.toc a:hover { background: var(--oak-front-on); }
+.toc a[aria-current="true"] { background: var(--oak-front-on); transform: translateX(-22px); box-shadow: 0 8px 16px -6px rgba(0,0,0,.7); }
+.toc li.is-off { opacity: .4; }
+
+/* ---------- the open drawer ---------- */
+.field { min-width: 0; }
+.controls {
+  position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--ground) 92%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+  --controls-pad: max(16px, 3vw); padding: 10px var(--controls-pad);
+}
+/* the filters line up with main's 920px column: its width minus the bar's own side padding */
+.controls-in { max-width: calc(920px - 2 * var(--controls-pad)); margin: 0 auto; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; }
+.fgroup { display: flex; gap: 5px; align-items: center; }
+.fgroup-label { font-size: 12px; color: var(--muted); font-weight: 700; margin-inline-end: 2px; }
+.chip {
+  font: 400 13px/1 var(--font-body); color: var(--ink); background: var(--card);
+  border: 1px solid var(--line); border-radius: 3px; padding: 7px 10px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--card); }
+.chip[aria-pressed="false"] .dot { opacity: .5; }
+
+main { max-width: 920px; margin: 0 auto; padding: 28px max(16px, 3vw) 0; }
+main > details.panel:first-of-type { margin-top: 72px; }
+.note { color: var(--muted); margin: 0 0 18px; max-width: 70ch; font-size: 15px; }
+
+details.panel { background: var(--card); border-radius: 3px; box-shadow: var(--shadow); margin-top: 12px; }
+details.panel > summary { cursor: pointer; padding: 13px 18px; font-weight: 700; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after { content: ""; flex: none; width: 14px; height: 14px; background: var(--muted); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1v12M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E") center / contain no-repeat; }
+details[open] > summary::after { -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M1 7h12' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E"); }
+
+/* the topic brief: why it matters, questions, practice; closed so the cards lead */
+details.brief { margin: 14px 0 4px; border-block: 1px solid var(--line); }
+details.brief > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; font-size: 14px; font-weight: 700; color: var(--muted); }
+details.brief > summary:hover { color: var(--ink); }
+details.brief .brief-body { padding-bottom: 12px; }
+details.brief .brief-body > p, details.brief .brief-body > .prose-list, details.brief .brief-body > ol { max-width: 70ch; }
+details.panel .panel-body { padding: 0 18px 16px; min-width: 0; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 700; font-size: 12px; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+
+/* tiers are guide cards: a coloured tab standing above the cards behind it */
+.tier { margin-top: 72px; --tc: var(--t-end); }
+.tier[data-tier="1"] { --tc: var(--t1); }
+.tier[data-tier="2"] { --tc: var(--t2); }
+.tier[data-tier="3"] { --tc: var(--t3); }
+.tier-head {
+  display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px; position: relative;
+  background: var(--tc); color: var(--on-t); border-radius: 0 0 4px 4px; padding: 22px 24px 20px; margin-top: 40px;
+  box-shadow: var(--shadow);
+}
+.tier-head h2 { margin: 0; font: 700 30px/1.2 var(--font-body); letter-spacing: -.01em; }
+.tier-tab {
+  position: absolute; top: -36px; inset-inline-start: 0; height: 36px; display: flex; align-items: center;
+  background: var(--tc); border-radius: 8px 8px 0 0; padding: 0 18px; font-size: 15px;
+}
+.tier-line { display: block; }
+.tier-head .count { color: var(--on-t); font-size: 15px; }
+
+.topic { margin-top: 44px; scroll-margin-top: 96px; }
+.topic-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.topic-head:not(:has(.topic-num)) { grid-template-columns: minmax(0, 1fr) auto; }
+.topic-num { font: 700 26px/1 var(--font-type); color: var(--tier-ink, var(--muted)); direction: ltr; }
+.topic[data-tier="1"] { --tier-ink: var(--t1); }
+.topic[data-tier="2"] { --tier-ink: var(--t2); }
+.topic[data-tier="3"] { --tier-ink: var(--t3); }
+.topic-head h3 { font-size: 24px; font-weight: 700; margin: 0; line-height: 1.25; min-width: 0; letter-spacing: -.01em; }
+.count { font: 400 13px var(--font-type); color: var(--muted); white-space: nowrap; direction: ltr; }
+.count.complete { color: var(--stamp); font-weight: 700; }
+.topic-body { min-width: 0; }
+.topic-body > p, .topic-body > .prose-list, .topic-body > ol, .tabpanel > p, .tabpanel > .prose-list { max-width: 70ch; }
+.topic-body p { margin: 10px 0; }
+.topic-body h4 { font-size: 14px; font-weight: 700; margin: 26px 0 6px; }
+.lead { font-weight: 700; }
+.callout { background: var(--stamp-soft); border-radius: 3px; padding: 10px 14px; font-size: 15px; }
+.prose-list { margin: 6px 0; padding-inline-start: 22px; }
+.prose-list li { margin: 3px 0; }
+.prose-list li::marker { color: var(--muted); }
+.prose-list .prose-list { margin: 2px 0; }
+
+/* sources: depth groups are guide cards with a tab; each source is an index card */
+.sources { display: grid; gap: 22px; margin-top: 10px; }
+.depth-label {
+  display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-weight: 700; font-size: 14px;
+  background: var(--card); padding: 7px 14px 5px; border-radius: 6px 6px 0 0; box-shadow: 0 -1px 0 var(--line);
+}
+.depth-hint { font-weight: 400; color: var(--muted); font-size: 13px; }
+.depth-extra { flex-basis: 100%; font-weight: 400; font-size: 14px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex: none; border: 2px solid currentColor; }
+.d-o { background: transparent; } .d-m { background: linear-gradient(90deg, currentColor 50%, transparent 50%); } .d-d { background: currentColor; }
+.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.item {
+  --lh: 26px;
+  position: relative; display: grid; grid-template-columns: 70px minmax(0, 1fr) 72px 118px 28px 76px; gap: 0 14px; align-items: start;
+  background-color: var(--card); border-radius: 2px; box-shadow: var(--shadow);
+  padding: 14px 16px calc(var(--lh) * .5); line-height: var(--lh);
+  background-image: linear-gradient(var(--rule-red), var(--rule-red)), repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), var(--rule-blue) calc(var(--lh) - 1px) var(--lh));
+  background-size: 100% 2px, 100% calc(100% - 14px); background-position: 0 7px, 0 14px; background-repeat: no-repeat, repeat-y;
+}
+.depth-group .items .item:first-child { border-start-start-radius: 0; }
+.call { font: 700 21px/var(--lh) var(--font-type); color: var(--ink); direction: ltr; text-align: right; }
+.item-body { min-width: 0; overflow-wrap: anywhere; font-size: 15px; }
+.item-body > a:first-child, .item-body > strong:first-child a { font-weight: 700; }
+.kind { display: grid; justify-items: center; align-content: start; gap: 2px; }
+.len { font: 400 13px/1.6 var(--font-type); color: var(--muted); white-space: nowrap; }
+.tag { display: inline-block; font: 700 11px/1 var(--font-body); border-radius: 2px; padding: 4px 6px 3px; vertical-align: 2px; border: 1px solid var(--ink); color: var(--ink); }
+.tag.video { background: var(--ink); color: var(--card); }
+.tag.old { border-color: var(--muted); color: var(--muted); font-weight: 400; }
+.item input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.box {
+  width: 24px; height: 24px; margin-top: 1px; border: 2px solid var(--muted); border-radius: 2px; background: var(--card);
+  cursor: pointer; display: grid; place-items: center; grid-column: 5; grid-row: 1;
+}
+.box:hover { border-color: var(--ink); }
+.item input:focus-visible + .box { outline: 2px solid var(--stamp); outline-offset: 2px; }
+.item input:checked + .box { border-color: var(--stamp); }
+.item input:checked + .box::after { content: ""; width: 6px; height: 12px; border: solid var(--stamp); border-width: 0 2.5px 2.5px 0; transform: translateY(-2px) rotate(45deg); }
+.item.is-done .item-body, .item.is-done .item-body a { color: var(--muted); }
+.item.is-done .call { color: var(--stamp); }
+.item.is-done .tag.video { background: var(--muted); border-color: var(--muted); }
+
+/* friends who already finished this source: small ID photos stacked beside the box, newest on top */
+.friends { grid-column: 6; grid-row: 1; justify-self: start; align-self: start; margin-top: 2px; display: flex; align-items: center; line-height: 1; cursor: default; }
+.friend { width: 22px; height: 22px; border-radius: 2px; flex: none; position: relative; background: var(--line); box-shadow: 0 0 0 2px var(--card), 0 1px 3px rgba(0,0,0,.35); }
+.friend + .friend { margin-inline-start: -6px; }
+span.friend { display: grid; place-items: center; font: 700 11px/1 var(--font-body); color: var(--card); background: var(--muted); }
+.friends-more { font: 700 12px/1 var(--font-type); color: var(--muted); margin-inline-start: 5px; direction: ltr; font-variant-numeric: tabular-nums; }
+
+/* the date stamp: the one authored moment */
+.stamp {
+  grid-column: 4; grid-row: 1 / span 2; justify-self: center; align-self: start; margin-top: -1px; pointer-events: none;
+  border: 2.5px solid var(--stamp); outline: 1px solid var(--stamp); outline-offset: 2px; border-radius: 4px;
+  color: var(--stamp); font: 700 14px/1 var(--font-type); letter-spacing: .08em; padding: 5px 9px 4px;
+  direction: ltr; white-space: nowrap; mix-blend-mode: multiply;
+  opacity: 0; transform: rotate(-7deg) scale(1.6);
+}
+:root[data-theme="dark"] .stamp { mix-blend-mode: screen; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .stamp { mix-blend-mode: screen; } }
+.item.is-done .stamp { opacity: .82; transform: rotate(-7deg) scale(1); }
+.item.is-done.just-stamped .stamp { animation: stamp .42s cubic-bezier(.2,1.4,.4,1); }
+@keyframes stamp {
+  0% { opacity: 0; transform: rotate(-12deg) scale(1.7); filter: blur(2px); }
+  55% { opacity: .95; transform: rotate(-6deg) scale(.96); filter: blur(0); }
+  100% { opacity: .82; transform: rotate(-7deg) scale(1); }
+}
+.empty-note { color: var(--muted); font-size: 14px; font-style: italic; }
+/* checklist items outside the source lists (closing section) */
+.tasks { margin-top: 8px; }
+
+/* Vue / React tracks: two guide-card tabs */
+.tabs { margin-top: 20px; }
+.tablist { display: flex; gap: 6px; border-bottom: 3px solid var(--ink); overflow-x: auto; }
+[role="tab"] {
+  font: 700 15px/1 var(--font-body); color: var(--muted); background: var(--card); border: 1px solid var(--line); border-bottom: 0;
+  border-radius: 8px 8px 0 0; padding: 11px 16px 9px; cursor: pointer; display: inline-flex; gap: 10px; align-items: baseline; white-space: nowrap;
+}
+[role="tab"]:hover { color: var(--ink); }
+[role="tab"][aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--card); }
+[role="tab"][aria-selected="true"] .count { color: var(--card); }
+.tabpanel { padding-top: 6px; }
+.tabpanel:focus-visible { outline-offset: 6px; }
+
+footer { margin-block: 72px 40px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px; }
+
+/* ---------- depth:  wood grain, paper fibre, layered shadows, ink bite, lift on hover ---------- */
+:root {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --wood: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='300'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .09' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+  --ink-bite: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='60'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+  --lift: 0 1px 1px rgba(0,0,0,.07), 0 3px 6px -2px rgba(0,0,0,.10), 0 14px 26px -14px rgba(0,0,0,.40);
+  --lift-hover: 0 2px 2px rgba(0,0,0,.08), 0 8px 14px -6px rgba(0,0,0,.16), 0 22px 36px -16px rgba(0,0,0,.45);
+}
+body { background-image: var(--grain); }
+.cabinet {
+  background-image: var(--wood), linear-gradient(100deg, rgba(255,255,255,.05), transparent 40%), linear-gradient(180deg, var(--oak-1), var(--oak-0) 65%);
+  box-shadow: inset 10px 0 24px -12px rgba(0,0,0,.6);
+}
+.toc a {
+  background-image: var(--wood), linear-gradient(180deg, rgba(255,255,255,.10), rgba(0,0,0,.18));
+  background-color: var(--oak-front);
+  box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 4px 8px -3px rgba(0,0,0,.65), 0 1px 2px rgba(0,0,0,.4);
+}
+.toc a[aria-current="true"] { box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 14px 22px -8px rgba(0,0,0,.8), 0 2px 4px rgba(0,0,0,.45); }
+.toc-title {
+  border: 0; padding: 3px 9px;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.35), rgba(0,0,0,.04));
+  box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), inset 0 1px 3px rgba(0,0,0,.28);
+}
+.seal { -webkit-mask: var(--ink-bite) center / 140px 60px; mask: var(--ink-bite) center / 140px 60px; }
+.item {
+  box-shadow: var(--lift);
+  background-image: var(--grain), linear-gradient(var(--rule-red), var(--rule-red)), repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), var(--rule-blue) calc(var(--lh) - 1px) var(--lh));
+  background-size: 180px 180px, 100% 2px, 100% calc(100% - 14px);
+  background-position: 0 0, 0 7px, 0 14px;
+  background-repeat: repeat, no-repeat, repeat-y;
+  transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s cubic-bezier(.16,1,.3,1);
+}
+.item:hover { transform: translateY(-2px); box-shadow: var(--lift-hover); }
+.depth-label { box-shadow: 0 -1px 0 var(--line), 0 -6px 12px -8px rgba(0,0,0,.25); }
+.stamp { -webkit-mask: var(--ink-bite) 0 0 / 140px 60px; mask: var(--ink-bite) 0 0 / 140px 60px; }
+.tier-head {
+  background-image: var(--grain), linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,0,0,.10));
+  box-shadow: 0 1px 1px rgba(0,0,0,.12), 0 18px 30px -16px rgba(0,0,0,.55);
+}
+.tier-tab { background-image: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); box-shadow: 0 -4px 10px -6px rgba(0,0,0,.3); }
+details.panel { box-shadow: var(--lift); }
+.chip { box-shadow: 0 1px 2px rgba(0,0,0,.10); }
+.chip[aria-pressed="true"] { box-shadow: inset 0 1px 2px rgba(0,0,0,.35); }
+.controls { box-shadow: 0 8px 16px -14px rgba(0,0,0,.45); }
+@media (prefers-reduced-motion: reduce) { .item { transition: none; } .item:hover { transform: none; } }
+
+/* ---------- phone: the cabinet becomes a header with a strip of drawers ---------- */
+@media (max-width: 900px) {
+  .shell { display: block; }
+  .cabinet { position: static; height: auto; overflow: visible; padding: 16px 16px 12px; gap: 12px; border-left: 0; }
+  .brand h1 { font-size: 21px; }
+  .brand p { display: none; }
+  .brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .palettes { margin-top: 0; }
+  .palettes-label { display: none; }
+  .ledger { gap: 14px; margin-top: -4px; }
+  .seal { width: 72px; height: 72px; outline-offset: -8px; border-width: 3px; }
+  .seal b { font-size: 20px; }
+  .seal small { font-size: 11px; }
+  .done-of { font-size: 14px; }
+  .reader-note { display: none; }
+  .gh-login, .holder-link { padding: 8px 12px; font-size: 13px; }
+  .reader-card { grid-template-columns: 32px minmax(0, 1fr) auto; padding: 7px 10px; }
+  .reader-photo { width: 32px; height: 32px; }
+  .reader-actions { grid-column: 3; grid-row: 1 / span 2; flex-direction: column; align-items: flex-end; gap: 0; margin: 0; padding: 0; border: 0; }
+  .reader-actions .danger { margin: 0; }
+  .toc { display: flex; gap: 6px; overflow-x: auto; margin-inline: -16px; padding: 2px 16px 6px; scroll-snap-type: x proximity; }
+  .toc-group { flex: none; display: flex; align-items: center; gap: 6px; }
+  .toc-tier { margin: 0; font-size: 0; }
+  .toc-tier::before { width: 6px; height: 30px; border-radius: 2px; }
+  .toc ol { display: flex; gap: 6px; }
+  .toc li { flex: none; scroll-snap-align: start; }
+  .toc-title { white-space: nowrap; }
+  .toc a[aria-current="true"] { transform: none; }
+  .filters { -webkit-mask-image: linear-gradient(to left, #000 82%, transparent); mask-image: linear-gradient(to left, #000 82%, transparent); padding-inline-end: 32px; }
+  .controls { --controls-pad: 16px; }
+  .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
+  main { padding-inline: 16px; }
+  .tier-head h2 { font-size: 22px; }
+  .tier-head { padding: 18px 16px 16px; }
+  .topic-head h3 { font-size: 20px; }
+  .topic-num { font-size: 21px; }
+  .item { grid-template-columns: minmax(0, 1fr) 28px; gap: 2px 12px; padding-inline: 14px; }
+  .call { grid-column: 1; grid-row: 1; font-size: 18px; }
+  .kind { grid-column: 1 / -1; grid-row: 3; justify-self: start; display: flex; gap: 8px; align-items: baseline; margin-top: 2px; }
+  .item-body { grid-column: 1 / -1; grid-row: 2; }
+  .box { grid-column: 2; grid-row: 1; }
+  .stamp { grid-column: 1; grid-row: 1; font-size: 12px; margin-top: -2px; }
+  .friends { grid-column: 1 / -1; grid-row: 3; justify-self: end; margin-top: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .toc a { transition: none; }
+  .item.is-done.just-stamped .stamp { animation: none; }
+}
+</style>
+<body>
+<div class="shell">
+<aside class="cabinet" aria-label="תוכן עניינים">
+  <div class="brand">
+    <h1>הכנה לריאיון</h1>
+    <p>Frontend Architect / Tech Lead</p>
+  </div>
+  <a class="holder-link" href="./">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    לתכנית הלימודים
+  </a>
+  <nav class="toc" aria-label="תוכן עניינים"><div class="toc-group"><ol><li><a href="#star"><span class="toc-title">בנק סיפורי <bdi>STAR</bdi></span><span class="toc-count" data-count-for="star"></span></a></li><li><a href="#ask"><span class="toc-title">שאלות למראיין</span><span class="toc-count" data-count-for="ask"></span></a></li><li><a href="#final"><span class="toc-title">שבועיים לפני הריאיון</span><span class="toc-count" data-count-for="final"></span></a></li></ol></div></nav>
+</aside>
+
+<div class="field">
+  <main class="prep">
+    <p class="note">הדף הזה משלים את <a href="./">תכנית הלימודים</a>: התכנית מכינה את החומר המקצועי, והדף הזה מכין את הריאיון עצמו.</p>
+
+    <section class="topic" id="star" data-tier="prep"><header class="topic-head"><h3>בנק סיפורי STAR</h3><span class="count" data-count-for="star"></span></header><div class="topic-body"><p>לכל סיפור כדאי להכין:</p><ul class="prose-list"><li><strong>Situation:</strong> המצב.</li><li><strong>Task:</strong> המשימה.</li><li><strong>Action:</strong> מה עשית.</li><li><strong>Result:</strong> התוצאה.</li><li><strong>Insight:</strong> מה למדת.</li></ul><p>את התשובה כדאי לתרגל בקול, בשתיים עד שלוש דקות.</p><p>כדאי להכין סיפור אחד לפחות מכל סוג:</p><div class="table-wrap"><table><thead><tr><th>#</th><th>סוג הסיפור</th><th>מתאים לשאלות על</th></tr></thead><tbody><tr><td>1</td><td>הטמעת טכנולוגיה חדשה או מיגרציה הדרגתית ממערכת legacy</td><td>בחירת טכנולוגיה, השפעה בלי סמכות, מיגרציה</td></tr><tr><td>2</td><td>פירוק קוד מונוליתי לרכיבים או למודולים</td><td>ארכיטקטורה, חוב טכני, ריפקטור</td></tr><tr><td>3</td><td>החלטה טכנית שהתבססה על בדיקה, מדידה או PoC</td><td>החלטה מבוססת נתונים, ‏trade-offs</td></tr><tr><td>4</td><td>הפיכת קוד ייחודי לפיצ'ר לתשתית משותפת</td><td>‏reuse, תכנון לטווח ארוך</td></tr><tr><td>5</td><td>אבחון תקלה קשה, גם מחוץ לקוד של הצוות</td><td>debugging, עבודה בין צוותים, אחריות</td></tr><tr><td>6</td><td>מערכת שהיית האחראי הראשי עליה לאורך זמן</td><td>אחריות מקצה לקצה, היקף</td></tr><tr><td>7</td><td>בניית מוצר או מערכת מאפס</td><td>בנייה מאפס, עבודה עצמאית</td></tr><tr><td>8</td><td>הובלת אימוץ של כלי או תהליך בצוות, למשל AI</td><td>השפעה על הצוות, ניהול שינוי</td></tr><tr><td>9</td><td>חניכה, הוראה או הסבר של נושא מורכב</td><td>חניכה, תקשורת</td></tr><tr><td>10</td><td>כלי פנימי שבנית כדי להסיר חיכוך</td><td>יוזמה, שיפור תהליכים</td></tr></tbody></table></div><h4>כדאי להכין גם</h4><ul class="prose-list"><li>סיפור על <strong>כישלון</strong> או הערכה שגויה, ומה למדת ממנו.</li><li>סיפור על <strong>אי־הסכמה</strong> עם עמית או מנהל.</li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section><section class="topic" id="ask" data-tier="prep"><header class="topic-head"><h3>שאלות למראיין</h3><span class="count" data-count-for="ask"></span></header><div class="topic-body"><ol class="prose-list"><li>איך נראית הצלחה בתפקיד אחרי 3, אחרי 6 ואחרי 12 חודשים?</li><li>איך מתקבלות ומתועדות החלטות ארכיטקטורה (RFC, ‏ADR), ומי מכריע בסוף?</li><li>מה היחס בתפקיד בין כתיבת קוד להובלה, באחוזים?</li><li>מה הכאב הכי גדול כרגע ב־frontend: חוב טכני, ביצועים, build ו־CI, או חוסר אחידות?</li><li>איך מתעדפים חוב טכני מול ה־roadmap, ומי מחליט?</li><li>יש design system או ספריית קומפוננטות משותפת? מי מתחזק אותה?</li><li>איך נראה תהליך הבדיקות והשחרור: זמן CI, ‏feature flags, תדירות deploy?</li><li>איך מטפלים בנגישות ובאבטחה: הן חלק מה־Definition of Done, נבדקות ב־audits, או מטופלות בדיעבד?</li><li><strong>מה מצב אימוץ ה־AI בצוות?</strong> אילו כלים יש, אילו כללים, ואיך מודדים את ההשפעה?</li><li>מה גודל הצוות, ואיך עובדים יחד frontend, ‏backend, מוצר ועיצוב?</li><li>למה המשרה פתוחה, ומה הוביל להצלחה (או לכישלון) של מי שהיה בה לפני?</li></ol><p>עוד מאגרים:</p><ul class="prose-list"><li><a href="https://www.techinterviewhandbook.org/final-questions/" target="_blank" rel="noopener">Tech Interview Handbook: Final questions</a></li><li><a href="https://github.com/viraptor/reverse-interview" target="_blank" rel="noopener">reverse-interview</a></li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section><section class="topic" id="final" data-tier="prep"><header class="topic-head"><h3>שבועיים לפני הריאיון</h3><span class="count" data-count-for="final"></span></header><div class="topic-body"><ul class="items tasks"><li class="item" data-id="70vukg" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>System Design:</strong> לחזור על מסגרת RADIO, ולפתור שני תרגילים בקול עם טיימר של 45 דקות.</div><span class="kind"></span><input type="checkbox" id="c-70vukg" aria-label="נלמד: System Design: לחזור על מסגרת RADIO, ולפתור שני תרגילים בקול עם טיימר של 45 דקות."><label for="c-70vukg" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="aj5l0d" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>מבנה הריאיון:</strong> לברר מראש איזה סטאק משתמשת החברה ואילו סבבים יש. לפי זה לבחור את מסלול Vue או React.</div><span class="kind"></span><input type="checkbox" id="c-aj5l0d" aria-label="נלמד: מבנה הריאיון: לברר מראש איזה סטאק משתמשת החברה ואילו סבבים יש. לפי זה לבחור את מסלול Vue או React."><label for="c-aj5l0d" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="m1emo6" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>סיפורים:</strong> לחזור על <a href="#star">בנק ה־STAR</a>, ולהקליט את עצמך עונה על 3 סיפורים.</div><span class="kind"></span><input type="checkbox" id="c-m1emo6" aria-label="נלמד: בנק ה־STAR"><label for="c-m1emo6" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="8x5vyt" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>תרגיל קוד:</strong> לפתור 3–4 תרגילים מ־BFE.dev או GreatFrontEnd. אחד מהם יהיה hook או composable.</div><span class="kind"></span><input type="checkbox" id="c-8x5vyt" aria-label="נלמד: תרגיל קוד: לפתור 3–4 תרגילים מ־BFE.dev או GreatFrontEnd. אחד מהם יהיה hook או composable."><label for="c-8x5vyt" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="1ah4amy" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>שאלת ה־AI:</strong> לחזור על התשובה ל־&quot;איך הובלת אימוץ AI&quot; ועל נקודות ה־DORA.</div><span class="kind"></span><input type="checkbox" id="c-1ah4amy" aria-label="נלמד: שאלת ה־AI: לחזור על התשובה ל־&quot;איך הובלת אימוץ AI&quot; ועל נקודות ה־DORA."><label for="c-1ah4amy" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="vj0d0z" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>ריאיון סימולציה:</strong> לעשות ריאיון סימולציה עם חבר או ב־<a href="https://www.pramp.com/" target="_blank" rel="noopener">Pramp</a>, שהוא חינמי ודורש הרשמה.</div><span class="kind"></span><input type="checkbox" id="c-vj0d0z" aria-label="נלמד: Pramp"><label for="c-vj0d0z" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="2melc" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>מצב הכלים:</strong> לעבור שוב על טבלת <a href="./">מצב הכלים</a> בתכנית, ולבדוק אם יצאו מאז גרסאות חדשות.</div><span class="kind"></span><input type="checkbox" id="c-2melc" aria-label="נלמד: מצב הכלים"><label for="c-2melc" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li><li class="item" data-id="1uf9ynd" data-tier="prep" data-depth="task" data-video="0"><span class="call"></span><div class="item-body"><strong>שאלות למראיין:</strong> להכין 3–4 <a href="#ask">שאלות</a> שמתאימות לחברה הספציפית.</div><span class="kind"></span><input type="checkbox" id="c-1uf9ynd" aria-label="נלמד: שאלות"><label for="c-1uf9ynd" class="box" aria-hidden="true"></label><span class="stamp" aria-hidden="true"></span></li></ul><p class="empty-note" hidden>אין כאן מקורות שמתאימים לסינון הנוכחי.</p></div></section>
+
+    <footer>רשימת הסימון של "שבועיים לפני הריאיון" נשמרת רק בדפדפן הזה, ולא בחשבון. היא לא נספרת בהתקדמות של התכנית.</footer>
+  </main>
+</div>
+</div>
+
+<script>
+(() => {
+  // Ticks on this page stay in this browser: a short checklist for the last two weeks, not part of the plan.
+  const KEY = 'tl-prep-v1';
+  const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const items = [...document.querySelectorAll('.item')];
+  let state = { done: [], dates: {} };
+  try { const v = JSON.parse(localStorage.getItem(KEY)); if (v && Array.isArray(v.done)) state = { done: v.done, dates: v.dates || {} }; } catch (e) { /* storage unavailable */ }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ } };
+  const isDone = id => state.done.includes(id);
+
+  const stampText = ts => {
+    if (!ts) return 'בוצע';
+    const d = new Date(ts);
+    return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  };
+  const paint = (el, on) => {
+    el.classList.toggle('is-done', on);
+    el.querySelector('input').checked = on;
+    el.querySelector('.stamp').textContent = on ? stampText(state.dates[el.dataset.id]) : '';
+  };
+  const updateCounts = () => {
+    for (const c of document.querySelectorAll('[data-count-for]')) {
+      const its = document.getElementById(c.dataset.countFor)?.querySelectorAll('.item') ?? [];
+      const d = [...its].filter(el => isDone(el.dataset.id)).length;
+      c.textContent = its.length ? `${d}/${its.length}` : '';
+      c.classList.toggle('complete', its.length > 0 && d === its.length);
+    }
+  };
+  for (const el of items) {
+    paint(el, isDone(el.dataset.id));
+    el.querySelector('input').addEventListener('change', e => {
+      const id = el.dataset.id, on = e.target.checked;
+      state.done = state.done.filter(x => x !== id);
+      if (on) { state.done.push(id); state.dates[id] = Date.now(); } else delete state.dates[id];
+      save();
+      el.classList.remove('just-stamped');
+      paint(el, on);
+      if (on) { void el.offsetWidth; el.classList.add('just-stamped'); }
+      updateCounts();
+    });
+  }
+  updateCounts();
+
+  // the drawer you are reading is pulled out of the cabinet, as on the plan
+  const drawers = new Map([...document.querySelectorAll('.toc a')].map(a => [a.getAttribute('href').slice(1), a]));
+  let current = null;
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      for (const en of entries) {
+        if (!en.isIntersecting || en.target.id === current) continue;
+        drawers.get(current)?.removeAttribute('aria-current');
+        current = en.target.id;
+        drawers.get(current)?.setAttribute('aria-current', 'true');
+      }
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    for (const s of document.querySelectorAll('.topic')) io.observe(s);
+  }
+})();
+</script>
+</body>
+</html>
+

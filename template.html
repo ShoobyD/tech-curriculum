@@ -4,17 +4,17 @@
 <title>תכנית לימודים לטק ליד</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="תכנית לימודים לריאיונות Frontend Architect / Tech Lead: 16 נושאים מדורגים לפי חשיבות, 437 מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
+<meta name="description" content="תכנית לימודים לריאיונות Frontend Architect / Tech Lead: 16 נושאים מדורגים לפי חשיבות, 429 מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="he_IL">
 <meta property="og:site_name" content="tech-lead-curriculum">
 <meta property="og:title" content="תכנית לימודים לטק ליד">
-<meta property="og:description" content="16 נושאים מדורגים לפי חשיבות, 437 מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
+<meta property="og:description" content="16 נושאים מדורגים לפי חשיבות, 429 מקורות חינמיים לפי עומק, עם עדיפות לווידאו ורשימת סימון להתקדמות.">
 <meta property="og:url" content="https://shoobyd.github.io/tech-lead-curriculum/">
 <meta property="og:image" content="https://shoobyd.github.io/tech-lead-curriculum/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="תכנית לימודים לטק ליד: 16 נושאים, 437 מקורות, 93 פלייליסטים וקורסים">
+<meta property="og:image:alt" content="תכנית לימודים לטק ליד: 16 נושאים, 429 מקורות, 93 פלייליסטים וקורסים">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0f241d">
 <script>try { const p = (JSON.parse(localStorage.getItem('tl-plan-prefs-v1')) || {}).palette; if (p && p !== 'green') document.documentElement.dataset.palette = p; } catch (e) { /* storage unavailable */ }</script>
@@ -214,18 +214,19 @@ h1, h2, h3, h4 { text-wrap: balance; }
 
 /* the reader's card: a paper slip in a brass frame, like the drawer labels, with a square ID photo */
 .reader-guest { display: grid; gap: 8px; }
-.gh-login, .reader-card {
+.gh-login, .holder-link, .reader-card {
   color: var(--holder-ink); background-color: var(--holder); border-radius: 2px;
   background-image: linear-gradient(180deg, rgba(255,255,255,.35), rgba(0,0,0,.04));
   box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), inset 0 1px 3px rgba(0,0,0,.28);
 }
-.gh-login {
+/* .holder-link: the same brass-framed slip as a plain link (the prep page's way back to the plan) */
+.gh-login, .holder-link {
   display: flex; align-items: center; justify-content: center; gap: 9px; padding: 9px 12px;
   font: 700 14px/1.3 var(--font-body); text-decoration: none;
   transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s;
 }
-.gh-login:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), 0 6px 10px -4px rgba(0,0,0,.55); }
-.gh-login svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
+.gh-login:hover, .holder-link:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px var(--brass), 0 0 0 3px rgba(0,0,0,.35), 0 6px 10px -4px rgba(0,0,0,.55); }
+.gh-login svg, .holder-link svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
 .reader-note { font-size: 12px; color: var(--cab-muted); margin: 0; line-height: 1.5; }
 .reader-card { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 0 12px; align-items: center; padding: 10px 12px 8px; }
 .reader-photo { grid-row: span 2; width: 40px; height: 40px; border-radius: 2px; overflow: hidden; background: rgba(0,0,0,.14); box-shadow: 0 0 0 1px rgba(0,0,0,.3); }
@@ -494,7 +495,7 @@ details.panel { box-shadow: var(--lift); }
   .seal small { font-size: 11px; }
   .done-of { font-size: 14px; }
   .reader-note { display: none; }
-  .gh-login { padding: 8px 12px; font-size: 13px; }
+  .gh-login, .holder-link { padding: 8px 12px; font-size: 13px; }
   .reader-card { grid-template-columns: 32px minmax(0, 1fr) auto; padding: 7px 10px; }
   .reader-photo { width: 32px; height: 32px; }
   .reader-actions { grid-column: 3; grid-row: 1 / span 2; flex-direction: column; align-items: flex-end; gap: 0; margin: 0; padding: 0; border: 0; }
@@ -616,7 +617,7 @@ details.panel { box-shadow: var(--lift); }
         </ul></div>
     </details>
 
-    <footer>המקורות נבדקו ב־31.10.2026. כל התוכן חינמי. אותה תכנית שמורה גם כקובץ Markdown, וממנו נבנה הדף. ההתחברות וההתקדמות המשותפת רצות על שרת קטן ב־Cloudflare.</footer>
+    <footer>בנק סיפורי STAR, שאלות למראיין ורשימה לשבועיים לפני הריאיון נמצאים ב<a href="prep.html">דף ההכנה לריאיון</a>. המקורות נבדקו ב־31.10.2026. כל התוכן חינמי. אותה תכנית שמורה גם כקובץ Markdown, וממנו נבנה הדף. ההתחברות וההתקדמות המשותפת רצות על שרת קטן ב־Cloudflare.</footer>
   </main>
 </div>
 </div>

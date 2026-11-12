@@ -1,15 +1,31 @@
-// Builds the study-plan artifact page from the markdown plan, so both stay identical.
+// Builds the pages from the markdown, so both stay identical:
+//   README.md         → index.html  the study plan (template.html)
+//   interview-prep.md → prep.html   the interview prep page (prep-template.html, with template.html's styles)
 import { readFileSync, writeFileSync } from 'node:fs';
 
-// Usage: node build.mjs [md] [out]. Defaults: README.md and index.html next to this script.
+// Usage: node build.mjs [md] [out] [prep-out]. Defaults: README.md, index.html and prep.html next to this script.
 const here = new URL('.', import.meta.url);
 const mdPath = process.argv[2] || new URL('README.md', here);
 const outPath = process.argv[3] || new URL('index.html', here);
-const lines = readFileSync(mdPath, 'utf8').replace(/\r/g, '').split('\n');
+const prepOutPath = process.argv[4] || new URL('prep.html', here);
+const readLines = path => readFileSync(path, 'utf8').replace(/\r/g, '').split('\n');
+const lines = readLines(mdPath);
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const ANCHORS = { '#בנק-סיפורי-star': '#star' };
+// GitHub's heading anchors in interview-prep.md, and the section ids they become on prep.html.
+const PREP_IDS = { 'בנק סיפורי STAR': 'star', 'שאלות למראיין': 'ask', 'שבועיים לפני הריאיון': 'final' };
+const ANCHORS = Object.fromEntries(Object.entries(PREP_IDS).map(([title, id]) => ['#' + title.toLowerCase().replace(/ /g, '-'), '#' + id]));
+// Links between the two markdown files become links between the two pages (same tab).
+// README anchors (the tool status table) have no target on the page yet, so they open the plan.
+const PAGES = [[/^interview-prep\.md(#.*)?$/, 'prep.html', true], [/^README\.md(#.*)?$/, './', false]];
+const localHref = href => {
+  for (const [re, page, keepAnchor] of PAGES) {
+    const m = href.match(re);
+    if (m) return page + (keepAnchor && m[1] ? ANCHORS[decodeURI(m[1])] ?? '' : '');
+  }
+  return null;
+};
 
 // Inline markdown: `code`, [text](url) with nested brackets in text, **bold**.
 function inline(src) {
@@ -34,6 +50,8 @@ function inline(src) {
     if (href.startsWith('#')) {
       href = ANCHORS[href] || (href.match(/^#(\d+)-/) ? '#s' + href.match(/^#(\d+)-/)[1] : undefined);
       out += href ? `<a href="${href}">${esc(text)}</a>` : esc(text);
+    } else if (localHref(href) !== null) {
+      out += `<a href="${localHref(href)}">${esc(text)}</a>`;
     } else {
       out += `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a>`;
     }
@@ -50,9 +68,7 @@ const TIERS = {
   '🔥 עדיפות 1': { key: '1', label: 'עדיפות 1', sub: 'עולה כמעט בכל ריאיון. מתחילים כאן.' },
   '⭐ עדיפות 2': { key: '2', label: 'עדיפות 2', sub: 'נשאל לעתים קרובות, לפעמים לעומק.' },
   '➕ עדיפות 3': { key: '3', label: 'עדיפות 3', sub: 'מראה רוחב. בדרך כלל נשאל בקצרה.' },
-  'לסיום': { key: 'end', label: 'לסיום', sub: 'סיפורים, שאלות למראיין והכנה אחרונה.' },
 };
-const END_IDS = { 'בנק סיפורי STAR': 'star', 'שאלות למראיין': 'ask', 'שבועיים לפני הריאיון': 'final' };
 
 const intro = { note: '', how: [], status: [] };
 const tiers = [];
@@ -72,9 +88,8 @@ for (const line of lines.slice(1)) {
       continue;
     }
     const nm = title.match(/^(\d+)\. (.+)$/);
-    section = nm
-      ? { id: 's' + nm[1], num: nm[1], title: nm[2], lines: [], subs: [] }
-      : { id: END_IDS[title], num: '', title, lines: [], subs: [] };
+    if (!nm) throw new Error(`README.md: a topic heading needs its number ("## 17. …"): ${title}`);
+    section = { id: 's' + nm[1], num: nm[1], title: nm[2], lines: [], subs: [] };
     tier.sections.push(section); sub = null; continue;
   }
   if ((m = line.match(/^### (.+)$/))) {
@@ -129,7 +144,8 @@ function renderItem(text, ctx) {
   return `<li class="item" data-id="${id}" data-tier="${ctx.tier}" data-depth="${ctx.depth}" data-video="${video ? 1 : 0}">` +
     `<span class="call">${call}</span>` +
     `<div class="item-body">${body}</div>` +
-    `<span class="kind"><span class="tag${video ? ' video' : ''}">${kind}</span><span class="len">${itemLength(text)}</span></span>` +
+    // a checklist task (outside any depth group) is neither reading nor video, and has no length
+    (ctx.depth === 'task' ? '<span class="kind"></span>' : `<span class="kind"><span class="tag${video ? ' video' : ''}">${kind}</span><span class="len">${itemLength(text)}</span></span>`) +
     `<input type="checkbox" id="c-${id}" aria-label="${esc(`נלמד: ${title}`)}"><label for="c-${id}" class="box" aria-hidden="true"></label>` +
     `<span class="stamp" aria-hidden="true"></span></li>`;
 }
@@ -273,4 +289,34 @@ const out = tpl
   .replace('{{TOC}}', toc)
   .replace('{{TIERS}}', tiersHtml);
 writeFileSync(outPath, out.replace(/\r?\n/g, '\r\n'));
-console.log('items:', itemCount, 'sections:', tiers.reduce((a, t) => a + t.sections.length, 0), 'bytes:', Buffer.byteLength(out));
+console.log('index.html  items:', itemCount, 'sections:', tiers.reduce((a, t) => a + t.sections.length, 0), 'bytes:', Buffer.byteLength(out));
+
+// ---------- the interview prep page ----------
+// interview-prep.md: "# title", an intro paragraph, then "## " sections. Its checklist uses the same
+// index cards as the plan; the page keeps those ticks in this browser only (prep-template.html).
+const prep = { intro: [], sections: [] };
+for (const line of readLines(new URL('interview-prep.md', here)).slice(1)) {
+  const m = line.match(/^## (.+)$/);
+  if (m) {
+    const title = m[1].trim();
+    prep.sections.push({ id: PREP_IDS[title] || `p${prep.sections.length + 1}`, num: '', title, lines: [], subs: [] });
+  } else if (prep.sections.length) prep.sections.at(-1).lines.push(line);
+  else if (line.trim()) prep.intro.push(line);
+}
+const planItems = itemCount;
+const prepKind = { key: 'prep' };
+// the intro's link to this very page means nothing on it
+const prepIntro = prep.intro.map(l => inline(l.replace(/^\*\*\[[^\]]+\]\([^)]+\)\*\*\.\s*/, ''))).join(' ');
+const prepToc = `<div class="toc-group"><ol>` + prep.sections.map(s =>
+  `<li><a href="#${s.id}"><span class="toc-title">${bdi(inline(s.title))}</span><span class="toc-count" data-count-for="${s.id}"></span></a></li>`).join('') + `</ol></div>`;
+const prepHtml = prep.sections.map(s => renderSection(s, prepKind)).join('');
+// one stylesheet for both pages: the palette script, the fonts and the styles, from template.html's head
+const shared = tpl.slice(tpl.indexOf('<script>try'), tpl.indexOf('</style>') + '</style>'.length);
+const prepOut = readFileSync(new URL('./prep-template.html', import.meta.url), 'utf8')
+  .replace('{{SHARED_HEAD}}', () => shared)
+  .replace('{{INTRO}}', () => prepIntro)
+  .replace('{{TOC}}', () => prepToc)
+  .replace('{{SECTIONS}}', () => prepHtml);
+writeFileSync(prepOutPath, prepOut.replace(/\r?\n/g, '\r\n'));
+console.log('prep.html   items:', itemCount - planItems, 'sections:', prep.sections.length, 'bytes:', Buffer.byteLength(prepOut));
+
