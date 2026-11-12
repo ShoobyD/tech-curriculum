@@ -610,6 +610,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
 (() => {
   const PROGRESS_KEY = 'tl-plan-progress-v1';
   const PREFS_KEY = 'tl-plan-prefs-v1';
+  const LAYOUT_KEY = 'tl-plan-layout-v1';
   const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
   const items = [...document.querySelectorAll('.item')];
@@ -640,18 +641,74 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     }
   }
 
-  // ---------- counts ----------
+  // ---------- layout: my own topic order and what I hid (private; saved with the progress) ----------
+  // {order: [topicId], hiddenTopics: [topicId], hiddenItems: [itemId]}. Empty lists mean the plan as
+  // built: default order, nothing hidden. What is hidden leaves the view and every count.
+  const topics = [...document.querySelectorAll('.topic')];
+  const DEFAULT_ORDER = topics.map(s => s.id);
+  // what follows the topics in the page, fixed: they are re-inserted before it in the chosen order
+  const AFTER_TOPICS = topics.at(-1).nextElementSibling;
+  const topicOf = new Map(items.map(el => [el.dataset.id, el.closest('.topic')?.id]));
+  const ids = v => (Array.isArray(v) ? [...new Set(v.filter(x => typeof x === 'string'))] : []);
+  const cleanLayout = l => ({ order: ids(l?.order), hiddenTopics: ids(l?.hiddenTopics), hiddenItems: ids(l?.hiddenItems) });
+  const sameLayout = (a, b) => JSON.stringify(cleanLayout(a)) === JSON.stringify(cleanLayout(b));
+  let layout = cleanLayout(lsGet(LAYOUT_KEY));
+  let hiddenTopicSet = new Set(layout.hiddenTopics), hiddenItemSet = new Set(layout.hiddenItems);
+  const isHidden = el => hiddenItemSet.has(el.dataset.id) || hiddenTopicSet.has(topicOf.get(el.dataset.id));
+
+  // The saved order, with any topic it doesn't know (one added to the plan later) at its default place.
+  function fullOrder() {
+    const order = layout.order.filter(id => DEFAULT_ORDER.includes(id));
+    DEFAULT_ORDER.forEach((id, i) => { if (!order.includes(id)) order.splice(Math.min(i, order.length), 0, id); });
+    return order;
+  }
+  function applyLayout() {
+    hiddenTopicSet = new Set(layout.hiddenTopics);
+    hiddenItemSet = new Set(layout.hiddenItems);
+    // the topics move as a block, in place; the drawers in the cabinet follow
+    const tocList = document.querySelector('.toc ol');
+    for (const id of fullOrder()) {
+      const s = document.getElementById(id);
+      const li = tocList.querySelector(`a[href="#${id}"]`).parentElement;
+      s.parentElement.insertBefore(s, AFTER_TOPICS);
+      tocList.append(li);
+      s.hidden = li.hidden = hiddenTopicSet.has(id);
+    }
+  }
+  // a change of layout: kept in this browser and, with an account, sent with the progress
+  function setLayout(next) {
+    layout = cleanLayout(next);
+    lsSet(LAYOUT_KEY, layout);
+    state.updatedAt = Date.now();
+    lsSet(PROGRESS_KEY, state);
+    applyLayout();
+    applyFilters();
+    updateCounts();
+    markChanged();
+  }
+  // the account's layout replaces this browser's
+  function adoptLayout(next) {
+    if (sameLayout(next, layout)) return;
+    layout = cleanLayout(next);
+    lsSet(LAYOUT_KEY, layout);
+    applyLayout();
+    applyFilters();
+    updateCounts();
+  }
+
+  // ---------- counts (what I hid is not counted) ----------
   function updateCounts() {
-    const total = items.length;
-    const done = items.filter(el => doneSet.has(el.dataset.id)).length;
+    const counted = items.filter(el => !isHidden(el));
+    const total = counted.length;
+    const done = counted.filter(el => doneSet.has(el.dataset.id)).length;
     const pct = total ? Math.round(done / total * 100) : 0;
     document.getElementById('pct').textContent = pct + '%';
     document.getElementById('done-of').textContent = `${done} מתוך ${total} מקורות`;
     for (const c of document.querySelectorAll('[data-count-for]')) {
       const scope = document.getElementById(c.dataset.countFor);
       if (!scope) continue;
-      const its = scope.querySelectorAll('.item');
-      const d = [...its].filter(el => doneSet.has(el.dataset.id)).length;
+      const its = [...scope.querySelectorAll('.item')].filter(el => !isHidden(el));
+      const d = its.filter(el => doneSet.has(el.dataset.id)).length;
       c.textContent = its.length ? `${d}/${its.length}` : '';
       c.classList.toggle('complete', its.length > 0 && d === its.length);
     }
@@ -698,6 +755,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
 
   function itemVisible(el) {
     const d = el.dataset;
+    if (isHidden(el)) return false;
     if (filters.hideDone && doneSet.has(d.id)) return false;
     if (d.depth === 'task') return true;
     if (!filters.depth.has(d.depth)) return false;
@@ -1016,7 +1074,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
       await api('/progress', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ done: [...doneSet], dates: state.dates }),
+        body: JSON.stringify({ done: [...doneSet], dates: state.dates, layout }),
         keepalive,
       });
       // a change made while saving keeps `pending` and is sent next
@@ -1042,14 +1100,19 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
       renderAccount();
       renderFriends();
       loaded = true;
+      const serverLayout = cleanLayout(server.layout);
       if (justLoggedIn) {
+        // progress merges; a layout doesn't: the account's wins if it has one, else this browser's goes up
         const both = merged(server, state);
         adopt(both);
-        if (sameProgress(both, server)) setStatus('saved'); else markChanged();
+        const hasLayout = serverLayout.order.length || serverLayout.hiddenTopics.length || serverLayout.hiddenItems.length;
+        if (hasLayout) adoptLayout(serverLayout);
+        if (sameProgress(both, server) && sameLayout(layout, serverLayout)) setStatus('saved'); else markChanged();
       } else if (state.pending) {
         markChanged();
       } else {
         adopt(server);
+        adoptLayout(serverLayout);
         setStatus('saved');
       }
       justLoggedIn = false;
@@ -1084,6 +1147,8 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     const p = { done: Object.keys(f.done), dates: Object.fromEntries(Object.entries(f.done).filter(([, t]) => t > 0)) };
     if (!sameProgress(p, { done: [...doneSet], dates: state.dates })) adopt(p);
     setStatus('saved');
+    // the layout is private, so the live message doesn't carry it: ask the account
+    api('/progress').then(server => { if (!busy()) adoptLayout(server.layout); }).catch(() => { /* the next visit catches up */ });
   }
   function onLive(msg) {
     if (msg?.type === 'progress') {
@@ -1105,7 +1170,9 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
     try {
       const server = await api('/progress');
       const p = { done: server.done, dates: server.dates || {} };
-      if (!busy() && !sameProgress(p, { done: [...doneSet], dates: state.dates })) adopt(p);
+      if (busy()) return;
+      if (!sameProgress(p, { done: [...doneSet], dates: state.dates })) adopt(p);
+      adoptLayout(server.layout);
     } catch (e) { /* the next gap or visit catches up */ }
   }
 
@@ -1151,6 +1218,7 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   // leaving with a change still waiting for its debounce: send it on the way out
   addEventListener('pagehide', () => { if (saveTimer) pushProgress(true); });
 
+  applyLayout();
   applyChecks();
   updateCounts();
   applyFilters();

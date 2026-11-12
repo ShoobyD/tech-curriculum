@@ -107,6 +107,7 @@ The five made-up users of `scripts/seed-dev.sql` are reseeded before each suite.
 | `friends` | Friends' photos on the cards: order, "+N", the letter fallback, never yourself, aligned columns |
 | `livepage` | Live updates between two devices and from a friend, without reloads; a tick is never undone by its own echo |
 | `pages` | The plan's dialogs (how to use, tool status: keyboard, Esc, backdrop, focus, `#status` links) and the interview prep page's own checklist |
+| `layout` | My own topic order and hidden topics and sources: from the account or this browser, applied on load, out of every count, live from my other devices, never from a friend's |
 
 Ports 8798 and 4398 must be free (the runner stops with a message if not); the usual dev ports (8787, 4399) can stay in use.
 
