@@ -595,7 +595,7 @@
 **9ב. ‏אסטרטגיות רינדור:**
 - 🟢
   - [ ] 🎬 [Rethinking reactivity](https://www.youtube.com/watch?v=AdNJ3fydeao). ‏Rich Harris, 37 דקות, ⚠️ 2019 (קלאסיקה). הטענה ש־"virtual DOM is pure overhead".
-  - [ ] 🎬 [Hydration, Islands, Streaming, Resumability… Oh My!](https://www.youtube.com/watch?v=GpUJAH7XgFk). ‏Matheus Albuquerque, ‏CityJS, 21 דקות. גרסה מצולמת ל־Rendering on the Web ול־islands. רלוונטי גם לנושא 5.
+  - [ ] 🎬 [Hydration, Islands, Streaming, Resumability… Oh My!](https://www.youtube.com/watch?v=GpUJAH7XgFk). ‏Matheus Albuquerque, ‏CityJS, 21 דקות. גרסה מצולמת ל־Rendering on the Web ול־islands. רלוונטי גם לנושא הביצועים.
 - 🟡
   - [ ] 🎬 [Resumability vs Hydration](https://www.youtube.com/watch?v=0LR-eb6gYKg). ‏Miško Hevery, 28 דקות, 2023.
   - [ ] 🎬 [Rendering on the Web](https://www.youtube.com/watch?v=k-A2VfuUROg). ‏Google I/O, 33 דקות, ⚠️ 2019. חלק מסדרה: [Web at Google I/O 2019](https://www.youtube.com/playlist?list=PLNYkxOF6rcIATmAmz7HcCzongGvQEtx8i), 28 סרטונים.
