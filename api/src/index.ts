@@ -1,5 +1,5 @@
 /**
- * Accounts API for the tech-lead study plan (shoobyd.github.io/tech-lead-curriculum).
+ * Accounts API for the technical-interview study plan (shoobyd.github.io/tech-lead-curriculum).
  *
  *   GET    /auth/login?return=<page>  login with GitHub (see auth.ts)
  *   GET    /auth/callback

@@ -1,8 +1,8 @@
 {
-  "name": "tech-lead-curriculum-api",
+  "name": "tech-curriculum-api",
   "version": "1.0.0",
   "private": true,
-  "description": "Accounts and shared progress for the tech-lead study plan (Cloudflare Worker + D1).",
+  "description": "Accounts and shared progress for the technical-interview study plan (Cloudflare Worker + D1).",
   "scripts": {
     "dev": "wrangler dev --port 8787",
     "deploy": "wrangler deploy",

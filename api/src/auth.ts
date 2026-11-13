@@ -15,7 +15,7 @@ import { allowedOrigins, type Env, textPage } from './http';
 import { randomNonce, readState, SESSION_TTL_MS, signToken, STATE_TTL_MS } from './tokens';
 
 const NONCE_COOKIE = 'tl_oauth_nonce';
-const USER_AGENT = 'tech-lead-curriculum-api';
+const USER_AGENT = 'tech-curriculum-api';
 
 const FAILED = 'ההתחברות נכשלה. חזרו לדף התכנית ונסו להתחבר שוב.';
 const NOT_CONFIGURED = 'ההתחברות עוד לא הוגדרה בשרת.';

@@ -124,7 +124,7 @@ npm run migrate:remote
 Create a GitHub OAuth App ([github.com/settings/applications/new](https://github.com/settings/applications/new): account Settings → Developer settings → OAuth Apps):
 
 - Homepage URL: `https://shoobyd.github.io/tech-lead-curriculum/`
-- Redirect URI (called "Authorization callback URL" in older forms): `https://tech-lead-curriculum-api.bmusty.workers.dev/auth/callback`, exactly, without a trailing slash
+- Redirect URI (called "Authorization callback URL" in older forms): `https://tech-curriculum-api.bmusty.workers.dev/auth/callback`, exactly, without a trailing slash
 - Wildcard matching, Device Flow and expiring user tokens: off
 
 Then set the three secrets and deploy. Run `secret put` in a regular terminal: it prompts for the value, and a non-interactive shell would upload an empty one. Keep the client secret out of shell history and chat logs:

@@ -5,7 +5,7 @@
 #   GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, SESSION_SECRET
 # Locally they come from .dev.vars (see .dev.vars.example).
 
-name = "tech-lead-curriculum-api"
+name = "tech-curriculum-api"
 main = "src/index.ts"
 compatibility_date = "2026-10-01"
 
