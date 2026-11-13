@@ -199,7 +199,7 @@ The cabinet comes in four finishes the reader picks from a swatch row in the cab
 **Key Characteristics:**
 - Wood-grained cabinet rail (right side, sticky) beside a paper-grained reading field.
 - Index cards with a red head rule and blue ruling at a 26px line pitch, on fibred card stock that lifts slightly under the pointer.
-- Call numbers in Courier Prime as each card's first, largest mark.
+- Call numbers in Courier Prime as each card's first, largest mark, numbered by the reader's own order.
 - Topics in the reader's own order, arranged in the cabinet; hidden cards and drawers leave the page and every count, and come back faded and dashed.
 - Done is a rotated, ink-bitten date stamp with the real date; overall progress is a round library seal.
 - Four cabinet finishes (green, oak, steel, navy) behind one set of token names.
@@ -320,7 +320,7 @@ A double-ruled box in the stamp ink (2.5px border plus a 1px outline 2px out) wi
 A round library stamp in Seal Gilt: 4px ring with an inner 1.5px ring 11px in, rotated -8deg, masked with the ink bite, the percentage in Courier Prime 30px over a small Hebrew word.
 
 ### Drawers (navigation)
-Each topic is a wood-grained drawer front, lit from above: topic number with a 3px brass rule above it, a framed label holder with the title, and a Courier count. Hover and current use the lighter front; current also slides 22px out over 0.35s `cubic-bezier(.16,1,.3,1)` and takes the pulled shadow. The drawers stand in the reader's order, and a hidden topic's drawer is gone. On phone they form a horizontal strip and do not slide.
+Each topic is a wood-grained drawer front, lit from above: topic number with a 3px brass rule above it, a framed label holder with the title, and a Courier count. Hover and current use the lighter front; current also slides 22px out over 0.35s `cubic-bezier(.16,1,.3,1)` and takes the pulled shadow. The drawers stand in the reader's order and are numbered by it, and a hidden topic's drawer is gone; while arranging it stays, faded, with no number and no brass rule. On phone they form a horizontal strip and do not slide.
 
 ### Arranging (the cabinet)
 A "נושאים" row above the drawers holds a text action, "סידור", with a drawn grip. Pressed, it becomes a framed holder slip reading "סיום", and "סדר מקורי" appears beside it (disabled while the order is the default). In the mode each drawer gets a grip on its start edge (drag it with a mouse, pen or finger; the drawer lifts, the others make room, and the cabinet scrolls along near its edges) and three 26px wood buttons at its end: up, down, and an eye that hides or shows the topic. The counts give way to them. Focus stays on the button that moved the drawer, and a polite live region says the new place ("…: מקום 2 מתוך 16"). A hidden topic's drawer stays in the cabinet while arranging, at 45% with its title struck through, so it can be shown again. Call numbers never renumber: 3.12 stays 3.12 wherever topic 3 stands.
@@ -374,7 +374,7 @@ Each topic's brief (why it matters, expected questions, practice) folds between 
 ### Don't:
 - **Don't** use percentage bars, blue progress bars or soft rounded tracker cards; progress is the seal and the stamps.
 - **Don't** colour-code depth, and don't rank topics: their order is the reader's.
-- **Don't** renumber call numbers when topics move.
+- **Don't** number what is hidden, or leave gaps: a topic number is its place among the visible topics in the reader's order, and a call number adds the card's place among its topic's visible cards; a sub-part heading ("3א.") takes its topic's number. The README keeps the original numbers.
 - **Don't** use hard offset shadows or glows; depth is the layered, neutral-black shadows and material textures above.
 - **Don't** add texture that is not the material's own: no photographic or raster textures; grain belongs to paper and wood.
 - **Don't** let index-card columns shift between cards, on desktop or phone.
