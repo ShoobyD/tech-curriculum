@@ -235,6 +235,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
 }
 .toc a:not(:has(.toc-num)) { grid-template-columns: minmax(0, 1fr) auto; }
 .toc-num { font: 700 12px var(--font-type); text-align: center; border-top: 3px solid var(--brass); padding-top: 1px; }
+.toc-num:empty { border-top: 0; }
 .toc-title {
   background: var(--holder); color: var(--holder-ink); border: 2px solid var(--brass); border-radius: 2px;
   padding: 2px 7px; font-weight: 700; line-height: 1.3;

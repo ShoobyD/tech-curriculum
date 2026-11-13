@@ -34,7 +34,15 @@ export default async function layoutSuite({ API, ORIGIN, PAGE, token, browser, c
 	const expectTotal = total - counts.s16 - 1;
 	check('hidden sources are not counted', (await doneOf(A)) === `1 מתוך ${expectTotal} מקורות`, await doneOf(A));
 	check('the percentage counts only what is shown', (await A.evaluate(`document.getElementById('pct').textContent`)) === `${Math.round(100 / expectTotal)}%`);
-	check("the topic's own count too", (await A.evaluate(`document.querySelector('.toc-count[data-count-for="s1"]').textContent`)) === `1/${counts.s1 - 1}`);
+	const nums = d => d.evaluate(`Object.fromEntries([...document.querySelectorAll('.topic')].map(s => [s.id, [document.querySelector('.toc a[href="#' + s.id + '"] .toc-num').textContent, s.querySelector('.topic-num').textContent]]))`);
+	const n = await nums(A);
+	check('the numbers follow the saved order, drawer and heading alike', ['s3', 's1', 's2', 's15'].every((id, i) => n[id].join() === `${i + 1},${i + 1}`), JSON.stringify(n).slice(0, 160));
+	check('a hidden topic has no number', n.s16.join() === ',');
+	const subs = id => A.evaluate(`[...document.querySelectorAll('#${id} .sub-num')].map(h => h.textContent).join()`);
+	check('sub-part headings take their topic\'s new number', (await subs('s3')) === '1א.,1ב.,1ג.,1ד.,1ה.', await subs('s3'));
+	check('and a hidden topic\'s have none', (await subs('s16')) === ',,,,');
+	check("a hidden source has no call number, and the next card takes its place", (await A.evaluate(`[${JSON.stringify(i0)}, ${JSON.stringify(i1)}].map(id => document.querySelector('.item[data-id="' + id + '"] .call').textContent).join()`)) === ',2.01');
+	check("the topic's own count too",(await A.evaluate(`document.querySelector('.toc-count[data-count-for="s1"]').textContent`)) === `1/${counts.s1 - 1}`);
 
 	// a tick on this device saves the progress with the layout, untouched
 	await A.click(await A.evaluate(`[...document.querySelectorAll('.item')].findIndex(el => el.dataset.id === ${JSON.stringify(i1)})`));

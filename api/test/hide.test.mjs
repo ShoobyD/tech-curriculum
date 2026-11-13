@@ -23,7 +23,9 @@ export default async function hideSuite({ API, PAGE, token, browser, check }) {
 	await A.evaluate(`document.querySelector('${card(id1)} .hide-btn').click()`);
 	check('the card leaves the page', !(await on(card(id1))));
 	check('it is not counted, though it was finished', (await doneOf()) === `0 מתוך ${start - 1} מקורות`, await doneOf());
-	check('the topic head says so', (await A.evaluate(`document.querySelector('#s1 .topic-hidden').textContent`)) === 'מקור אחד מוסתר');
+	const calls = () => A.evaluate(`[...document.querySelectorAll('#s1 .item')].slice(0, 3).map(el => el.querySelector('.call').textContent).join()`);
+	check('it gives up its call number, and the next card takes it', (await calls()) === '1.01,,1.02', await calls());
+	check('the topic head says so',(await A.evaluate(`document.querySelector('#s1 .topic-hidden').textContent`)) === 'מקור אחד מוסתר');
 	check('focus goes to that line, which brings it back', await A.evaluate(`document.activeElement.matches('#s1 .topic-hidden')`));
 	check('screen readers hear it', (await A.evaluate(`document.getElementById('arrange-status').textContent`)) === 'המקור הוסתר. בנושא הזה: מקור אחד מוסתר.');
 	check('the chip appears with the count', (await on('[data-f="showHidden"]')) && (await A.evaluate(`document.querySelector('[data-f="showHidden"] .chip-n').textContent`)) === '1');
@@ -33,6 +35,7 @@ export default async function hideSuite({ API, PAGE, token, browser, check }) {
 	check('the topic\'s count shows the hidden card, faded', (await on(card(id1))) && await A.evaluate(`document.querySelector('${card(id1)}').classList.contains('is-hidden')`));
 	check('and the chip is on', (await A.evaluate(`document.querySelector('[data-f="showHidden"]').getAttribute('aria-pressed')`)) === 'true');
 	check('shown, it is still not counted', (await total()) === start - 1);
+	check('nor numbered', (await calls()) === '1.01,,1.02');
 	check('its button now restores', (await A.evaluate(`document.querySelector('${card(id1)} .hide-btn').getAttribute('aria-label')`)).startsWith('החזרת המקור: '));
 	await sleep(800);
 	check('the account has it hidden, still finished', await server().then(p => p.layout.hiddenItems.includes(id1) && p.done.includes(id1)));
@@ -48,6 +51,7 @@ export default async function hideSuite({ API, PAGE, token, browser, check }) {
 	await A.evaluate(`document.querySelector('${card(id1)} .hide-btn').click()`);
 	check('restoring brings it back, counted', !(await A.evaluate(`document.querySelector('${card(id1)}').classList.contains('is-hidden')`)) && (await total()) === start);
 	check('the topic\'s count is gone', !(await on('#s1 .topic-hidden')));
+	check('and its number is back', (await calls()) === '1.01,1.02,1.03');
 	check('the other device follows, live', (await waitFor(() => B.evaluate(`!document.querySelector('${card(id1)}').hidden`))) >= 0);
 
 	// a whole topic, from its drawer while arranging
@@ -56,8 +60,12 @@ export default async function hideSuite({ API, PAGE, token, browser, check }) {
 	await A.evaluate(`document.querySelector('.arrange').click(); document.querySelector('.toc a[href="#s16"]').parentElement.querySelector('[data-act="hide"]').click()`);
 	check('a hidden topic leaves the page', !(await on('#s16')));
 	check('while arranging, its drawer stays, marked', (await on('.toc a[href="#s16"]')) && await A.evaluate(`document.querySelector('.toc a[href="#s16"]').parentElement.classList.contains('is-hidden')`));
+	check('its drawer, heading and cards have no number', (await A.evaluate(`[document.querySelector('.toc a[href="#s16"] .toc-num').textContent, document.querySelector('#s16 .topic-num').textContent, ...[...document.querySelectorAll('#s16 .call')].map(c => c.textContent)].join('')`)) === '');
 	check('focus stays on its button, which now restores', await A.evaluate(`document.activeElement.dataset.act === 'hide' && document.activeElement.getAttribute('aria-label').startsWith('החזרת הנושא')`));
 	check('its sources are not counted', (await total()) === start - s16);
+	await A.evaluate(`document.querySelector('.toc a[href="#s16"]').parentElement.querySelector('[data-dir="-1"]').click()`);
+	check('moved while hidden, it is still unnumbered, and screen readers hear its place in the whole order', (await A.evaluate(`document.querySelector('.toc a[href="#s16"] .toc-num').textContent`)) === '' && (await A.evaluate(`document.getElementById('arrange-status').textContent`)).endsWith(': מוסתר, מקום 15 מתוך 16'), await A.evaluate(`document.getElementById('arrange-status').textContent`));
+	check('the topic it passed keeps the last number', (await A.evaluate(`document.querySelector('.toc a[href="#s15"] .toc-num').textContent`)) === '15');
 	await A.evaluate(`document.querySelector('.arrange').click()`);
 	check('out of the mode, the drawer is gone too', !(await on('.toc a[href="#s16"]')));
 	await A.evaluate(`document.querySelector('[data-f="showHidden"]').click()`);

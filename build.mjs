@@ -212,7 +212,12 @@ function renderBlocks(src, ctx) {
     if (l.startsWith('> ')) { html += `<p class="callout">${inline(l.slice(2))}</p>`; i++; continue; }
     // bold-only line ending with a colon is a block heading
     const bm = l.match(/^\*\*([^*]+?):\*\*\s*(.*)$/);
-    if (bm && !bm[2]) { html += `<h4>${inline(bm[1])}</h4>`; i++; continue; }
+    if (bm && !bm[2]) {
+      // a sub-part heading carries its topic's number ("3א."): marked, so the page can renumber it by the reader's order
+      const sm = ctx.num && bm[1].match(new RegExp(`^${ctx.num}([א-ת])\\.\\s*`));
+      html += sm ? `<h4><span class="sub-num" data-sub="${sm[1]}">${ctx.num}${sm[1]}.</span> ${inline(bm[1].slice(sm[0].length))}</h4>` : `<h4>${inline(bm[1])}</h4>`;
+      i++; continue;
+    }
     if (bm) { html += `<p><strong class="lead">${inline(bm[1])}:</strong> ${inline(bm[2])}</p>`; i++; continue; }
     html += `<p>${inline(l)}</p>`; i++;
   }

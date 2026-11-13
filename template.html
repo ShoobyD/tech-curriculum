@@ -235,6 +235,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
 }
 .toc a:not(:has(.toc-num)) { grid-template-columns: minmax(0, 1fr) auto; }
 .toc-num { font: 700 12px var(--font-type); text-align: center; border-top: 3px solid var(--brass); padding-top: 1px; }
+.toc-num:empty { border-top: 0; }
 .toc-title {
   background: var(--holder); color: var(--holder-ink); border: 2px solid var(--brass); border-radius: 2px;
   padding: 2px 7px; font-weight: 700; line-height: 1.3;
@@ -762,6 +763,24 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
       tocList.append(li);
     }
     applyTopicVisibility();
+    applyNumbers();
+  }
+  // Numbers follow my order and count only what is visible: a topic is its place among the visible
+  // topics, a card is that number and its place among the topic's visible cards, a sub-part ("3א.")
+  // takes the topic's number. Hidden ones have none.
+  function applyNumbers() {
+    let n = 0;
+    for (const id of fullOrder()) {
+      const s = document.getElementById(id);
+      const num = hiddenTopicSet.has(id) ? '' : String(++n);
+      document.querySelector(`.toc a[href="#${id}"] .toc-num`).textContent = num;
+      s.querySelector('.topic-num').textContent = num;
+      for (const h of s.querySelectorAll('.sub-num')) h.textContent = num ? `${num}${h.dataset.sub}.` : '';
+      let k = 0;
+      for (const el of s.querySelectorAll('.item')) {
+        el.querySelector('.call').textContent = num && !isHidden(el) ? `${num}.${String(++k).padStart(2, '0')}` : '';
+      }
+    }
   }
   // A hidden topic is gone from the page and the cabinet; with "הצג מוסתרים" it comes back faded,
   // and while arranging its drawer stays in the cabinet so it can be shown again.
@@ -1010,8 +1029,13 @@ dialog.sheet { background-image: var(--grain); box-shadow: 0 2px 4px rgba(0,0,0,
   // the drawers already stand in the new order; the layout takes it from them
   function commitOrder(li, focusDir) {
     setLayout({ ...layout, order: drawerOrder() });
-    const shown = shownDrawers();
-    arrangeStatus.textContent = `${drawerTitle(li)}: מקום ${shown.indexOf(li) + 1} מתוך ${shown.length}`;
+    // a visible topic's place is its new number; a hidden one has no number, so its place is in the whole order
+    const id = li.querySelector('a').getAttribute('href').slice(1);
+    const order = fullOrder();
+    const visible = order.filter(t => !hiddenTopicSet.has(t));
+    arrangeStatus.textContent = hiddenTopicSet.has(id)
+      ? `${drawerTitle(li)}: מוסתר, מקום ${order.indexOf(id) + 1} מתוך ${order.length}`
+      : `${drawerTitle(li)}: מקום ${visible.indexOf(id) + 1} מתוך ${visible.length}`;
     updateArrangeTools();
     if (focusDir) {
       // focus stays on the button that moved it; at the edge, on the other one
