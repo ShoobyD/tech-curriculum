@@ -1,5 +1,5 @@
 ---
-name: tech-lead-curriculum
+name: tech-curriculum
 description: A library card catalogue for a free, video-first study plan for technical interviews.
 colors:
   oak-0: "#0f241d"
@@ -184,7 +184,7 @@ components:
     size: "22px"
 ---
 
-# Design System: tech-lead-curriculum
+# Design System: tech-curriculum
 
 ## Overview
 

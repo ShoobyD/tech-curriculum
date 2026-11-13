@@ -1,4 +1,4 @@
-# Accounts API for the study plan on shoobyd.github.io/tech-lead-curriculum.
+# Accounts API for the study plan on shoobyd.github.io/tech-curriculum.
 # Deployed separately from the site (which stays static on GitHub Pages):
 #   npm run migrate:remote && npm run deploy
 # Secrets are never stored here (npx wrangler secret put <NAME>):

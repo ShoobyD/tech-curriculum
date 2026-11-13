@@ -1,6 +1,6 @@
 # Accounts API
 
-Accounts and shared progress for the [study plan](https://shoobyd.github.io/tech-lead-curriculum/): a Cloudflare Worker with a D1 database and one Durable Object for live updates. The site itself stays static on GitHub Pages. This Worker is the only thing that writes to the database, so write access never reaches the browser.
+Accounts and shared progress for the [study plan](https://shoobyd.github.io/tech-curriculum/): a Cloudflare Worker with a D1 database and one Durable Object for live updates. The site itself stays static on GitHub Pages. This Worker is the only thing that writes to the database, so write access never reaches the browser.
 
 Friends log in with GitHub, and their progress follows them between devices. Everyone's progress is visible to everyone: the page shows, on each source, the friends who already finished it. Open pages get every change live, over a WebSocket.
 
@@ -123,7 +123,7 @@ npm run migrate:remote
 
 Create a GitHub OAuth App ([github.com/settings/applications/new](https://github.com/settings/applications/new): account Settings → Developer settings → OAuth Apps):
 
-- Homepage URL: `https://shoobyd.github.io/tech-lead-curriculum/`
+- Homepage URL: `https://shoobyd.github.io/tech-curriculum/`
 - Redirect URI (called "Authorization callback URL" in older forms): `https://tech-curriculum-api.bmusty.workers.dev/auth/callback`, exactly, without a trailing slash
 - Wildcard matching, Device Flow and expiring user tokens: off
 
